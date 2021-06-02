@@ -40,7 +40,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = getConfig({ locale })
   const { pages } = await getAllPages({ config, preview })
-  const { categories, brands } = await getSiteInfo({ config, preview })
+  const { categories, brands } = { categories: [], brands: [] }
   return {
     props: {
       pages,

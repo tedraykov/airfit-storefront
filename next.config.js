@@ -54,6 +54,9 @@ module.exports = withCommerceConfig({
       },
     ].filter((x) => x)
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 })
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments

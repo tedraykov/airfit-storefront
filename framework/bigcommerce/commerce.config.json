@@ -1,6 +1,0 @@
-{
-  "provider": "bigcommerce",
-  "features": {
-    "wishlist": true
-  }
-}
