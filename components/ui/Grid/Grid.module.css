@@ -18,11 +18,20 @@
 @screen lg {
   .root {
     @apply grid-cols-3 grid-rows-2;
+    min-height: initial;
+    height: var(--row-height);
+    max-height: 1000px;
   }
 
   .root & > * {
     @apply col-span-1;
     height: inherit;
+  }
+}
+
+@screen xl {
+  .root {
+    max-height: 1200px;
   }
 }
 

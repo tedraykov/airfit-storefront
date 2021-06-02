@@ -49,13 +49,8 @@ const Layout: FC<Props> = ({
   children,
   pageProps: { commerceFeatures, ...pageProps },
 }) => {
-  const {
-    displaySidebar,
-    displayModal,
-    closeSidebar,
-    closeModal,
-    modalView,
-  } = useUI()
+  const { displaySidebar, displayModal, closeSidebar, closeModal, modalView } =
+    useUI()
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
   return (
@@ -79,7 +74,7 @@ const Layout: FC<Props> = ({
           title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
           hide={acceptedCookies}
           action={
-            <Button className="mx-5" onClick={() => onAcceptCookies()}>
+            <Button className="mx-5" onClick={onAcceptCookies}>
               Accept cookies
             </Button>
           }

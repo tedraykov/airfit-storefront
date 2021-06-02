@@ -4,13 +4,13 @@
   ease-linear cursor-pointer;
   height: 100% !important;
 
-  &:hover {
+&:hover, &:focus {
     & .squareBg:before {
       transform: scale(0.98);
     }
 
     & .productImage {
-      transform: scale(1.2625);
+      transform: scale(1.0625);
     }
 
     & .productTitle > span,
@@ -100,22 +100,27 @@
 }
 
 .productTitle {
-  @apply pt-0 max-w-full w-full leading-extra-loose;
-  font-size: 2rem;
-  letter-spacing: 0.4px;
+  @apply my-1 max-w-full w-full;
 
   & span {
-    @apply py-4 px-6 bg-primary text-primary font-bold;
-    font-size: inherit;
-    letter-spacing: inherit;
+    @apply py-3 px-3
+    bg-primary font-bold
+    text-primary text-xl tracking-wide leading-loose
+    md:py-4 md:px-6 md:text-2xl md:leading-extra-loose
+    lg:text-xl lg:leading-extra-loose
+    xl:text-2xl xl:leading-extra-loose;
+
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
 }
 
 .productPrice {
-  @apply py-4 px-6 bg-primary text-primary font-semibold inline-block text-sm leading-6;
-  letter-spacing: 0.4px;
+  @apply py-3 px-3
+  bg-primary font-semibold inline
+  text-primary text-base leading-extra-loose tracking-wide
+  md:px-6 md:leading-extra-loose
+  lg:py-4 lg:px-6;
 }
 
 .wishlistButton {
@@ -123,14 +128,14 @@
 }
 
 .imageContainer {
-  @apply flex items-center justify-center;
+  @apply flex items-center justify-center h-full;
   overflow: hidden;
 
   & > div {
-    min-width: 100%;
+    @apply min-w-full max-h-full;
   }
 }
 
 .productImage {
-  @apply transform transition-transform duration-500 object-cover scale-120;
+  @apply transform transition-transform duration-500 object-cover;
 }
