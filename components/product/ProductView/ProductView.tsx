@@ -10,6 +10,7 @@ import usePrice from '@framework/product/use-price'
 import { useAddItem } from '@framework/cart'
 import { getVariant, SelectedOptions } from '../helpers'
 import WishlistButton from '@components/wishlist/WishlistButton'
+import { useRouter } from 'next/router'
 
 interface Props {
   children?: any
@@ -19,6 +20,8 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product }) => {
   const addItem = useAddItem()
+  const router = useRouter()
+
   const { price } = usePrice({
     amount: product.price.value,
     baseAmount: product.price.retailPrice,
@@ -29,7 +32,15 @@ const ProductView: FC<Props> = ({ product }) => {
   const [choices, setChoices] = useState<SelectedOptions>({})
 
   useEffect(() => {
-    // Selects the default option
+    const optionsFromUrl = getOptionsFromQueryParams()
+    if (
+      !!Object.keys(optionsFromUrl).length &&
+      !!getVariant(product, optionsFromUrl as SelectedOptions)
+    ) {
+      setChoices(() => optionsFromUrl as SelectedOptions)
+      return
+    }
+
     product.variants[0].options?.forEach((v) => {
       setChoices((choices) => ({
         ...choices,
@@ -37,6 +48,28 @@ const ProductView: FC<Props> = ({ product }) => {
       }))
     })
   }, [])
+
+  function getOptionsFromQueryParams(): {
+    [name: string]: string | string[] | undefined
+  } {
+    const queryParams = new URLSearchParams(
+      router.asPath.substring(router.asPath.indexOf('?') + 1)
+    )
+
+    let optionEntries: [string, any][] = []
+    queryParams.forEach((value, key) => optionEntries.push([key, value]))
+
+    optionEntries = optionEntries.filter(([key]) =>
+      product?.options.find(
+        (opt) => opt.displayName.toLowerCase() === key.toLowerCase()
+      )
+    )
+    return Object.fromEntries(optionEntries)
+  }
+
+  useEffect(() => {
+    router.push({ query: { ...choices } }, undefined, { shallow: true }).then()
+  }, [choices])
 
   const variant = getVariant(product, choices)
 
@@ -132,7 +165,8 @@ const ProductView: FC<Props> = ({ product }) => {
                           setChoices((choices) => {
                             return {
                               ...choices,
-                              [opt.displayName.toLowerCase()]: v.label.toLowerCase(),
+                              [opt.displayName.toLowerCase()]:
+                                v.label.toLowerCase(),
                             }
                           })
                         }}

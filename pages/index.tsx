@@ -1,5 +1,5 @@
 import { Layout } from '@components/common'
-import { Grid, Hero } from '@components/ui'
+import { Grid, Hero, Marquee } from '@components/ui'
 import { ProductCard } from '@components/product'
 import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
@@ -64,7 +64,7 @@ export default function Home({
         Hebrew. It’s now undergone a name change, and will be referred to as
         ‘Natural’."
       />
-      {/*<HomeAllProductsGrid/>*/}
+      <Marquee />
     </>
   )
 }
