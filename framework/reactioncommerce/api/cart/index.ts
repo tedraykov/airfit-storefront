@@ -29,7 +29,9 @@ const cartApi: ReactionCommerceApiHandler<Cart, CartHandlers> = async (
   if (!isAllowedMethod(req, res, METHODS)) return
 
   const { cookies } = req
-  const cartId = cookies[config.anonymousCartTokenCookie]
+  const cartId = config.anonymousCartTokenCookie
+    ? cookies[config.anonymousCartTokenCookie]
+    : ''
 
   try {
     // Return current cart info

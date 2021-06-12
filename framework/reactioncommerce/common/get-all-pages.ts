@@ -1,6 +1,7 @@
 import { getConfig, ReactionCommerceConfig } from '../api'
-import { NavigationTreeItem } from '../schema'
+import { Shop } from '../schema'
 import { getAllPagesQuery } from '../utils/queries'
+import { normalizePages } from '@framework/utils'
 
 type Variables = {
   first?: number
@@ -25,28 +26,14 @@ const getAllPages = async (options?: {
 }): Promise<ReturnType> => {
   let { config, variables } = options ?? {}
   config = getConfig(config)
-  const { locale } = config
-  console.log('locale', locale)
+
   const { data } = await config.fetch(getAllPagesQuery, {
     variables: {
       ...variables,
       shopId: config.shopId,
     },
   })
-
-  const pages = data.shop?.defaultNavigationTree?.items?.map(
-    ({
-      navigationItem: {
-        _id: id,
-        data: { contentForLanguage: name, url },
-      },
-    }: NavigationTreeItem) => ({
-      id,
-      url,
-      name,
-      body: '',
-    })
-  )
+  const pages = normalizePages(data.shop as Shop)
 
   return { pages }
 }

@@ -30,20 +30,18 @@ const fetcher: Fetcher = async ({
   // if no URL is passed but we have a `query` param, we assume it's GraphQL
   if (!url && query) {
     const customerToken = getCustomerToken()
-    const authorizationHeader = {}
+    const headers = new Headers()
+    headers.set('Content-Type', 'application/json')
 
     if (customerToken) {
-      authorizationHeader['Authorization'] = `Bearer ${customerToken}`
+      headers.set('Authorization', `Bearer ${customerToken}`)
     }
 
     return handleFetchResponse(
       await fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({ query, variables }),
-        headers: {
-          'Content-Type': 'application/json',
-          ...authorizationHeader,
-        },
+        headers: headers,
       })
     )
   }

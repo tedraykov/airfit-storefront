@@ -8,23 +8,8 @@ import { Layout } from '@components/common'
 import { ProductCard } from '@components/product'
 import { Container, Grid, Skeleton } from '@components/ui'
 
-import { getConfig } from '@framework/api'
 import useSearch from '@framework/product/use-search'
-import getAllPages from '@framework/common/get-all-pages'
-import getSiteInfo from '@framework/common/get-site-info'
-
 import rangeMap from '@lib/range-map'
-
-// TODO(bc) Remove this. This should come from the API
-import getSlug from '@lib/get-slug'
-
-// TODO (bc) : Remove or standarize this.
-const SORT = Object.entries({
-  'latest-desc': 'Latest arrivals',
-  'trending-desc': 'Trending',
-  'price-asc': 'Price: Low to high',
-  'price-desc': 'Price: High to low',
-})
 
 import {
   filterQuery,
@@ -32,15 +17,30 @@ import {
   getDesignerPath,
   useSearchMeta,
 } from '@lib/search'
+
+// TODO(bc) Remove this. This should come from the API
+import getSlug from '@lib/get-slug'
+import getAllPages from '@framework/common/get-all-pages'
+import getSiteInfo from '@framework/common/get-site-info'
+import { getConfig } from '@framework/api'
 import { Product } from '@commerce/types'
+
+const SORT = Object.entries({
+  'latest-desc': 'Latest arrivals',
+  'trending-desc': 'Trending',
+  'price-asc': 'Price: Low to high',
+  'price-desc': 'Price: High to low',
+})
 
 export async function getStaticProps({
   preview,
   locale,
+  locales,
 }: GetStaticPropsContext) {
-  const config = getConfig({ locale })
+  const config = { ...getConfig(), locale, locales }
+
   const { pages } = await getAllPages({ config, preview })
-  const { categories, brands } = { categories: [], brands: [] }
+  const { categories, brands } = await getSiteInfo({ config, preview })
   return {
     props: {
       pages,
@@ -60,7 +60,7 @@ export default function Search({
   const [toggleFilter, setToggleFilter] = useState(false)
 
   const router = useRouter()
-  const { asPath } = router
+  const { asPath, locale } = router
   const { q, sort } = router.query
   // `q` can be included but because categories and designers can't be searched
   // in the same way of products, it's better to ignore the search input if one

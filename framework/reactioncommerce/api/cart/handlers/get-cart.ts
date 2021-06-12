@@ -24,18 +24,13 @@ const getCart: CartHandlers['getCart'] = async ({ req, res, config }) => {
   let normalizedCart
 
   if (cartId && anonymousCartToken && reactionCustomerToken) {
-    const rawReconciledCart = await reconcileCarts({
-      config,
-      cartId,
-      anonymousCartToken,
-      reactionCustomerToken,
-    })
+    const rawReconciledCart = await reconcileCarts(config)
 
     normalizedCart = normalizeCart(rawReconciledCart)
 
     // Clear the anonymous cart token cookie and update cart ID cookie
     res.setHeader('Set-Cookie', [
-      getCartCookie(config.anonymousCartTokenCookie),
+      getCartCookie(config.anonymousCartTokenCookie ?? ''),
       getCartCookie(config.cartIdCookie, normalizedCart.id, 999),
     ])
   } else if (cartId && anonymousCartToken) {

@@ -24,7 +24,7 @@ export type UseData = <Data = any, FetchInput extends HookFetchInput = {}>(
   swrOptions?: SwrOptions<Data, FetchInput>
 ) => ResponseState<Data>
 
-const useData: UseData = (options, input, fetcherFn, swrOptions) => {
+const useData: UseData = (options, input, fetcherFn, swrOptions): any => {
   const hookInput = Array.isArray(input) ? input : Object.entries(input)
   const fetcher = async (
     url: string,
@@ -51,6 +51,7 @@ const useData: UseData = (options, input, fetcherFn, swrOptions) => {
       throw error
     }
   }
+
   const response = useSWR(
     () => {
       const opts = options.fetchOptions

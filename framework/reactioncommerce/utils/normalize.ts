@@ -15,9 +15,11 @@ import {
   CatalogProduct,
   ImageInfo,
   CartItem,
+  Shop,
 } from '../schema'
 
 import type { Cart, LineItem } from '../types'
+import { Page } from '@framework/common/get-all-pages'
 
 const normalizeProductImages = (images: ImageInfo[], name: string) =>
   images.map((image) => ({
@@ -92,7 +94,7 @@ function groupProductOptionsByAttributeLabel(
       )
 
       if (variantHasOptions(currentVariant)) {
-        (<CatalogProductVariant[]>currentVariant.options).forEach(
+        ;(<CatalogProductVariant[]>currentVariant.options).forEach(
           (variantOption) => {
             groupedOptions = mergeVariantOptionsWithExistingOptions(
               groupedOptions,
@@ -278,6 +280,24 @@ export function normalizeCustomer(viewer: Account): Customer {
     lastName: viewer.lastName ?? '',
     email: viewer.primaryEmailAddress,
   }
+}
+
+export function normalizePages(shop: Shop): Page[] {
+  return (
+    shop?.defaultNavigationTree?.items?.map((item) => {
+      if (!item) {
+        return <Page>{}
+      }
+
+      const navigationItem = item.navigationItem
+      return <Page>{
+        id: navigationItem._id,
+        url: navigationItem.data?.url ?? '/',
+        name: navigationItem.data?.contentForLanguage ?? 'en',
+        body: '',
+      }
+    }) ?? []
+  )
 }
 
 function flatVariantOptions(variant: CatalogProductVariant): ProductVariant[] {

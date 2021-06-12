@@ -1,5 +1,5 @@
-import { Page } from '../../schema'
 import { ReactionCommerceConfig, getConfig } from '..'
+import { Page } from '@framework/common/get-all-pages'
 
 export type GetPageResult<T extends { page?: any } = { page?: Page }> = T
 

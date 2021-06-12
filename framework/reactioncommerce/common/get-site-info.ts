@@ -23,7 +23,7 @@ const getSiteInfo = async (options?: {
   const brands = await getVendors(config)
 
   return {
-    categories,
+    categories: categories as unknown as Category[],
     brands,
   }
 }

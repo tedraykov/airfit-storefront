@@ -1,10 +1,9 @@
 import { SWRHook } from '@commerce/utils/types'
 import useSearch, { UseSearch } from '@commerce/product/use-search'
 
-import { CatalogItemEdge } from '../schema'
+import { CatalogItemEdge, CatalogItemProduct } from '../schema'
 import {
   catalogItemsQuery,
-  getCollectionProductsQuery,
   getSearchVariables,
   normalizeProduct,
 } from '../utils'
@@ -49,32 +48,29 @@ export const handler: SWRHook<
     let edges
 
     edges = data.catalogItems?.edges ?? []
-    if (brandId) {
-      edges = edges.filter(
-        ({ node: { vendor } }: CatalogItemEdge) => vendor === brandId
-      )
-    }
 
     return {
       products: edges.map(({ node }: CatalogItemEdge) =>
-        normalizeProduct(node)
+        normalizeProduct(node as CatalogItemProduct)
       ),
       found: !!edges.length,
     }
   },
-  useHook: ({ useData }) => (input = {}) => {
-    return useData({
-      input: [
-        ['search', input.search],
-        ['categoryId', input.categoryId],
-        ['brandId', input.brandId],
-        ['sort', input.sort],
-        ['shopId', input.shopId],
-      ],
-      swrOptions: {
-        revalidateOnFocus: false,
-        ...input.swrOptions,
-      },
-    })
-  },
+  useHook:
+    ({ useData }) =>
+    (input = {}) => {
+      return useData({
+        input: [
+          ['search', input.search],
+          ['categoryId', input.categoryId],
+          ['brandId', input.brandId],
+          ['sort', input.sort],
+          ['shopId', input.shopId],
+        ],
+        swrOptions: {
+          revalidateOnFocus: false,
+          ...input.swrOptions,
+        },
+      })
+    },
 }

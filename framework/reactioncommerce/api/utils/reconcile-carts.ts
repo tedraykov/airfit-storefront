@@ -1,11 +1,7 @@
 import reconcileCartsMutation from '@framework/utils/mutations/reconcile-carts'
+import { ReactionCommerceConfig } from '@framework/api'
 
-async function reconcileCarts({
-  config,
-  cartId,
-  anonymousCartToken,
-  reactionCustomerToken,
-}) {
+async function reconcileCarts(config: ReactionCommerceConfig) {
   const {
     data: {
       reconcileCarts: { cart: rawReconciledCart },
@@ -15,15 +11,15 @@ async function reconcileCarts({
     {
       variables: {
         input: {
-          anonymousCartId: cartId,
-          cartToken: anonymousCartToken,
+          anonymousCartId: config.cartIdCookie,
+          cartToken: config.anonymousCartTokenCookie,
           shopId: config.shopId,
         },
       },
     },
     {
       headers: {
-        Authorization: `Bearer ${reactionCustomerToken}`,
+        Authorization: `Bearer ${config.customerCookie}`,
       },
     }
   )

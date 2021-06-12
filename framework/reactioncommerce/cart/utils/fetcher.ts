@@ -1,6 +1,6 @@
 import { HookFetcherFn } from '@commerce/utils/types'
 import { Cart } from '@commerce/types'
-import { checkoutCreate, checkoutToCart } from '.'
+import { checkoutCreate } from '.'
 import { FetchCartInput } from '@commerce/cart/use-cart'
 
 const fetcher: HookFetcherFn<Cart | null, FetchCartInput> = async ({
@@ -25,7 +25,7 @@ const fetcher: HookFetcherFn<Cart | null, FetchCartInput> = async ({
   }
 
   // TODO: Fix this type
-  return checkoutToCart({ checkout } as any)
+  return checkout
 }
 
 export default fetcher

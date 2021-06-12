@@ -33,9 +33,8 @@ const SignUpView: FC<Props> = () => {
       setLoading(true)
       setMessage('')
       await signup({
+        username: email,
         email,
-        firstName,
-        lastName,
         password,
       })
       setLoading(false)

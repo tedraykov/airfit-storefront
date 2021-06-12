@@ -17,9 +17,6 @@ const addItem: CartHandlers['addItem'] = async ({
   body: { item },
   config,
 }) => {
-  console.log('add-item API', item.productId)
-  console.log('variantId', item.variantId)
-
   const {
     [REACTION_ANONYMOUS_CART_TOKEN_COOKIE]: anonymousCartToken,
     [REACTION_CUSTOMER_TOKEN_COOKIE]: reactionCustomerToken,
@@ -66,7 +63,7 @@ const addItem: CartHandlers['addItem'] = async ({
 
     res.setHeader('Set-Cookie', [
       getCartCookie(
-        config.anonymousCartTokenCookie,
+        config.anonymousCartTokenCookie ?? '',
         createdCart.data.createCart.token,
         999
       ),
@@ -94,18 +91,11 @@ const addItem: CartHandlers['addItem'] = async ({
   }
 
   if (anonymousCartToken && reactionCustomerToken) {
-    console.log('reconciliating carts')(
-      ({ _id: cartId } = await reconcileCarts({
-        config,
-        cartId,
-        anonymousCartToken,
-        reactionCustomerToken,
-      }))
-    )
+    ;({ _id: cartId } = await reconcileCarts(config))
 
     // Clear the anonymous cart token cookie and update cart ID cookie
     res.setHeader('Set-Cookie', [
-      getCartCookie(config.anonymousCartTokenCookie),
+      getCartCookie(config.anonymousCartTokenCookie ?? ''),
       getCartCookie(config.cartIdCookie, cartId, 999),
     ])
   }

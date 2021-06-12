@@ -1,4 +1,3 @@
-import { CollectionEdge } from '../schema'
 import { getConfig, ReactionCommerceConfig } from '../api'
 import getAllCollectionsQuery from '../utils/queries/get-all-collections-query'
 
@@ -14,7 +13,7 @@ const getAllCollections = async (options?: {
   const edges = data.collections?.edges ?? []
 
   const categories = edges.map(
-    ({ node: { id: entityId, title: name, handle } }: CollectionEdge) => ({
+    ({ node: { id: entityId, title: name, handle } }: any) => ({
       entityId,
       name,
       path: `/${handle}`,

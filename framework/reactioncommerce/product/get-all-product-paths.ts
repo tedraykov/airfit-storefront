@@ -1,7 +1,5 @@
-import { Product } from '@commerce/types'
 import { getConfig, ReactionCommerceConfig } from '../api'
 import fetchAllProducts from '../api/utils/fetch-all-products'
-import { ProductEdge } from '../schema'
 import getAllProductsPathsQuery from '../utils/queries/get-all-products-paths-query'
 
 type ProductPath = {
@@ -39,7 +37,7 @@ const getAllProductPaths = async (options?: {
         node: {
           product: { slug },
         },
-      }: CatalogItemEdge) => ({
+      }: any) => ({
         node: {
           path: `/${slug}`,
         },

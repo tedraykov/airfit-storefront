@@ -9577,7 +9577,7 @@ type Query {
     """
     Optionally provide a list of shop IDs from which you want to get the vendors
     """
-    shopIds: [ID]!
+    shopIds: [ID]
 
     """
     Optionally provide a list of tag IDs to further filter the vendors

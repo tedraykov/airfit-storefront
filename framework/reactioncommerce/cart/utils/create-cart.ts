@@ -1,6 +1,7 @@
 import {
   REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
   REACTION_COOKIE_EXPIRE,
+  SHOP_ID,
 } from '../../const'
 import createCartMutation from '../../utils/mutations/create-cart'
 import Cookies from 'js-cookie'
@@ -10,7 +11,7 @@ export const createCart = async (fetch: any) => {
     query: createCartMutation,
     variables: {
       input: {
-        shopId,
+        SHOP_ID,
       },
     },
   })

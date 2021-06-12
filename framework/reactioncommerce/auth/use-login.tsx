@@ -3,27 +3,13 @@ import type { MutationHook } from '@commerce/utils/types'
 import { CommerceError } from '@commerce/utils/errors'
 import useCustomer from '../customer/use-customer'
 import authenticateMutation from '../utils/mutations/authenticate'
-import {
-  CustomerAccessTokenCreateInput,
-  CustomerUserError,
-  Mutation,
-  MutationAuthenticateArgs,
-} from '../schema'
+import { Mutation, MutationAuthenticateArgs } from '../schema'
 import useLogin, { UseLogin } from '@commerce/auth/use-login'
 import { setCustomerToken } from '../utils'
 
 export default useLogin as UseLogin<typeof handler>
 
-const getErrorMessage = ({ code, message }: CustomerUserError) => {
-  switch (code) {
-    case 'UNIDENTIFIED_CUSTOMER':
-      message = 'Cannot find an account that matches the provided credentials'
-      break
-  }
-  return message
-}
-
-export const handler: MutationHook<null, {}, CustomerAccessTokenCreateInput> = {
+export const handler: MutationHook<null, {}, any> = {
   fetchOptions: {
     query: authenticateMutation,
   },
@@ -55,16 +41,18 @@ export const handler: MutationHook<null, {}, CustomerAccessTokenCreateInput> = {
 
     return null
   },
-  useHook: ({ fetch }) => () => {
-    const { revalidate } = useCustomer()
+  useHook:
+    ({ fetch }) =>
+    () => {
+      const { revalidate } = useCustomer()
 
-    return useCallback(
-      async function login(input) {
-        const data = await fetch({ input })
-        await revalidate()
-        return data
-      },
-      [fetch, revalidate]
-    )
-  },
+      return useCallback(
+        async function login(input) {
+          const data = await fetch({ input })
+          await revalidate()
+          return data
+        },
+        [fetch, revalidate]
+      )
+    },
 }

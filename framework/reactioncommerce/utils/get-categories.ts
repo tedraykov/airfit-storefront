@@ -1,5 +1,5 @@
 import { ReactionCommerceConfig } from '../api'
-import { CollectionEdge, TagEdge } from '../schema'
+import { Tag, TagEdge } from '../schema'
 import getTagsQuery from './queries/get-all-collections-query'
 
 export type Category = {
@@ -19,15 +19,11 @@ const getCategories = async (
   })
 
   return (
-    data.tags?.edges?.map(
-      ({
-        node: { _id: entityId, displayTitle: name, slug: handle },
-      }: TagEdge) => ({
-        entityId,
-        name,
-        path: `/${handle}`,
-      })
-    ) ?? []
+    data.tags?.edges?.map(({ node }: TagEdge) => ({
+      entityId: node?._id,
+      name: node?.displayTitle,
+      path: `/${node?.slug}`,
+    })) ?? []
   )
 }
 
