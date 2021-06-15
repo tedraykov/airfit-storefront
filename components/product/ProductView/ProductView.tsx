@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import s from './ProductView.module.css'
 import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text, useUI } from '@components/ui'
@@ -126,21 +126,7 @@ const ProductView: FC<Props> = ({ product }) => {
           </div>
 
           <div className={s.sliderContainer}>
-            <ProductSlider key={product.id}>
-              {product.images.map((image, i) => (
-                <div key={image.url} className={s.imageContainer}>
-                  <Image
-                    className={s.img}
-                    src={image.url!}
-                    alt={image.alt || 'Product Image'}
-                    width={1050}
-                    height={1050}
-                    priority={i === 0}
-                    quality="85"
-                  />
-                </div>
-              ))}
-            </ProductSlider>
+            <ProductSlider key={product.id} images={product.images}/>
           </div>
         </div>
         <div className={s.sidebar}>

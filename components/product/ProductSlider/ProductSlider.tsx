@@ -1,20 +1,28 @@
 import { useKeenSlider } from 'keen-slider/react'
 import React, {
-  Children,
   FC,
-  isValidElement,
   useState,
   useRef,
-  useEffect,
+  useEffect
 } from 'react'
 import cn from 'classnames'
 
 import s from './ProductSlider.module.css'
+import Image from 'next/image'
+import { ProductImage } from '@commerce/types'
+import { Lightbox } from '@components/product/ProductGallery/Lightbox'
 
-const ProductSlider: FC = ({ children }) => {
+interface Props {
+  images: ProductImage[]
+}
+
+const ProductSlider: FC<Props> = ({ images }) => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
   const sliderContainerRef = useRef<HTMLDivElement>(null)
+
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
 
   const [ref, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -22,7 +30,7 @@ const ProductSlider: FC = ({ children }) => {
     mounted: () => setIsMounted(true),
     slideChanged(s) {
       setCurrentSlide(s.details().relativeSlide)
-    },
+    }
   })
 
   // Stop the history navigation gesture on touch devices
@@ -59,60 +67,74 @@ const ProductSlider: FC = ({ children }) => {
     }
   }, [])
 
+  function openGallery(i: number) {
+    console.log('Opening gallery from image')
+    setSelectedImageIndex(i);
+    setIsGalleryOpen(true)
+  }
+
+  function closeGallery() {
+    console.log('Closing')
+    setIsGalleryOpen(false)
+  }
+
   return (
-    <div className={s.root} ref={sliderContainerRef}>
-      <button
-        className={cn(s.leftControl, s.control)}
-        onClick={slider?.prev}
-        aria-label="Previous Product Image"
-      />
-      <button
-        className={cn(s.rightControl, s.control)}
-        onClick={slider?.next}
-        aria-label="Next Product Image"
-      />
-      <div
-        ref={ref}
-        className="keen-slider h-full transition-opacity duration-150"
-        style={{ opacity: isMounted ? 1 : 0 }}
-      >
-        {Children.map(children, (child) => {
-          // Add the keen-slider__slide className to children
-          if (isValidElement(child)) {
-            return {
-              ...child,
-              props: {
-                ...child.props,
-                className: `${
-                  child.props.className ? `${child.props.className} ` : ''
-                }keen-slider__slide`,
-              },
-            }
-          }
-          return child
-        })}
-      </div>
-      {slider && (
-        <div className={cn(s.positionIndicatorsContainer)}>
-          {[...Array(slider.details().size).keys()].map((idx) => {
-            return (
-              <button
-                aria-label="Position indicator"
-                key={idx}
-                className={cn(s.positionIndicator, {
-                  [s.positionIndicatorActive]: currentSlide === idx,
-                })}
-                onClick={() => {
-                  slider.moveToSlideRelative(idx)
-                }}
-              >
-                <div className={s.dot} />
-              </button>
-            )
-          })}
+    <>
+      <div className={s.root} ref={sliderContainerRef}>
+        <button
+          className={cn(s.leftControl, s.control)}
+          onClick={slider?.prev}
+          aria-label='Previous Product Image'
+        />
+        <button
+          className={cn(s.rightControl, s.control)}
+          onClick={slider?.next}
+          aria-label='Next Product Image'
+        />
+        <div
+          ref={ref}
+          className='keen-slider h-full transition-opacity duration-150'
+          style={{ opacity: isMounted ? 1 : 0 }}
+        >
+          {images.map(({ url, alt }, i) => (
+            <div onClick={() => {
+              openGallery(i)
+            }} key={url} className={cn(s.imageContainer, 'keen-slider__slide')}>
+              <Image
+                className={s.img}
+                src={url!}
+                alt={alt || 'Product Image'}
+                width={1500}
+                height={1500}
+                priority={i === 0}
+                quality='85'
+              />
+            </div>
+          ))}
         </div>
-      )}
-    </div>
+        {slider && (
+          <div className={cn(s.positionIndicatorsContainer)}>
+            {[...Array(slider.details().size).keys()].map((idx) => {
+              return (
+                <button
+                  aria-label='Position indicator'
+                  key={idx}
+                  className={cn(s.positionIndicator, {
+                    [s.positionIndicatorActive]: currentSlide === idx
+                  })}
+                  onClick={() => {
+                    slider.moveToSlideRelative(idx)
+                  }}
+                >
+                  <div className={s.dot} />
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
+      <Lightbox images={images} selectedImageIndex={selectedImageIndex} isOpen={isGalleryOpen} onClose={closeGallery} />
+    </>
   )
 }
 
