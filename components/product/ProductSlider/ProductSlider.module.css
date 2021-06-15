@@ -1,6 +1,7 @@
 .root {
   @apply relative w-full h-full;
   overflow-y: hidden;
+  cursor: pointer;
 }
 
 .leftControl,
@@ -37,7 +38,7 @@
 }
 
 .control {
-  @apply opacity-0 transition duration-150;
+  @apply opacity-50 transition duration-150;
 }
 
 .root:hover .control {
@@ -45,12 +46,11 @@
 }
 
 .positionIndicatorsContainer {
-  @apply hidden;
+  /*@apply hidden;*/
 
-  @screen sm {
     @apply block absolute bottom-6 left-1/2;
     transform: translateX(-50%);
-  }
+
 }
 
 .positionIndicator {
@@ -79,4 +79,17 @@
 
 .positionIndicatorActive:hover .dot {
   @apply bg-white;
+}
+
+.imageContainer {
+& > div {
+    @apply h-full;
+& > div {
+    @apply h-full;
+  }
+}
+}
+
+.img {
+  @apply w-full h-auto max-h-full object-cover;
 }

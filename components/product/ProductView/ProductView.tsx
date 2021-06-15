@@ -1,5 +1,4 @@
 import cn from 'classnames'
-import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import React, { FC, useEffect, useState } from 'react'
 import s from './ProductView.module.css'
@@ -10,7 +9,6 @@ import usePrice from '@framework/product/use-price'
 import { useAddItem } from '@framework/cart'
 import { getVariant, SelectedOptions } from '../helpers'
 import WishlistButton from '@components/wishlist/WishlistButton'
-import { useRouter } from 'next/router'
 
 interface Props {
   children?: any
@@ -20,56 +18,23 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product }) => {
   const addItem = useAddItem()
-  const router = useRouter()
 
   const { price } = usePrice({
     amount: product.price.value,
     baseAmount: product.price.retailPrice,
-    currencyCode: product.price.currencyCode!,
+    currencyCode: product.price.currencyCode!
   })
   const { openSidebar } = useUI()
   const [loading, setLoading] = useState(false)
   const [choices, setChoices] = useState<SelectedOptions>({})
 
-  useEffect(() => {
-    const optionsFromUrl = getOptionsFromQueryParams()
-    if (
-      !!Object.keys(optionsFromUrl).length &&
-      !!getVariant(product, optionsFromUrl as SelectedOptions)
-    ) {
-      setChoices(() => optionsFromUrl as SelectedOptions)
-      return
-    }
-
+  useEffect(() =>
     product.variants[0].options?.forEach((v) => {
       setChoices((choices) => ({
         ...choices,
-        [v.displayName.toLowerCase()]: v.values[0].label.toLowerCase(),
+        [v.displayName.toLowerCase()]: v.values[0].label.toLowerCase()
       }))
-    })
-  }, [])
-
-  function getOptionsFromQueryParams(): {
-    [name: string]: string | string[] | undefined
-  } {
-    const queryParams = new URLSearchParams(
-      router.asPath.substring(router.asPath.indexOf('?') + 1)
-    )
-
-    let optionEntries: [string, any][] = []
-    queryParams.forEach((value, key) => optionEntries.push([key, value]))
-
-    optionEntries = optionEntries.filter(([key]) =>
-      product?.options.find(
-        (opt) => opt.displayName.toLowerCase() === key.toLowerCase()
-      )
-    )
-    return Object.fromEntries(optionEntries)
-  }
-
-  useEffect(() => {
-    router.push({ query: { ...choices } }, undefined, { shallow: true }).then()
-  }, [choices])
+    }), [])
 
   const variant = getVariant(product, choices)
 
@@ -78,15 +43,13 @@ const ProductView: FC<Props> = ({ product }) => {
     try {
       const selectedVariant = variant ? variant : product.variants[0]
 
-      console.log('selected variant', selectedVariant)
-
       await addItem({
         productId: String(product.id),
         variantId: String(selectedVariant.id),
         pricing: {
           amount: selectedVariant.price,
-          currencyCode: product.price.currencyCode ?? 'USD',
-        },
+          currencyCode: product.price.currencyCode ?? 'USD'
+        }
       })
       openSidebar()
       setLoading(false)
@@ -96,7 +59,7 @@ const ProductView: FC<Props> = ({ product }) => {
   }
 
   return (
-    <Container className="max-w-none w-full" clean>
+    <Container className='max-w-none w-full' clean>
       <NextSeo
         title={product.name}
         description={product.description}
@@ -109,9 +72,9 @@ const ProductView: FC<Props> = ({ product }) => {
               url: product.images[0]?.url!,
               width: 800,
               height: 600,
-              alt: product.name,
-            },
-          ],
+              alt: product.name
+            }
+          ]
         }}
       />
       <div className={cn(s.root, 'fit')}>

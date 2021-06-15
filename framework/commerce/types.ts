@@ -185,7 +185,7 @@ export interface ProductOptionValues {
   hexColors?: string[]
 }
 
-interface ProductImage {
+export interface ProductImage {
   url: string
   alt?: string
 }
