@@ -1,19 +1,16 @@
 import { Layout } from '@components/common'
-import { Grid, Hero, Marquee } from '@components/ui'
+import { Grid, Hero } from '@components/ui'
 import { ProductCard } from '@components/product'
-import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import { getConfig } from '@framework/api'
 import getAllProducts from '@framework/product/get-all-products'
-import getSiteInfo from '@framework/common/get-site-info'
-import getAllPages from '@framework/common/get-all-pages'
 
 export async function getStaticProps({
   preview,
   locale,
 }: GetStaticPropsContext) {
-  const config = getConfig({ locale })
+  const config = getConfig()
 
   const { products } = await getAllProducts({
     variables: { first: 12 },
@@ -64,7 +61,6 @@ export default function Home({
         Hebrew. It’s now undergone a name change, and will be referred to as
         ‘Natural’."
       />
-      <Marquee />
     </>
   )
 }

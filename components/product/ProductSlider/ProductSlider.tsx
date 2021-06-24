@@ -1,16 +1,11 @@
 import { useKeenSlider } from 'keen-slider/react'
-import React, {
-  FC,
-  useState,
-  useRef,
-  useEffect
-} from 'react'
+import React, { FC, useState, useRef, useEffect } from 'react'
 import cn from 'classnames'
 
 import s from './ProductSlider.module.css'
 import Image from 'next/image'
 import { ProductImage } from '@commerce/types'
-import { Lightbox } from '@components/product/ProductGallery/Lightbox'
+import { ProductGallery } from '@components/product/ProductGallery/ProductGallery'
 
 interface Props {
   images: ProductImage[]
@@ -30,7 +25,7 @@ const ProductSlider: FC<Props> = ({ images }) => {
     mounted: () => setIsMounted(true),
     slideChanged(s) {
       setCurrentSlide(s.details().relativeSlide)
-    }
+    },
   })
 
   // Stop the history navigation gesture on touch devices
@@ -69,37 +64,42 @@ const ProductSlider: FC<Props> = ({ images }) => {
 
   function openGallery(i: number) {
     console.log('Opening gallery from image')
-    setSelectedImageIndex(i);
+    setSelectedImageIndex(i)
     setIsGalleryOpen(true)
   }
 
-  function closeGallery() {
+  function closeGallery(idx: number) {
     console.log('Closing')
     setIsGalleryOpen(false)
+    slider.moveToSlideRelative(idx)
   }
 
   return (
     <>
-      <div className={s.root} ref={sliderContainerRef}>
+      <div className={s.slider} ref={sliderContainerRef}>
         <button
           className={cn(s.leftControl, s.control)}
           onClick={slider?.prev}
-          aria-label='Previous Product Image'
+          aria-label="Previous Product Image"
         />
         <button
           className={cn(s.rightControl, s.control)}
           onClick={slider?.next}
-          aria-label='Next Product Image'
+          aria-label="Next Product Image"
         />
         <div
           ref={ref}
-          className='keen-slider h-full transition-opacity duration-150'
+          className="keen-slider h-full transition-opacity duration-150"
           style={{ opacity: isMounted ? 1 : 0 }}
         >
           {images.map(({ url, alt }, i) => (
-            <div onClick={() => {
-              openGallery(i)
-            }} key={url} className={cn(s.imageContainer, 'keen-slider__slide')}>
+            <div
+              onClick={() => {
+                openGallery(i)
+              }}
+              key={url}
+              className={cn(s.imageContainer, 'keen-slider__slide')}
+            >
               <Image
                 className={s.img}
                 src={url!}
@@ -107,7 +107,7 @@ const ProductSlider: FC<Props> = ({ images }) => {
                 width={1500}
                 height={1500}
                 priority={i === 0}
-                quality='85'
+                quality="85"
               />
             </div>
           ))}
@@ -117,10 +117,10 @@ const ProductSlider: FC<Props> = ({ images }) => {
             {[...Array(slider.details().size).keys()].map((idx) => {
               return (
                 <button
-                  aria-label='Position indicator'
+                  aria-label="Position indicator"
                   key={idx}
                   className={cn(s.positionIndicator, {
-                    [s.positionIndicatorActive]: currentSlide === idx
+                    [s.positionIndicatorActive]: currentSlide === idx,
                   })}
                   onClick={() => {
                     slider.moveToSlideRelative(idx)
@@ -133,7 +133,12 @@ const ProductSlider: FC<Props> = ({ images }) => {
           </div>
         )}
       </div>
-      <Lightbox images={images} selectedImageIndex={selectedImageIndex} isOpen={isGalleryOpen} onClose={closeGallery} />
+      <ProductGallery
+        images={images}
+        selectedImageIndex={selectedImageIndex}
+        isOpen={isGalleryOpen}
+        onClose={closeGallery}
+      />
     </>
   )
 }

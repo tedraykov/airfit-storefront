@@ -4,6 +4,12 @@
   cursor: pointer;
 }
 
+@screen md {
+  .slider {
+    display: none;
+  }
+}
+
 .leftControl,
 .rightControl {
   @apply absolute top-1/2 -translate-x-1/2 z-20 w-16 h-16 flex items-center justify-center bg-hover-1 rounded-full;

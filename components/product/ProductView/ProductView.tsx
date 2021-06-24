@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import { NextSeo } from 'next-seo'
 import React, { FC, useEffect, useState } from 'react'
-import s from './ProductView.module.css'
+import s from './ProductView.module.scss'
 import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text, useUI } from '@components/ui'
 import type { Product } from '@commerce/types'
@@ -9,6 +9,8 @@ import usePrice from '@framework/product/use-price'
 import { useAddItem } from '@framework/cart'
 import { getVariant, SelectedOptions } from '../helpers'
 import WishlistButton from '@components/wishlist/WishlistButton'
+import { createMedia } from '@artsy/fresnel'
+import { DesktopGallery } from '@components/product/DesktopGallery/DesktopGallery'
 
 interface Props {
   children?: any
@@ -22,19 +24,22 @@ const ProductView: FC<Props> = ({ product }) => {
   const { price } = usePrice({
     amount: product.price.value,
     baseAmount: product.price.retailPrice,
-    currencyCode: product.price.currencyCode!
+    currencyCode: product.price.currencyCode!,
   })
   const { openSidebar } = useUI()
   const [loading, setLoading] = useState(false)
   const [choices, setChoices] = useState<SelectedOptions>({})
 
-  useEffect(() =>
-    product.variants[0].options?.forEach((v) => {
-      setChoices((choices) => ({
-        ...choices,
-        [v.displayName.toLowerCase()]: v.values[0].label.toLowerCase()
-      }))
-    }), [])
+  useEffect(
+    () =>
+      product.variants[0].options?.forEach((v) => {
+        setChoices((choices) => ({
+          ...choices,
+          [v.displayName.toLowerCase()]: v.values[0].label.toLowerCase(),
+        }))
+      }),
+    []
+  )
 
   const variant = getVariant(product, choices)
 
@@ -48,8 +53,8 @@ const ProductView: FC<Props> = ({ product }) => {
         variantId: String(selectedVariant.id),
         pricing: {
           amount: selectedVariant.price,
-          currencyCode: product.price.currencyCode ?? 'USD'
-        }
+          currencyCode: product.price.currencyCode ?? 'USD',
+        },
       })
       openSidebar()
       setLoading(false)
@@ -58,8 +63,17 @@ const ProductView: FC<Props> = ({ product }) => {
     }
   }
 
+  const { MediaContextProvider, Media } = createMedia({
+    breakpoints: {
+      sm: 0,
+      md: 768,
+      lg: 1024,
+      xl: 1192,
+    },
+  })
+
   return (
-    <Container className='max-w-none w-full' clean>
+    <Container className="max-w-none w-full" clean>
       <NextSeo
         title={product.name}
         description={product.description}
@@ -72,9 +86,9 @@ const ProductView: FC<Props> = ({ product }) => {
               url: product.images[0]?.url!,
               width: 800,
               height: 600,
-              alt: product.name
-            }
-          ]
+              alt: product.name,
+            },
+          ],
         }}
       />
       <div className={cn(s.root, 'fit')}>
@@ -87,10 +101,16 @@ const ProductView: FC<Props> = ({ product }) => {
               {product.price?.currencyCode}
             </div>
           </div>
-
-          <div className={s.sliderContainer}>
-            <ProductSlider key={product.id} images={product.images}/>
-          </div>
+          <MediaContextProvider>
+            <Media lessThan="lg">
+              <div className={s.sliderContainer}>
+                <ProductSlider key={product.id} images={product.images} />
+              </div>
+            </Media>
+            <Media greaterThanOrEqual="lg">
+              <DesktopGallery images={product.images} />
+            </Media>
+          </MediaContextProvider>
         </div>
         <div className={s.sidebar}>
           <section>
