@@ -5,6 +5,8 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import { getConfig } from '@framework/api'
 import getAllProducts from '@framework/product/get-all-products'
+import getAllPages from '@framework/common/get-all-pages'
+import getSiteInfo from '@framework/common/get-site-info'
 
 export async function getStaticProps({
   preview,
@@ -18,15 +20,15 @@ export async function getStaticProps({
     preview,
   })
 
-  // const { categories, brands } = await getSiteInfo({ config, preview })
-  // const { pages } = await getAllPages({ config, preview })
+  const { categories, brands } = await getSiteInfo({ config, preview })
+  const { pages } = await getAllPages({ config, preview })
 
   return {
     props: {
       products,
-      categories: [],
-      brands: [],
-      pages: [],
+      categories,
+      brands,
+      pages,
     },
     revalidate: 14400,
   }
