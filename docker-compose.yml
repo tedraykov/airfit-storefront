@@ -1,0 +1,23 @@
+# This docker-compose file is used to run the project's published image
+#
+# Usage: docker-compose up [-d]
+#
+# See comment in docker-compose.dev.yml if you want to run for development.
+
+version: "3.4"
+
+networks:
+  reaction:
+    external:
+      name: reaction.localhost
+
+services:
+  storefront:
+    image: tedraykov/airfit-storefront:0.0.1
+    env_file:
+      - ./.env
+    networks:
+      default:
+      reaction:
+    ports:
+      - "4081:4081"
