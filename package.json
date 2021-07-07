@@ -14,7 +14,7 @@
     "generate:vendure": "graphql-codegen --config framework/vendure/codegen.json",
     "generate:definitions": "node framework/bigcommerce/scripts/generate-definitions.js"
   },
-  "name": "nextjs-commerce",
+  "name": "airfit",
   "version": "1.0.0",
   "sideEffects": false,
   "license": "MIT",
