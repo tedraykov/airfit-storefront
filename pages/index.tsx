@@ -1,70 +1,39 @@
-import { Layout } from '@components/common'
-import { Grid, Hero } from '@components/ui'
-import { ProductCard } from '@components/product'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import Head from 'next/head'
+import styles from '../styles/Home.module.css'
+import Image from 'next/image'
 
-import { getConfig } from '@framework/api'
-import getAllProducts from '@framework/product/get-all-products'
-import getAllPages from '@framework/common/get-all-pages'
-import getSiteInfo from '@framework/common/get-site-info'
+import { SocialMedia } from '@components/SocialMedia/SocialMedia'
 
-export async function getStaticProps({
-  preview,
-  locale,
-}: GetStaticPropsContext) {
-  const config = getConfig()
-
-  const { products } = await getAllProducts({
-    variables: { first: 12 },
-    config,
-    preview,
-  })
-
-  const { categories, brands } = await getSiteInfo({ config, preview })
-  const { pages } = await getAllPages({ config, preview })
-
-  return {
-    props: {
-      products,
-      categories,
-      brands,
-      pages,
-    },
-    revalidate: 120,
-  }
-}
-
-export default function Home({
-  products,
-  brands,
-  categories,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Home() {
   return (
-    <>
-      <Grid>
-        {products.slice(0, 3).map((product, i) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            imgProps={{
-              width: i === 0 ? 1080 : 540,
-              height: i === 0 ? 1080 : 540,
-            }}
+    <div className={styles.container}>
+      <Head>
+        <title>AirFit - Очаквайте скоро</title>
+        <link rel="icon" href="/favicon.ico" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;800&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
+      <main className={styles.main}>
+        <section>
+          <h1 className={styles.title}>AIRFIT</h1>
+          <p className={styles.subHeading}>Очаквайте скоро</p>
+        </section>
+        <figure>
+          <div className={styles.overlay} />
+          <Image
+            src="https://images.pexels.com/photos/4753895/pexels-photo-4753895.jpeg?cs=srgb&dl=pexels-cottonbro-4753895.jpg&fm=jpg"
+            alt="Banner image"
+            width={666}
+            height={1000}
           />
-        ))}
-      </Grid>
-      <Hero
-        headline="Release Details: The Yeezy BOOST 350 V2 ‘Natural'"
-        description="
-        The Yeezy BOOST 350 V2 lineup continues to grow. We recently had the
-        ‘Carbon’ iteration, and now release details have been locked in for
-        this ‘Natural’ joint. Revealed by Yeezy Mafia earlier this year, the
-        shoe was originally called ‘Abez’, which translated to ‘Tin’ in
-        Hebrew. It’s now undergone a name change, and will be referred to as
-        ‘Natural’."
-      />
-    </>
+        </figure>
+      </main>
+      <footer className={styles.socialMedia}>
+        <SocialMedia />
+      </footer>
+    </div>
   )
 }
-
-Home.Layout = Layout

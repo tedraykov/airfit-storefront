@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,700&display=swap');
+
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.nav .logo {
+  position: relative;
+  margin: 0;
+  display: flex;
+  background-color: white;
+  cursor: pointer;
+}
+
+.nav .logo::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 50px 0 rgba(255, 255, 255, 0.50);
+  -webkit-box-shadow: 0 0 50px 0 rgba(255, 255, 255, 0.50);
+  -moz-box-shadow: 0 0 50px 0 rgba(255, 255, 255, 0.50);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.nav .logo:hover::after {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.nav .logo img {
+  color: black;
+  height: 100px;
+  width: 100px;
+  padding: 30px;
+}
+
+.nav .logo span {
+  transform: translate(-30px, -28px) rotate(90deg);
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  width: 30px;
+}
+
+.container {
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgb(1, 5, 5)
+}
+
+.main {
+  width: 100%;
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
+.main section {
+  z-index: 2;
+  color: white;
+  padding: 5rem 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+.title {
+  position: relative;
+  margin: 0;
+  line-height: 1.15;
+  font-size: 6.5rem;
+  font-weight: bold;
+  font-family: "Roboto Condensed", sans-serif;
+  /*-webkit-text-stroke: 1.5px black;*/
+
+  -webkit-animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  -o-animation: fadein 1s;
+  animation: fadein 1s;
+}
+
+.title:after {
+  content: "AIRFIT";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  z-index: -1;
+  background: linear-gradient(120deg, #ad4508, #919701, #005b83);
+  background-size: 600% 600%;
+
+  -webkit-animation: logoShadowGradient 10s ease infinite;
+  -moz-animation: logoShadowGradient 10s ease infinite;
+  animation: logoShadowGradient 10s ease infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@-webkit-keyframes logoShadowGradient {
+  0%{background-position:0 30%}
+  50%{background-position:100% 71%}
+  100%{background-position:0 30%}
+}
+@-moz-keyframes logoShadowGradient {
+  0%{background-position:0 30%}
+  50%{background-position:100% 71%}
+  100%{background-position:0 30%}
+}
+@keyframes logoShadowGradient {
+  0%{background-position:0 30%}
+  50%{background-position:100% 71%}
+  100%{background-position:0 30%}
+}
+
+.subHeading {
+  line-height: 2;
+  font-size: 1.4rem;
+  font-family: "Lato Light", sans-serif;
+
+  -webkit-animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  -o-animation: fadein 1s;
+  animation: fadein 1s;
+  animation-delay: 200ms;
+  opacity: 0;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.main figure {
+  min-width: 666px;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.main .overlay {
+  position: absolute;
+  width: 100%;
+  height: 1000px;
+  z-index: 1;
+  -webkit-box-shadow: inset 0 0 40px 40px rgb(2,7,8);
+  box-shadow: inset 0 0 40px 40px rgb(2,7,8);
+  background: radial-gradient(circle, rgba(2,7,8,0.2) 0%, rgba(2,7,8,1) 80%);
+}
+
+.socialMedia {
+  z-index: 100;
+  position: fixed;
+  bottom: 0;
+}
+
+@media (min-width: 600px) {
+  .main section {
+    align-items: flex-start;
+    padding: 5rem 8rem;
+  }
+
+  .title,
+  .description {
+    text-align: start;
+  }
+
+  .main figure {
+    right: 0;
+    left: auto;
+  }
+
+  .socialMedia {
+    margin: 0 10%;
+    right: 0;
+  }
+}
+
+@media (min-width: 860px) {
+  .main section {
+    padding: 8rem 20%;
+  }
+
+  .title {
+    max-width: max-content;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main {
+    max-width: 1600px;
+  }
+  .title {
+    font-size: 7rem;
+  }
+}

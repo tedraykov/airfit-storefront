@@ -1,0 +1,63 @@
+.container {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.container li {
+  margin: 0 1rem;
+}
+
+.container li a {
+  position: relative;
+  border-style: none;
+  background: #ffffff;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container li a::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.2);
+  -webkit-box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: 0 0 20px 0 rgba(255, 255, 255, 0.20);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.container li a:hover::after {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.container li a svg {
+  height: 1.4rem;
+  width: 1.4rem;
+}
+
+.container li a:hover {
+  color: white;
+}
+
+.instagram:hover {
+  background: #f09433;
+  background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+}
+
+.facebook:hover {
+  background: #4267B2;
+}
+
+.youtube:hover {
+  background: #bf2020;
+}
