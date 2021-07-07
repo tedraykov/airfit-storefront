@@ -23,6 +23,7 @@ const getCategories = async (
       entityId: node?._id,
       name: node?.displayTitle,
       path: `/${node?.slug}`,
+      slug: node?.slug,
     })) ?? []
   )
 }
