@@ -11,7 +11,7 @@ interface Props {
   className?: string
   product: Product
   variant?: 'slim' | 'simple'
-  imgProps?: Omit<ImageProps, 'src' | 'placeholder' | 'blurDataURL'>
+  imgProps?: Omit<ImageProps, 'src' | 'placeholder' | 'blurDataURL' | ''>
 }
 
 const placeholderImg = '/product-img-placeholder.svg'
@@ -42,13 +42,14 @@ const ProductCard: FC<Props> = ({
             </div>
             {product?.images && (
               <Image
-                quality="85"
                 src={product.images[0]?.url || placeholderImg}
                 alt={product.name || 'Product Image'}
-                height={320}
-                width={320}
+                unoptimized={true}
+                width={540}
+                height={540}
                 layout="fixed"
-                {...imgProps}
+                placeholder={'blur'}
+                blurDataURL={product.images[0]?.thumbnail || placeholderImg}
               />
             )}
           </div>
@@ -75,12 +76,13 @@ const ProductCard: FC<Props> = ({
                 <Image
                   alt={product.name || 'Product Image'}
                   className={s.productImage}
-                  src={product.images[0]?.url || placeholderImg}
+                  src={product.images[0]?.large || placeholderImg}
                   height={640}
                   width={640}
-                  quality="85"
+                  unoptimized={true}
                   layout="responsive"
-                  {...imgProps}
+                  placeholder={'blur'}
+                  blurDataURL={product.images[0]?.thumbnail || placeholderImg}
                 />
               )}
             </div>

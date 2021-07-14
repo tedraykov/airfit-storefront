@@ -187,6 +187,10 @@ export interface ProductOptionValues {
 
 export interface ProductImage {
   url: string
+  large: string
+  medium: string
+  small: string
+  thumbnail: string
   alt?: string
 }
 

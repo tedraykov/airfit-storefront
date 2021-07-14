@@ -4,6 +4,7 @@ import {
   ProductVariant,
   ProductOption,
   ProductOptionValues,
+  ProductImage,
 } from '@commerce/types'
 
 import {
@@ -21,9 +22,16 @@ import {
 import type { Cart, LineItem } from '../types'
 import { Page } from '@framework/common/get-all-pages'
 
-const normalizeProductImages = (images: ImageInfo[], name: string) =>
+const normalizeProductImages = (
+  images: ImageInfo[],
+  name: string
+): ProductImage[] =>
   images.map((image) => ({
-    url: image?.URLs?.original || image?.URLs?.medium || '',
+    url: image?.URLs?.original || '',
+    medium: image?.URLs?.medium || '',
+    small: image?.URLs?.small || '',
+    thumbnail: image?.URLs?.thumbnail || '',
+    large: image?.URLs?.large || '',
     alt: name,
   }))
 
