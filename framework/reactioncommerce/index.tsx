@@ -23,7 +23,7 @@ type ReactionConfig = CommerceConfig & {
 }
 
 export const reactionCommerceConfig: ReactionConfig = {
-  locale: 'en-us',
+  locale: 'bg-BG',
   anonymousCartTokenCookie: REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
   cartCookie: REACTION_CART_ID_COOKIE,
   shopId: SHOP_ID,
@@ -42,7 +42,6 @@ export function CommerceProvider({
 }: ReactionCommerceProps) {
   return (
     <CoreCommerceProvider
-      // TODO: Fix this type
       provider={reactionCommerceProvider as any}
       config={{ ...reactionCommerceConfig, ...config }}
     >

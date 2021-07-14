@@ -47,7 +47,7 @@ export class Config {
 }
 
 const config = new Config({
-  locale: 'en-US',
+  locale: 'bg-BG',
   commerceUrl: API_URL,
   cartCookie: REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
   cartIdCookie: REACTION_CART_ID_COOKIE,
