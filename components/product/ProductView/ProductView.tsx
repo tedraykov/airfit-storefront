@@ -92,20 +92,17 @@ const ProductView: FC<Props> = ({ product }) => {
       />
       <div className={cn(s.root, 'fit')}>
         <div className={cn(s.productDisplay, 'fit')}>
-          <div className={s.nameBox}>
-            <h1 className={s.name}>{product.name}</h1>
-            <div className={s.price}>
-              {price}
-              {` `}
+          <div className={s.nameBoxContainer}>
+            <div className={s.nameBox}>
+              <h1 className={s.name}>{product.name}</h1>
+              <div className={s.price}>{price}</div>
             </div>
           </div>
           <MediaContextProvider>
-            <Media lessThan="lg">
-              <div className={s.sliderContainer}>
-                <ProductSlider key={product.id} images={product.images} />
-              </div>
+            <Media lessThan="lg" className={s.sliderContainer}>
+              <ProductSlider key={product.id} images={product.images} />
             </Media>
-            <Media greaterThanOrEqual="lg">
+            <Media greaterThanOrEqual="lg" className={s.galleryContainer}>
               <DesktopGallery images={product.images} />
             </Media>
           </MediaContextProvider>

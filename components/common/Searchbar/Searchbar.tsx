@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import s from './Searchbar.module.css'
 import { useRouter } from 'next/router'
+import throttle from 'lodash.throttle'
 
 interface Props {
   className?: string
@@ -29,7 +30,7 @@ const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
         <input
           id={id}
           className={s.input}
-          placeholder="Search for products..."
+          placeholder="Търси продукти в сайта..."
           defaultValue={router.query.q}
           onKeyUp={(e) => {
             e.preventDefault()

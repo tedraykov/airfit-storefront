@@ -8798,11 +8798,6 @@ react-photoswipe-gallery@^1.3.6:
   resolved "https://registry.yarnpkg.com/react-photoswipe-gallery/-/react-photoswipe-gallery-1.3.6.tgz#c6e7f72393e78a09d7de312b12a89ecfe8d19d8c"
   integrity sha512-HUaNu4FWNcHbZeBtYMZ+wX2+DbaW0LCtbkQuHLxM+VJWvYhPSpiVTmkR0Wn5qeN8t2L5/ca1rV66G8e15AVcOA==
 
-react-progressive-image-loading@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-progressive-image-loading/-/react-progressive-image-loading-3.0.3.tgz#7e99298b9bd76bc7dcfba9cdf83c263d41f17dc3"
-  integrity sha1-fpkpi5vXa8fc+6nN+DwmPUHxfcM=
-
 react-refresh@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"

@@ -89,10 +89,13 @@ const ProductSlider: FC<Props> = ({ images }) => {
         />
         <div
           ref={ref}
-          className="keen-slider h-full transition-opacity duration-150"
+          className={cn(
+            s.imagesWrapper,
+            'keen-slider h-full transition-opacity duration-150'
+          )}
           style={{ opacity: isMounted ? 1 : 0 }}
         >
-          {images.map(({ url, alt, thumbnail }, i) => (
+          {images.map(({ url, medium, alt, thumbnail }, i) => (
             <div
               onClick={() => {
                 openGallery(i)
@@ -102,10 +105,10 @@ const ProductSlider: FC<Props> = ({ images }) => {
             >
               <Image
                 className={s.img}
-                src={url!}
+                src={medium!}
                 alt={alt || 'Product Image'}
-                width={800}
-                height={800}
+                sizes="(max-width: 500px) 500px, (max-width: 640px) 640px"
+                layout={'fill'}
                 priority={i === 0}
                 unoptimized={true}
                 placeholder="blur"

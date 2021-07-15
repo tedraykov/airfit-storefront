@@ -50,8 +50,8 @@
 .positionIndicatorsContainer {
   /*@apply hidden;*/
 
-    @apply block absolute bottom-6 left-1/2;
-    transform: translateX(-50%);
+  @apply block absolute bottom-12 left-1/2;
+  transform: translateX(-50%);
 
 }
 
@@ -83,8 +83,24 @@
   @apply bg-white;
 }
 
+.imagesWrapper {
+  min-height: 500px;
+}
+
+@screen sm {
+  .imagesWrapper {
+    min-height: 600px;
+  }
+}
+
+@screen md {
+  .imagesWrapper {
+    min-height: 700px;
+  }
+}
+
 .imageContainer > div {
-    @apply h-full;
+  @apply h-full;
 }
 
 .img {

@@ -89,8 +89,9 @@
   @apply bg-white;
 }
 
-.imageContainer > div {
-    @apply h-full;
+.imageContainer {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .img {
