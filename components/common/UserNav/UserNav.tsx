@@ -8,7 +8,7 @@ import { Avatar } from '@components/common'
 import { Heart, Bag } from '@components/icons'
 import { useUI } from '@components/ui/context'
 import DropdownMenu from './DropdownMenu'
-import s from './UserNav.module.css'
+import s from './UserNav.module.scss'
 
 interface Props {
   className?: string

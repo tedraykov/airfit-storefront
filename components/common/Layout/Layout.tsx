@@ -102,7 +102,7 @@ const Layout: FC<Props> = ({
     }))
 
   return (
-    <CommerceProvider locale={'bg-BG'}>
+    <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>
         <Navbar links={navBarLinks} />
         <main className="fit">{children}</main>

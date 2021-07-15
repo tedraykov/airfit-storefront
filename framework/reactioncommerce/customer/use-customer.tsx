@@ -13,14 +13,16 @@ export const handler: SWRHook<Customer | null> = {
     const data = await fetch<any | null>({
       ...options,
     })
-    return normalizeCustomer(data.viewer) ?? null
+    return normalizeCustomer(data.viewer)
   },
-  useHook: ({ useData }) => (input) => {
-    return useData({
-      swrOptions: {
-        revalidateOnFocus: false,
-        ...input?.swrOptions,
-      },
-    })
-  },
+  useHook:
+    ({ useData }) =>
+    (input) => {
+      return useData({
+        swrOptions: {
+          revalidateOnFocus: false,
+          ...input?.swrOptions,
+        },
+      })
+    },
 }

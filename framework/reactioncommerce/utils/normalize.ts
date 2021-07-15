@@ -278,9 +278,9 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
   }
 }
 
-export function normalizeCustomer(viewer: Account): Customer {
+export function normalizeCustomer(viewer: Account): Customer | null {
   if (!viewer) {
-    return <Customer>{}
+    return null
   }
 
   return <Customer>{

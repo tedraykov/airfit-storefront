@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import s from './Sidebar.module.css'
 import cn from 'classnames'
 import {

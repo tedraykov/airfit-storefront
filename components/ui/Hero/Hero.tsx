@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Container } from '@components/ui'
-import { RightArrow } from '@components/icons'
+import { ArrowRight } from '@components/icons'
 import s from './Hero.module.css'
 import Link from 'next/link'
 interface Props {
@@ -24,7 +24,7 @@ const Hero: FC<Props> = ({ headline, description }) => {
             <Link href="/">
               <a className="text-white pt-3 font-bold hover:underline flex flex-row cursor-pointer w-max-content">
                 Read it here
-                <RightArrow width="20" heigh="20" className="ml-1" />
+                <ArrowRight width="20" heigh="20" className="ml-1" />
               </a>
             </Link>
           </div>
