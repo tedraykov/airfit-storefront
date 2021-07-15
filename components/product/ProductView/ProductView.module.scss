@@ -28,7 +28,7 @@
 }
 
 .nameBoxContainer {
-  @apply z-20 pr-16;
+  @apply z-20 pr-16 pointer-events-none;
 
   @screen lg {
     @apply absolute h-full w-full;
