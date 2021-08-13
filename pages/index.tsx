@@ -3,25 +3,26 @@ import { Grid, Hero } from '@components/ui'
 import { ProductCard } from '@components/product'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
-import { getConfig } from '@framework/api'
-import getAllProducts from '@framework/product/get-all-products'
-import getAllPages from '@framework/common/get-all-pages'
-import getSiteInfo from '@framework/common/get-site-info'
+import commerce from '@lib/api/commerce'
 
 export async function getStaticProps({
   preview,
   locale,
+  locales,
 }: GetStaticPropsContext) {
-  const config = getConfig()
-
-  const { products } = await getAllProducts({
-    variables: { first: 12 },
+  const config = { locale, locales }
+  const productsPromise = commerce.getAllProducts({
+    variables: { first: 6 },
     config,
     preview,
+    // Saleor provider only
+    ...({ featured: true } as any),
   })
-
-  const { categories, brands } = await getSiteInfo({ config, preview })
-  const { pages } = await getAllPages({ config, preview })
+  const pagesPromise = commerce.getAllPages({ config, preview })
+  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const { products } = await productsPromise
+  const { pages } = await pagesPromise
+  const { categories, brands } = await siteInfoPromise
 
   return {
     props: {
@@ -30,14 +31,12 @@ export async function getStaticProps({
       brands,
       pages,
     },
-    revalidate: 120,
+    revalidate: 60,
   }
 }
 
 export default function Home({
   products,
-  brands,
-  categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>

@@ -7,29 +7,13 @@ import type {
 
 import { ValidationError } from '@commerce/utils/errors'
 
-import useRemoveItem, {
-  RemoveItemInput as RemoveItemInputBase,
-  UseRemoveItem,
-} from '@commerce/cart/use-remove-item'
-
 import useCart from './use-cart'
-import {
-  removeCartItemsMutation,
-  getAnonymousCartToken,
-  getAnonymousCartId,
-  normalizeCart,
-} from '../utils'
-import { Cart, LineItem } from '../types'
+import { removeCartItemsMutation, normalizeCart } from '../utils'
+import { LineItem, RemoveItemHook } from '../types'
 import { Mutation, MutationUpdateCartItemsQuantityArgs } from '../schema'
-import { RemoveCartItemBody } from '@commerce/types'
-
-export type RemoveItemFn<T = any> = T extends LineItem
-  ? (input?: RemoveItemInput<T>) => Promise<Cart | null>
-  : (input: RemoveItemInput<T>) => Promise<Cart | null>
-
-export type RemoveItemInput<T = any> = T extends LineItem
-  ? Partial<RemoveItemInputBase>
-  : RemoveItemInputBase
+import useRemoveItem, { UseRemoveItem } from '@commerce/cart/use-remove-item'
+import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
+import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
 
 export default useRemoveItem as UseRemoveItem<typeof handler>
 
@@ -41,7 +25,7 @@ export const handler = {
     input: { itemId },
     options,
     fetch,
-  }: HookFetcherContext<RemoveCartItemBody>) {
+  }: HookFetcherContext<RemoveItemHook>) {
     const { removeCartItems } = await fetch<
       Mutation,
       MutationUpdateCartItemsQuantityArgs
@@ -49,7 +33,7 @@ export const handler = {
       ...options,
       variables: {
         input: {
-          cartId: getAnonymousCartId(),
+          cartId: getCartIdCookie(),
           cartToken: getAnonymousCartToken(),
           cartItemIds: [itemId],
         },
@@ -57,29 +41,26 @@ export const handler = {
     })
     return normalizeCart(removeCartItems?.cart)
   },
-  useHook: ({
-    fetch,
-  }: MutationHookContext<Cart | null, RemoveCartItemBody>) => <
-    T extends LineItem | undefined = undefined
-  >(
-    ctx: { item?: T } = {}
-  ) => {
-    const { item } = ctx
-    const { mutate } = useCart()
-    const removeItem: RemoveItemFn<LineItem> = async (input) => {
-      const itemId = input?.id ?? item?.id
+  useHook:
+    ({ fetch }: MutationHookContext<RemoveItemHook>) =>
+    <T extends LineItem | undefined = undefined>() => {
+      const { mutate } = useCart()
 
-      if (!itemId) {
-        throw new ValidationError({
-          message: 'Invalid input used for this operation',
-        })
-      }
+      return useCallback(
+        async (input) => {
+          const itemId = input?.id
 
-      const data = await fetch({ input: { itemId } })
-      await mutate(data, false)
-      return data
-    }
+          if (!itemId) {
+            throw new ValidationError({
+              message: 'Invalid input used for this operation',
+            })
+          }
 
-    return useCallback(removeItem as RemoveItemFn<T>, [fetch, mutate])
-  },
+          const data = await fetch({ input: { itemId } })
+          await mutate(data, false)
+          return data
+        },
+        [fetch, mutate]
+      )
+    },
 }

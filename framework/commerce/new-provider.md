@@ -3,6 +3,7 @@
 A commerce provider is a headless e-commerce platform that integrates with the [Commerce Framework](./README.md). Right now we have the following providers:
 
 - BigCommerce ([framework/bigcommerce](../bigcommerce))
+- Saleor ([framework/saleor](../saleor))
 - Shopify ([framework/shopify](../shopify))
 
 Adding a commerce provider means adding a new folder in `framework` with a folder structure like the next one:
@@ -57,7 +58,8 @@ import {
   CommerceProvider as CoreCommerceProvider,
   useCommerce as useCoreCommerce,
 } from '@commerce'
-import { bigcommerceProvider, BigcommerceProvider } from './provider'
+import { bigcommerceProvider } from './provider'
+import type { BigcommerceProvider } from './provider'
 
 export { bigcommerceProvider }
 export type { BigcommerceProvider }
@@ -149,31 +151,33 @@ export const handler: SWRHook<
   { isEmpty?: boolean }
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/cart',
+    url: '/api/cart',
     method: 'GET',
   },
   async fetcher({ input: { cartId }, options, fetch }) {
     const data = cartId ? await fetch(options) : null
     return data && normalizeCart(data)
   },
-  useHook: ({ useData }) => (input) => {
-    const response = useData({
-      swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },
-    })
+  useHook:
+    ({ useData }) =>
+    (input) => {
+      const response = useData({
+        swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },
+      })
 
-    return useMemo(
-      () =>
-        Object.create(response, {
-          isEmpty: {
-            get() {
-              return (response.data?.lineItems.length ?? 0) <= 0
+      return useMemo(
+        () =>
+          Object.create(response, {
+            isEmpty: {
+              get() {
+                return (response.data?.lineItems.length ?? 0) <= 0
+              },
+              enumerable: true,
             },
-            enumerable: true,
-          },
-        }),
-      [response]
-    )
-  },
+          }),
+        [response]
+      )
+    },
 }
 ```
 
@@ -197,7 +201,7 @@ export default useAddItem as UseAddItem<typeof handler>
 
 export const handler: MutationHook<Cart, {}, CartItemBody> = {
   fetchOptions: {
-    url: '/api/bigcommerce/cart',
+    url: '/api/cart',
     method: 'POST',
   },
   async fetcher({ input: item, options, fetch }) {
@@ -217,18 +221,20 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
 
     return normalizeCart(data)
   },
-  useHook: ({ fetch }) => () => {
-    const { mutate } = useCart()
+  useHook:
+    ({ fetch }) =>
+    () => {
+      const { mutate } = useCart()
 
-    return useCallback(
-      async function addItem(input) {
-        const data = await fetch({ input })
-        await mutate(data, false)
-        return data
-      },
-      [fetch, mutate]
-    )
-  },
+      return useCallback(
+        async function addItem(input) {
+          const data = await fetch({ input })
+          await mutate(data, false)
+          return data
+        },
+        [fetch, mutate]
+      )
+    },
 }
 ```
 

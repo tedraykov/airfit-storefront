@@ -7,9 +7,9 @@ import useCart from './use-cart'
 
 export default useAddItem as UseAddItem<typeof handler>
 
-export const handler: MutationHook<Cart, {}, CartItemBody> = {
+export const handler: MutationHook<AddItemHook> = {
   fetchOptions: {
-    url: '/api/reactioncommerce/cart',
+    url: '/api/cart',
     method: 'POST',
   },
   async fetcher({ input: item, options, fetch }) {
@@ -24,23 +24,25 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
       })
     }
 
-    const data = await fetch<Cart, AddCartItemBody>({
+    const data = await fetch({
       ...options,
       body: { item },
     })
 
     return data
   },
-  useHook: ({ fetch }) => () => {
-    const { mutate } = useCart()
+  useHook:
+    ({ fetch }) =>
+    () => {
+      const { mutate } = useCart()
 
-    return useCallback(
-      async function addItem(input) {
-        const data = await fetch({ input })
-        await mutate(data, false)
-        return data
-      },
-      [fetch, mutate]
-    )
-  },
+      return useCallback(
+        async function addItem(input) {
+          const data = await fetch({ input })
+          await mutate(data, false)
+          return data
+        },
+        [fetch, mutate]
+      )
+    },
 }

@@ -1,6 +1,7 @@
-import { getConfig, ReactionCommerceConfig } from '../api'
+import { ReactionCommerceConfig } from '../api'
 import fetchAllProducts from '../api/utils/fetch-all-products'
 import getAllProductsPathsQuery from '../utils/queries/get-all-products-paths-query'
+import commerce from '@lib/api/commerce'
 
 type ProductPath = {
   path: string
@@ -20,7 +21,7 @@ const getAllProductPaths = async (options?: {
   preview?: boolean
 }): Promise<ReturnType> => {
   let { config, variables = { first: 250 } } = options ?? {}
-  config = getConfig(config)
+  config = commerce.getConfig(config)
 
   const products = await fetchAllProducts({
     config,

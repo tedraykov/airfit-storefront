@@ -1,6 +1,11 @@
-import * as Core from '@commerce/types'
+import * as Core from '@commerce/types/cart'
+import { Product as CoreProduct } from '@commerce/types/product'
 
-export interface Cart extends Core.Cart {
+export type Product = CoreProduct & {
+  vendor: string
+}
+
+export type Cart = Core.Cart & {
   id: string
   lineItems: LineItem[]
 }
@@ -19,20 +24,33 @@ export type OptionSelections = {
 }
 
 export type CartItemBody = Core.CartItemBody & {
-  productId: string // The product id is always required for BC
+  pricing: number
   optionSelections?: OptionSelections
 }
 
-export type GetCartHandlerBody = Core.GetCartHandlerBody
+export type CartTypes = {
+  cart: Cart
+  item: Core.LineItem
+  itemBody: CartItemBody
+}
 
-export type AddCartItemBody = Core.AddCartItemBody<CartItemBody>
+export type CartSchema = Core.CartSchema<CartTypes>
 
-export type AddCartItemHandlerBody = Core.AddCartItemHandlerBody<CartItemBody>
+export type CartHooks = Core.CartHooks<CartTypes>
 
-export type UpdateCartItemBody = Core.UpdateCartItemBody<CartItemBody>
+export type UpdateItemHook = CartHooks['updateItem']
+export type RemoveItemHook = CartHooks['removeItem']
 
-export type UpdateCartItemHandlerBody = Core.UpdateCartItemHandlerBody<CartItemBody>
-
-export type RemoveCartItemBody = Core.RemoveCartItemBody
-
-export type RemoveCartItemHandlerBody = Core.RemoveCartItemHandlerBody
+// export type GetCartHandlerBody = Core.GetCartHandlerBody
+//
+// export type AddCartItemBody = Core.AddCartItemBody<CartItemBody>
+//
+// export type AddCartItemHandlerBody = Core.AddCartItemHandlerBody<CartItemBody>
+//
+// export type UpdateCartItemBody = Core.UpdateCartItemBody<CartItemBody>
+//
+// export type UpdateCartItemHandlerBody = Core.UpdateCartItemHandlerBody<CartItemBody>
+//
+// export type RemoveCartItemBody = Core.RemoveCartItemBody
+//
+// export type RemoveCartItemHandlerBody = Core.RemoveCartItemHandlerBody

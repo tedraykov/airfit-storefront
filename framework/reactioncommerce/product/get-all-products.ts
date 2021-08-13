@@ -1,8 +1,9 @@
 import { GraphQLFetcherResult } from '@commerce/api'
-import { getConfig, ReactionCommerceConfig } from '../api'
+import { ReactionCommerceConfig } from '../api'
 import { CatalogItemEdge, CatalogItemProduct } from '../schema'
 import { catalogItemsQuery, normalizeProduct } from '../utils'
-import { Product } from '@commerce/types'
+import { Product } from '@commerce/types/product'
+import commerce from '@lib/api/commerce'
 
 type Variables = {
   first?: number
@@ -19,7 +20,7 @@ const getAllProducts = async (options: {
   preview?: boolean
 }): Promise<ReturnType> => {
   let { config, variables = { first: 250 } } = options ?? {}
-  config = getConfig(config)
+  config = commerce.getConfig(config)
 
   const { data }: GraphQLFetcherResult = await config.fetch(catalogItemsQuery, {
     variables: {

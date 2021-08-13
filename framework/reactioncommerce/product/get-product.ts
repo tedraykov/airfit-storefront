@@ -1,6 +1,7 @@
 import { GraphQLFetcherResult } from '@commerce/api'
-import { getConfig, ReactionCommerceConfig } from '../api'
+import { ReactionCommerceConfig } from '../api'
 import { normalizeProduct, getProductQuery } from '../utils'
+import commerce from '@lib/api/commerce'
 
 type Variables = {
   slug: string
@@ -16,7 +17,7 @@ const getProduct = async (options: {
   preview?: boolean
 }): Promise<ReturnType> => {
   let { config, variables } = options ?? {}
-  config = getConfig(config)
+  config = commerce.getConfig(config)
 
   const { data }: GraphQLFetcherResult = await config.fetch(getProductQuery, {
     variables,

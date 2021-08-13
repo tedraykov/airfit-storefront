@@ -1,11 +1,13 @@
 import {
-  Product,
-  Customer,
   ProductVariant,
   ProductOption,
   ProductOptionValues,
   ProductImage,
-} from '@commerce/types'
+} from '@commerce/types/product'
+
+import { Product } from '../types'
+
+import { Customer } from '@commerce/types/customer'
 
 import {
   Account,
@@ -196,7 +198,7 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     images: media?.length
       ? normalizeProductImages(<ImageInfo[]>media, title ?? '')
       : [],
-    vendor: product.vendor,
+    vendor: product.vendor ?? '',
     price: {
       value: pricing[0]?.minPrice ?? 0,
       currencyCode: pricing[0]?.currency.code,
@@ -266,7 +268,6 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
       requiresShipping: true,
       price: priceWhenAdded?.amount,
       listPrice: compareAtPrice?.amount ?? 0,
-      options: [],
     },
     path: '',
     discounts: [],

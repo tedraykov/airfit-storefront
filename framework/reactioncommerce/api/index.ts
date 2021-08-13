@@ -1,4 +1,8 @@
-import type { CommerceAPIConfig } from '@commerce/api'
+import {
+  CommerceAPI,
+  CommerceAPIConfig,
+  getCommerceApi as commerceApi,
+} from '@commerce/api'
 
 import {
   API_URL,
@@ -16,39 +20,34 @@ if (!API_URL) {
   )
 }
 
-import fetchGraphqlApi from './utils/fetch-graphql-api'
+if (!SHOP_ID) {
+  throw new Error(
+    `The environment variable SHOP_ID is missing and it's required to access your store`
+  )
+}
 
-export interface ReactionCommerceConfig
-  extends Omit<CommerceAPIConfig, 'apiToken'> {
+import fetchGraphqlApi from './utils/fetch-graphql-api'
+import login from './operations/login'
+import getAllPages from './operations/get-all-pages'
+import getPage from './operations/get-page'
+import getSiteInfo from './operations/get-site-info'
+import getAllProductPaths from './operations/get-all-product-paths'
+import getAllProducts from './operations/get-all-products'
+import getProduct from './operations/get-product'
+
+export interface ReactionCommerceConfig extends CommerceAPIConfig {
   shopId: string
+  apiToken: string
   cartIdCookie: string
   dummyEmptyCartId?: string
   anonymousCartTokenCookie?: string
   anonymousCartTokenCookieMaxAge?: number
 }
 
-export class Config {
-  private config: ReactionCommerceConfig
-
-  constructor(config: ReactionCommerceConfig) {
-    this.config = config
-  }
-
-  getConfig(userConfig: Partial<ReactionCommerceConfig> = {}) {
-    return Object.entries(userConfig).reduce<ReactionCommerceConfig>(
-      (cfg, [key, value]) => Object.assign(cfg, { [key]: value }),
-      { ...this.config }
-    )
-  }
-
-  setConfig(newConfig: Partial<ReactionCommerceConfig>) {
-    Object.assign(this.config, newConfig)
-  }
-}
-
-const config = new Config({
+const config: ReactionCommerceConfig = {
   locale: 'bg-BG',
   commerceUrl: API_URL,
+  apiToken: REACTION_CUSTOMER_TOKEN_COOKIE,
   cartCookie: REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
   cartIdCookie: REACTION_CART_ID_COOKIE,
   dummyEmptyCartId: REACTION_EMPTY_DUMMY_CART_ID,
@@ -58,12 +57,26 @@ const config = new Config({
   fetch: fetchGraphqlApi,
   customerCookie: REACTION_CUSTOMER_TOKEN_COOKIE,
   shopId: SHOP_ID,
-})
-
-export function getConfig(userConfig?: Partial<ReactionCommerceConfig>) {
-  return config.getConfig(userConfig)
 }
 
-export function setConfig(newConfig: Partial<ReactionCommerceConfig>) {
-  return config.setConfig(newConfig)
+const operations = {
+  login,
+  getAllPages,
+  getPage,
+  getSiteInfo,
+  getAllProductPaths,
+  getAllProducts,
+  getProduct,
+}
+
+export const provider = { config, operations }
+
+export type Provider = typeof provider
+
+export type ReactionCommerceAPI<P extends Provider = Provider> = CommerceAPI<P>
+
+export function getCommerceApi<P extends Provider>(
+  customProvider: P = provider as any
+): ReactionCommerceAPI<P> {
+  return commerceApi(customProvider)
 }

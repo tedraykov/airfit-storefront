@@ -1,5 +1,6 @@
-import { getConfig, ReactionCommerceConfig } from '../api'
+import { ReactionCommerceConfig } from '../api'
 import getAllCollectionsQuery from '../utils/queries/get-all-collections-query'
+import commerce from '@lib/api/commerce'
 
 const getAllCollections = async (options?: {
   variables?: any
@@ -7,7 +8,7 @@ const getAllCollections = async (options?: {
   preview?: boolean
 }) => {
   let { config, variables = { first: 250 } } = options ?? {}
-  config = getConfig(config)
+  config = commerce.getConfig(config)
 
   const { data } = await config.fetch(getAllCollectionsQuery, { variables })
   const edges = data.collections?.edges ?? []

@@ -1,11 +1,11 @@
 import useCustomer, { UseCustomer } from '@commerce/customer/use-customer'
-import { Customer } from '@commerce/types'
 import { SWRHook } from '@commerce/utils/types'
 import { viewerQuery, normalizeCustomer } from '../utils'
+import { CustomerHook } from '@commerce/types/customer'
 
 export default useCustomer as UseCustomer<typeof handler>
 
-export const handler: SWRHook<Customer | null> = {
+export const handler: SWRHook<CustomerHook> = {
   fetchOptions: {
     query: viewerQuery,
   },
