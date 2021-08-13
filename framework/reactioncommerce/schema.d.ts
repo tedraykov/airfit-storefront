@@ -5530,7 +5530,7 @@ export type RecalculateReservedSimpleInventoryPayload = {
   inventoryInfo: SimpleInventoryInfo
 }
 
-/** Input for the `reconcileCarts` mutation call */
+/** Input for the `reconcileCart` mutation call */
 export type ReconcileCartsInput = {
   /** An anonymous cart ID */
   anonymousCartId: Scalars['ID']
@@ -5548,7 +5548,7 @@ export type ReconcileCartsInput = {
   shopId: Scalars['ID']
 }
 
-/** The payload returned from the `reconcileCarts` mutation call */
+/** The payload returned from the `reconcileCart` mutation call */
 export type ReconcileCartsPayload = {
   __typename?: 'ReconcileCartsPayload'
   /** The account cart, potentially modified */

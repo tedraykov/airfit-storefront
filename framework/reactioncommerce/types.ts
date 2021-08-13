@@ -24,13 +24,16 @@ export type OptionSelections = {
 }
 
 export type CartItemBody = Core.CartItemBody & {
-  pricing: number
+  pricing: {
+    amount: number
+    currencyCode: string
+  }
   optionSelections?: OptionSelections
 }
 
 export type CartTypes = {
-  cart: Cart
-  item: Core.LineItem
+  cart?: Cart
+  item: LineItem
   itemBody: CartItemBody
 }
 
@@ -38,19 +41,7 @@ export type CartSchema = Core.CartSchema<CartTypes>
 
 export type CartHooks = Core.CartHooks<CartTypes>
 
+export type GetCartHook = CartHooks['getCart']
+export type AddItemHook = CartHooks['addItem']
 export type UpdateItemHook = CartHooks['updateItem']
 export type RemoveItemHook = CartHooks['removeItem']
-
-// export type GetCartHandlerBody = Core.GetCartHandlerBody
-//
-// export type AddCartItemBody = Core.AddCartItemBody<CartItemBody>
-//
-// export type AddCartItemHandlerBody = Core.AddCartItemHandlerBody<CartItemBody>
-//
-// export type UpdateCartItemBody = Core.UpdateCartItemBody<CartItemBody>
-//
-// export type UpdateCartItemHandlerBody = Core.UpdateCartItemHandlerBody<CartItemBody>
-//
-// export type RemoveCartItemBody = Core.RemoveCartItemBody
-//
-// export type RemoveCartItemHandlerBody = Core.RemoveCartItemHandlerBody

@@ -23,6 +23,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
   body: { item },
   config,
 }) => {
+  console.log('Adding item endpoint called')
   let cartId = cookies[config.cartIdCookie]
 
   if (!cartId) {
@@ -47,7 +48,7 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
 
   const updatedCart = await updateCart(item, cookies, config)
 
-  return res.status(200).json(updatedCart)
+  return res.status(200).json(updatedCart.data)
 }
 
 async function createNewCart(

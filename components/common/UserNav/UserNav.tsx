@@ -20,7 +20,7 @@ const UserNav: FC<Props> = ({ className }) => {
   const { data } = useCart()
   const { data: customer } = useCustomer()
   const { toggleSidebar, closeSidebarIfPresent, openModal } = useUI()
-  const itemsCount = data?.lineItems.reduce(countItem, 0) ?? 0
+  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
 
   return (
     <nav className={cn(s.root, className)}>

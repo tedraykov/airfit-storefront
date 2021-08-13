@@ -19,8 +19,7 @@ import fetcher from './fetcher'
 
 export const reactionCommerceProvider = {
   locale: 'en-us',
-  anonymousCartTokenCookie: REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
-  cartIdCookie: REACTION_CART_ID_COOKIE,
+  cartCookie: REACTION_CART_ID_COOKIE,
   fetcher,
   cart: { useCart, useAddItem, useUpdateItem, useRemoveItem },
   customer: { useCustomer },

@@ -10408,7 +10408,7 @@ type RecalculateReservedSimpleInventoryPayload {
 }
 
 """
-Input for the `reconcileCarts` mutation call
+Input for the `reconcileCart` mutation call
 """
 input ReconcileCartsInput {
   """
@@ -10440,7 +10440,7 @@ input ReconcileCartsInput {
 }
 
 """
-The payload returned from the `reconcileCarts` mutation call
+The payload returned from the `reconcileCart` mutation call
 """
 type ReconcileCartsPayload {
   """

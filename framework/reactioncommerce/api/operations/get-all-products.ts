@@ -31,7 +31,7 @@ export default function getAllProductsOperation({
         shopIds: [config.shopId],
       },
     })
-    console.log(data)
+
     return {
       products:
         data.catalogItems?.edges?.map((item: CatalogItemEdge | null) =>

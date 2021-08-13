@@ -24,7 +24,6 @@ export default function getAllProductPathsOperation({
         shopIds: [config.shopId],
       },
     })
-    console.log(data)
     const products = data?.edges ?? []
 
     return {

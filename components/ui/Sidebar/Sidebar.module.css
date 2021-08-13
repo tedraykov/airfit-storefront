@@ -1,9 +1,10 @@
 .root {
-  @apply fixed inset-0 h-full z-50 box-border;
+  @apply fixed inset-0 h-full z-50 box-border transition;
 }
 
 .sidebar {
   @apply h-full flex flex-col text-base bg-accents-0 shadow-xl overflow-y-auto overflow-x-hidden;
+  transition: width 1000ms;
   -webkit-overflow-scrolling: touch !important;
 }
 

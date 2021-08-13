@@ -212,7 +212,11 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
   }
 }
 
-export function normalizeCart(cart: ReactionCart): Cart {
+export function normalizeCart(cart: ReactionCart): Cart | null {
+  if (!cart) {
+    return null
+  }
+
   return {
     id: cart._id,
     customerId: '',

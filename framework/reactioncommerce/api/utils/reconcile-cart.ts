@@ -1,7 +1,11 @@
 import reconcileCartsMutation from '@framework/utils/mutations/reconcile-carts'
 import { ReactionCommerceConfig } from '@framework/api'
+import getAuthorizationHeader from '@framework/api/utils/request-authorization'
 
-async function reconcileCarts(config: ReactionCommerceConfig) {
+async function reconcileCart(
+  cookies: { [p: string]: string },
+  config: ReactionCommerceConfig
+) {
   const {
     data: {
       reconcileCarts: { cart: rawReconciledCart },
@@ -11,20 +15,18 @@ async function reconcileCarts(config: ReactionCommerceConfig) {
     {
       variables: {
         input: {
-          anonymousCartId: config.cartIdCookie,
-          cartToken: config.anonymousCartTokenCookie,
+          anonymousCartId: cookies[config.cartIdCookie],
+          cartToken: cookies[config.anonymousCartTokenCookie ?? ''],
           shopId: config.shopId,
         },
       },
     },
     {
-      headers: {
-        Authorization: `Bearer ${config.customerCookie}`,
-      },
+      headers: getAuthorizationHeader(cookies[config.customerCookie]),
     }
   )
 
   return rawReconciledCart
 }
 
-export default reconcileCarts
+export default reconcileCart

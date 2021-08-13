@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { SWRHook } from '@commerce/utils/types'
-import useCart, { UseCart, FetchCartInput } from '@commerce/cart/use-cart'
-import type { Cart } from '../types'
+import useCart, { UseCart } from '@commerce/cart/use-cart'
+import { GetCartHook } from '@framework/types'
 
 export default useCart as UseCart<typeof handler>
 
@@ -10,10 +10,9 @@ export const handler: SWRHook<GetCartHook> = {
     method: 'GET',
     url: '/api/cart',
   },
-  async fetcher({ input: { cartId }, options, fetch }) {
+  async fetcher({ options, fetch }) {
     console.log('cart API fetcher', options)
-    const data = await fetch(options)
-    return data
+    return await fetch(options)
   },
   useHook:
     ({ useData }) =>
@@ -21,7 +20,6 @@ export const handler: SWRHook<GetCartHook> = {
       const response = useData({
         swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },
       })
-
       return useMemo(
         () =>
           Object.create(response, {

@@ -20,10 +20,8 @@ import {
 
 // TODO(bc) Remove this. This should come from the API
 import getSlug from '@lib/get-slug'
-import getAllPages from '@framework/common/get-all-pages'
-import getSiteInfo from '@framework/common/get-site-info'
-import { getConfig } from '@framework/api'
 import { Product } from '@commerce/types'
+import commerce from '@lib/api/commerce'
 
 const SORT = Object.entries({
   'latest-desc': 'Latest arrivals',
@@ -37,10 +35,9 @@ export async function getStaticProps({
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const config = { ...getConfig(), locale, locales }
-
-  const { pages } = await getAllPages({ config, preview })
-  const { categories, brands } = await getSiteInfo({ config, preview })
+  const config = commerce.getConfig({ locale, locales })
+  const { pages } = await commerce.getAllPages({ config, preview })
+  const { categories, brands } = await commerce.getSiteInfo({ config, preview })
   return {
     props: {
       pages,

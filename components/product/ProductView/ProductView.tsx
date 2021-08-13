@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react'
 import s from './ProductView.module.scss'
 import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text, useUI } from '@components/ui'
-import type { Product, ProductOption } from '@commerce/types'
+import type { Product, ProductOption } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 import { useAddItem } from '@framework/cart'
 import {
@@ -46,7 +46,7 @@ const ProductView: FC<Props> = ({ product }) => {
     setLoading(true)
     try {
       const selectedVariant = variant ? variant : product.variants[0]
-
+      console.log('Adding item to cart')
       await addItem({
         productId: String(product.id),
         variantId: String(selectedVariant.id),

@@ -20,6 +20,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
   res,
   config,
 }) => {
+  console.log('Get cart endpoint called')
   let normalizedCart
 
   if (cartNeedsToBeReconciled(cookies, config)) {
