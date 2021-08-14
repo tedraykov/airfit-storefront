@@ -2,6 +2,7 @@ import Cookies, { CookieAttributes } from 'js-cookie'
 import {
   REACTION_COOKIE_EXPIRE,
   REACTION_CUSTOMER_TOKEN_COOKIE,
+  REACTION_REFRESH_TOKEN_COOKIE,
 } from '../const'
 
 export const getCustomerToken = () =>
@@ -16,6 +17,23 @@ export const setCustomerToken = (
   } else {
     Cookies.set(
       REACTION_CUSTOMER_TOKEN_COOKIE,
+      token,
+      options ?? {
+        expires: REACTION_COOKIE_EXPIRE,
+      }
+    )
+  }
+}
+
+export const setRefreshToken = (
+  token: string | null,
+  options?: CookieAttributes
+) => {
+  if (!token) {
+    Cookies.remove(REACTION_REFRESH_TOKEN_COOKIE)
+  } else {
+    Cookies.set(
+      REACTION_REFRESH_TOKEN_COOKIE,
       token,
       options ?? {
         expires: REACTION_COOKIE_EXPIRE,

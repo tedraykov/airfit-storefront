@@ -10,6 +10,7 @@ import {
   REACTION_CART_ID_COOKIE,
   REACTION_EMPTY_DUMMY_CART_ID,
   REACTION_CUSTOMER_TOKEN_COOKIE,
+  REACTION_REFRESH_TOKEN_COOKIE,
   REACTION_COOKIE_EXPIRE,
   SHOP_ID,
 } from '../const'
@@ -37,7 +38,7 @@ import getProduct from './operations/get-product'
 
 export interface ReactionCommerceConfig extends CommerceAPIConfig {
   shopId: string
-  apiToken: string
+  refreshTokenCookie: string
   cartIdCookie: string
   dummyEmptyCartId?: string
   anonymousCartTokenCookie?: string
@@ -56,6 +57,7 @@ const config: ReactionCommerceConfig = {
   anonymousCartTokenCookieMaxAge: REACTION_COOKIE_EXPIRE,
   fetch: fetchGraphqlApi,
   customerCookie: REACTION_CUSTOMER_TOKEN_COOKIE,
+  refreshTokenCookie: REACTION_REFRESH_TOKEN_COOKIE,
   shopId: SHOP_ID,
 }
 

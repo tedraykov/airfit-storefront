@@ -5,11 +5,12 @@ import useCustomer from '../customer/use-customer'
 import authenticateMutation from '../utils/mutations/authenticate'
 import { Mutation, MutationAuthenticateArgs } from '../schema'
 import useLogin, { UseLogin } from '@commerce/auth/use-login'
-import { setCustomerToken } from '../utils'
+import { setCustomerToken, setRefreshToken } from '../utils'
+import { LoginHook } from '@commerce/types/login'
 
 export default useLogin as UseLogin<typeof handler>
 
-export const handler: MutationHook<null, {}, any> = {
+export const handler: MutationHook<LoginHook> = {
   fetchOptions: {
     query: authenticateMutation,
   },
@@ -32,11 +33,14 @@ export const handler: MutationHook<null, {}, any> = {
     })
 
     const accessToken = authenticate?.tokens?.accessToken
+    const refreshToken = authenticate?.tokens?.refreshToken
 
     console.log('accessToken', accessToken)
+    console.log('refreshToken', refreshToken)
 
-    if (accessToken) {
+    if (accessToken && refreshToken) {
       setCustomerToken(accessToken)
+      setRefreshToken(refreshToken, { expires: 7 })
     }
 
     return null
