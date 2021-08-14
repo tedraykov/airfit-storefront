@@ -9,11 +9,11 @@ import { ValidationError } from '@commerce/utils/errors'
 
 import useCart from './use-cart'
 import { removeCartItemsMutation, normalizeCart } from '../utils'
-import { LineItem, RemoveItemHook } from '../types'
 import { Mutation, MutationUpdateCartItemsQuantityArgs } from '../schema'
 import useRemoveItem, { UseRemoveItem } from '@commerce/cart/use-remove-item'
 import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
+import { LineItem, RemoveItemHook } from '@framework/types/cart'
 
 export default useRemoveItem as UseRemoveItem<typeof handler>
 

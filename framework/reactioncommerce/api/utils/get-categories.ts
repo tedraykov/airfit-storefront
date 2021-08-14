@@ -1,6 +1,7 @@
 import { ReactionCommerceConfig } from '../'
 import { TagEdge } from '../../schema'
 import getTagsQuery from '../../utils/queries/get-all-collections-query'
+import { normalizeCategory } from '@framework/utils'
 
 export type Category = {
   entityId: string
@@ -18,16 +19,7 @@ const getCategories = async (
     },
   })
 
-  return (
-    data.tags?.edges?.map(
-      ({ node: { _id: id, displayTitle: name, slug: handle } }: TagEdge) => ({
-        id,
-        name,
-        path: `/${handle}`,
-        slug: handle,
-      })
-    ) ?? []
-  )
+  return data.tags?.edges?.map(normalizeCategory)
 }
 
 export default getCategories

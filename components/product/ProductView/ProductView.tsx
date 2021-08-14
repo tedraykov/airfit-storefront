@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react'
 import s from './ProductView.module.scss'
 import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text, useUI } from '@components/ui'
-import type { Product, ProductOption } from '@commerce/types/product'
+import type { Product, ProductOption } from '@framework/types/product'
 import usePrice from '@framework/product/use-price'
 import { useAddItem } from '@framework/cart'
 import {

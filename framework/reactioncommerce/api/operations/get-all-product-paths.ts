@@ -1,5 +1,5 @@
 import { OperationContext } from '@commerce/api/operations'
-import type { CatalogItemConnection } from '../../schema'
+import type { CatalogItemConnection, CatalogItemProduct } from '../../schema'
 import { Provider } from '../index'
 import getAllProductsPathsQuery from '../../utils/queries/get-all-products-paths-query'
 import { GetAllProductPathsOperation } from '@commerce/types/product'
@@ -26,10 +26,14 @@ export default function getAllProductPathsOperation({
     })
     const products = data?.edges ?? []
 
+    let productPaths = products
+      .filter((productEdge) => !!productEdge && !!productEdge.node)
+      .map((productEdge) => ({
+        path: `/${(productEdge?.node as CatalogItemProduct).product?.slug}`,
+      }))
+
     return {
-      products: products.map(({ node }) => ({
-        path: `/${node.product?.slug}`,
-      })),
+      products: productPaths,
     }
   }
 

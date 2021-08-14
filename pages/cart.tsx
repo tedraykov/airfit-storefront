@@ -6,6 +6,7 @@ import { Button, Text } from '@components/ui'
 import { Bag, Cross, Check, MapPin, CreditCard } from '@components/icons'
 import { CartItem } from '@components/cart'
 import commerce from '@lib/api/commerce'
+import { LineItem } from '@framework/types/cart'
 
 export async function getStaticProps({
   preview,

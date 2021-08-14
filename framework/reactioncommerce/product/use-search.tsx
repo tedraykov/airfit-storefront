@@ -7,34 +7,16 @@ import {
   getSearchVariables,
   normalizeProduct,
 } from '../utils'
-
-import { Product } from '@commerce/types'
+import { SearchProductsHook } from '@framework/types/product'
 
 export default useSearch as UseSearch<typeof handler>
 
-export type SearchProductsInput = {
-  search?: string
-  categoryId?: string
-  brandId?: string
-  sort?: string
-  shopId?: string
-}
-
-export type SearchProductsData = {
-  products: Product[]
-  found: boolean
-}
-
-export const handler: SWRHook<
-  SearchProductsData,
-  SearchProductsInput,
-  SearchProductsInput
-> = {
+export const handler: SWRHook<SearchProductsHook> = {
   fetchOptions: {
     query: catalogItemsQuery,
   },
   async fetcher({ input, options, fetch }) {
-    const { brandId, shopId } = input
+    const { shopId } = input
 
     const data = await fetch({
       query: options.query,

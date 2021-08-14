@@ -3,11 +3,9 @@ import type {
   OperationContext,
   OperationOptions,
 } from '@commerce/api/operations'
-import { ValidationError } from '@commerce/utils/errors'
-import type { LoginOperation } from '../../types/login'
-import type { MutationAuthenticateArgs } from '../../schema'
 import { Provider, ReactionCommerceConfig } from '..'
 import loginMutation from '../../utils/mutations/authenticate'
+import { LoginOperation } from '@commerce/types/login'
 
 export default function loginOperation({
   commerce,

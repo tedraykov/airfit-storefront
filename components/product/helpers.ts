@@ -1,6 +1,6 @@
-import type { Product, ProductVariant } from '@commerce/types'
-import { ProductOption } from '@commerce/types'
+import type { Product, ProductOption } from '@framework/types/product'
 import { Dispatch, SetStateAction } from 'react'
+import { ProductVariant } from '@framework/types/product'
 
 export type SelectedOptions = Record<string, string | null>
 
@@ -8,7 +8,7 @@ export function getVariant(
   product: Product,
   opts: SelectedOptions
 ): ProductVariant | undefined {
-  return product.variants.find((variant) =>
+  return product.variants.find((variant: ProductVariant) =>
     variantMatchesAllOptions(variant, opts)
   )
 }

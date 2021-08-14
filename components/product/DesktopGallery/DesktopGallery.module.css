@@ -56,9 +56,8 @@
 .positionIndicatorsContainer {
   /*@apply hidden;*/
 
-    @apply block absolute bottom-6 left-1/2;
-    transform: translateX(-50%);
-
+  @apply block absolute bottom-6 left-1/2;
+  transform: translateX(-50%);
 }
 
 .positionIndicator {

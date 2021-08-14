@@ -3,7 +3,7 @@ import type { MutationHook } from '@commerce/utils/types'
 import { CommerceError } from '@commerce/utils/errors'
 import useAddItem, { UseAddItem } from '@commerce/cart/use-add-item'
 import useCart from './use-cart'
-import { AddItemHook } from '@framework/types'
+import { AddItemHook } from '@framework/types/cart'
 
 export default useAddItem as UseAddItem<typeof handler>
 
@@ -24,11 +24,10 @@ export const handler: MutationHook<AddItemHook> = {
       })
     }
 
-    const data = await fetch({
+    return await fetch({
       ...options,
       body: { item },
     })
-    return data
   },
   useHook:
     ({ fetch }) =>

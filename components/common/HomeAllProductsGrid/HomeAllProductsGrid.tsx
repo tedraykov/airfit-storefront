@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import Link from 'next/link'
-import type { Product } from '@commerce/types'
 import { Grid } from '@components/ui'
 import { ProductCard } from '@components/product'
 import s from './HomeAllProductsGrid.module.css'
 import { getCategoryPath, getDesignerPath } from '@lib/search'
+import { Product } from '@framework/types/product'
 
 interface Props {
   categories?: any

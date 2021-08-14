@@ -9,10 +9,10 @@ import { ProductView } from '@components/product'
 
 import getAllProductPaths from '@framework/product/get-all-product-paths'
 import commerce from '@lib/api/commerce'
-import { Page } from '@framework/types'
 import getSlug from '@lib/get-slug'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { options } from '@lib/contentful/options'
+import { Page } from '@framework/types/page'
 
 export async function getStaticProps({
   params,

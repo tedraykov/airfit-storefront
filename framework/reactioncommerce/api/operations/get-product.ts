@@ -1,8 +1,7 @@
-import { Product } from '@commerce/types/product'
+import { Product } from '@framework/types/product'
 import { OperationContext } from '@commerce/api/operations'
 import { normalizeProduct } from '@framework/utils'
 import { Provider, ReactionCommerceConfig } from '../'
-import { CatalogItem } from '../../schema'
 import getProductQuery from '../../utils/queries/get-product-query'
 
 export default function getProductOperation({
@@ -20,7 +19,7 @@ export default function getProductOperation({
   }): Promise<Product | {} | any> {
     const config = commerce.getConfig(cfg)
 
-    const { data } = await config.fetch<CatalogItem>(query, { variables })
+    const { data } = await config.fetch(query, { variables })
 
     const { catalogItemProduct } = data
 

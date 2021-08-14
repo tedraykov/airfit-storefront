@@ -1,7 +1,4 @@
-import {
-  REACTION_ANONYMOUS_CART_TOKEN_COOKIE,
-  REACTION_CART_ID_COOKIE,
-} from './const'
+import { REACTION_CART_ID_COOKIE } from './const'
 
 import { handler as useCart } from './cart/use-cart'
 import { handler as useAddItem } from './cart/use-add-item'

@@ -1,11 +1,11 @@
 import { FC } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
-import type { Page } from '@framework/types'
 import getSlug from '@lib/get-slug'
 import { Github, Vercel } from '@components/icons'
 import { Logo, Container } from '@components/ui'
 import s from './Footer.module.scss'
+import { Page } from '@framework/types/page'
 
 interface Props {
   className?: string

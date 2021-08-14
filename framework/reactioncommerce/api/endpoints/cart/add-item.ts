@@ -1,7 +1,6 @@
 import { createCartMutation } from '@framework/utils/mutations'
 import reconcileCarts from '@framework/api/utils/reconcile-cart'
 import { ReactionCommerceConfig } from '@framework/api'
-import { CartItemBody } from '@framework/types'
 import {
   cartNeedsToBeReconciled,
   updateCookiesForAnonymousCart,
@@ -9,6 +8,7 @@ import {
 } from '@framework/api/endpoints/cart/utils'
 import { updateCart } from '@framework/api/utils/update-cart'
 import { CartEndpoint } from '@framework/api/endpoints/cart/index'
+import { CartItemBody } from '@framework/types/cart'
 
 const handleMissingCartId = (res: any) => {
   return res.status(400).json({

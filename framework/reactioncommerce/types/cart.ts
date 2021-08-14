@@ -1,15 +1,4 @@
 import * as Core from '@commerce/types/cart'
-import { Page as CorePage } from '@commerce/types/page'
-import { Product as CoreProduct } from '@commerce/types/product'
-import { Document } from '@contentful/rich-text-types'
-
-export type Page = CorePage & {
-  body: Document
-}
-
-export type Product = CoreProduct & {
-  vendor: string
-}
 
 export type Cart = Core.Cart & {
   id: string
@@ -20,15 +9,10 @@ export interface LineItem extends Core.LineItem {
   options: any[]
 }
 
-/**
- * Cart mutations
- */
-
 export type OptionSelections = {
   option_id: number
   option_value: number | string
 }
-
 export type CartItemBody = Core.CartItemBody & {
   pricing: {
     amount: number
@@ -36,17 +20,13 @@ export type CartItemBody = Core.CartItemBody & {
   }
   optionSelections?: OptionSelections
 }
-
 export type CartTypes = {
   cart?: Cart
   item: LineItem
   itemBody: CartItemBody
 }
-
 export type CartSchema = Core.CartSchema<CartTypes>
-
 export type CartHooks = Core.CartHooks<CartTypes>
-
 export type GetCartHook = CartHooks['getCart']
 export type AddItemHook = CartHooks['addItem']
 export type UpdateItemHook = CartHooks['updateItem']

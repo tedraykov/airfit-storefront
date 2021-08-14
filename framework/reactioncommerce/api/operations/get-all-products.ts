@@ -1,9 +1,9 @@
-import { Product } from '@commerce/types/product'
+import { Product } from '@framework/types/product'
 import { OperationContext } from '@commerce/api/operations'
 import { normalizeProduct } from '@framework/utils'
 import catalogItemsQuery from '../../utils/queries/catalog-items-query'
 import { Provider, ReactionCommerceConfig } from '..'
-import { CatalogItemEdge } from '@framework/schema'
+import { CatalogItemEdge, CatalogItemProduct } from '@framework/schema'
 
 export type ProductVariables = {
   first?: number
@@ -35,7 +35,7 @@ export default function getAllProductsOperation({
     return {
       products:
         data.catalogItems?.edges?.map((item: CatalogItemEdge | null) =>
-          normalizeProduct(item?.node)
+          normalizeProduct(item?.node as CatalogItemProduct)
         ) || [],
     }
   }

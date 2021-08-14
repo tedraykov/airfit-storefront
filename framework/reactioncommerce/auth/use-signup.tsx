@@ -5,16 +5,11 @@ import useSignup, { UseSignup } from '@commerce/auth/use-signup'
 import { setCustomerToken } from '@framework/utils'
 import { createUserMutation } from '@framework/utils/mutations'
 import useCustomer from '../customer/use-customer'
-import { CreateUserInput } from '../schema'
+import { SignupHook } from '@commerce/types/signup'
 
 export default useSignup as UseSignup<typeof handler>
 
-export const handler: MutationHook<
-  null,
-  {},
-  CreateUserInput,
-  CreateUserInput
-> = {
+export const handler: MutationHook<SignupHook> = {
   fetchOptions: {
     query: createUserMutation,
   },
@@ -42,16 +37,18 @@ export const handler: MutationHook<
 
     return createUser
   },
-  useHook: ({ fetch }) => () => {
-    const { revalidate } = useCustomer()
+  useHook:
+    ({ fetch }) =>
+    () => {
+      const { revalidate } = useCustomer()
 
-    return useCallback(
-      async function signup(input) {
-        const data = await fetch({ input })
-        await revalidate()
-        return data
-      },
-      [fetch, revalidate]
-    )
-  },
+      return useCallback(
+        async function signup(input) {
+          const data = await fetch({ input })
+          await revalidate()
+          return data
+        },
+        [fetch, revalidate]
+      )
+    },
 }

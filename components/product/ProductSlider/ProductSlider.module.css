@@ -52,7 +52,6 @@
 
   @apply block absolute bottom-12 left-1/2;
   transform: translateX(-50%);
-
 }
 
 .positionIndicator {

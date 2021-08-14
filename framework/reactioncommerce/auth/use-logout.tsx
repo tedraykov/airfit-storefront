@@ -3,11 +3,12 @@ import type { MutationHook } from '@commerce/utils/types'
 import useLogout, { UseLogout } from '@commerce/auth/use-logout'
 import useCustomer from '../customer/use-customer'
 import logoutMutation from '../utils/mutations/logout'
-import { getCustomerToken, setCustomerToken } from '../utils/customer-token'
+import { setCustomerToken } from '@framework/utils'
+import { LogoutHook } from '@commerce/types/logout'
 
 export default useLogout as UseLogout<typeof handler>
 
-export const handler: MutationHook<null> = {
+export const handler: MutationHook<LogoutHook> = {
   fetchOptions: {
     query: logoutMutation,
   },
@@ -18,16 +19,18 @@ export const handler: MutationHook<null> = {
     setCustomerToken(null)
     return null
   },
-  useHook: ({ fetch }) => () => {
-    const { mutate } = useCustomer()
+  useHook:
+    ({ fetch }) =>
+    () => {
+      const { mutate } = useCustomer()
 
-    return useCallback(
-      async function logout() {
-        const data = await fetch()
-        await mutate(null, false)
-        return data
-      },
-      [fetch, mutate]
-    )
-  },
+      return useCallback(
+        async function logout() {
+          const data = await fetch()
+          await mutate(null, false)
+          return data
+        },
+        [fetch, mutate]
+      )
+    },
 }

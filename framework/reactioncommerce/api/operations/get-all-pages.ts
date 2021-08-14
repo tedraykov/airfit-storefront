@@ -1,9 +1,9 @@
 import { getContentfulPages } from '@lib/contentful/contentful'
-import { Page } from '@framework/types'
 import { normalizeContentfulPages } from '@framework/utils'
 import { OperationContext } from '@commerce/api/operations'
 import { Provider, ReactionCommerceConfig } from '@framework/api'
 import { IPage } from '@lib/contentful/schema'
+import { Page } from '@framework/types/page'
 
 export type GetAllPagesResult<T extends { pages: any[] } = { pages: Page[] }> =
   T

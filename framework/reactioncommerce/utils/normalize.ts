@@ -1,11 +1,4 @@
-import {
-  ProductVariant,
-  ProductOption,
-  ProductOptionValues,
-  ProductImage,
-} from '@commerce/types/product'
-
-import { Page, Product } from '../types'
+import { ProductOption, ProductImage } from '@framework/types/product'
 
 import { Customer } from '@commerce/types/customer'
 
@@ -19,13 +12,15 @@ import {
   ImageInfo,
   CartItem,
   Shop,
+  TagEdge,
 } from '../schema'
 
-import type { Cart, LineItem } from '../types'
 import { IPage } from '@lib/contentful/schema'
-import { Document } from '@contentful/rich-text-types'
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
-import { ReactNode } from 'react'
+import { Cart, LineItem } from '@framework/types/cart'
+import { Product, ProductVariant } from '@framework/types/product'
+import { ProductOptionValues } from '@commerce/types/product'
+import { Category } from '@commerce/types/site'
+import { Page } from '@framework/types/page'
 
 const normalizeProductImages = (
   images: ImageInfo[],
@@ -335,6 +330,15 @@ export function normalizeContentfulPage(page: IPage): Page {
     url: `/${page.fields.slug}`,
     // HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
     body: page.fields.body,
+  }
+}
+
+export function normalizeCategory(tag: TagEdge): Category {
+  return <Category>{
+    id: tag.node?._id,
+    name: tag.node?.displayTitle ?? tag.node?.name ?? '',
+    slug: tag.node?.slug ?? '',
+    path: '/' + tag.node?.slug,
   }
 }
 

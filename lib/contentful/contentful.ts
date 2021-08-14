@@ -1,19 +1,27 @@
-import { createClient, Entry } from 'contentful'
-import { IPage, IPageFields } from '@lib/contentful/schema'
-import { Options } from '@contentful/rich-text-react-renderer'
-import { BLOCKS } from '@contentful/rich-text-types'
-import { Text } from 'components/ui'
-export const contentfulClient = () => {
-  return createClient({
-    space: '9q0u06dganwf', // ID of a Compose-compatible space to be used \
-    accessToken: 'xvYz4TfUxhiYkcY2Q4wfmFEYF-v8JGZczrvatyUPQR4', // delivery API key for the space \
-  })
+import { createClient } from 'contentful'
+import { IPageFields } from '@lib/contentful/schema'
+
+const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
+const CONTENTFUL_DELIVERY_API_ACCESS_TOKEN =
+  process.env.CONTENTFUL_DELIVERY_API_ACCESS_TOKEN
+
+if (!CONTENTFUL_SPACE_ID) {
+  throw new Error(
+    `The environment variable CONTENTFUL_SPACE_ID is missing and it's required to access your store`
+  )
 }
 
-type GetPageParams = {
-  pageContentType?: string
-  slug?: string
-  locale?: string
+if (!CONTENTFUL_DELIVERY_API_ACCESS_TOKEN) {
+  throw new Error(
+    `The environment variable CONTENTFUL_DELIVERY_API_ACCESS_TOKEN is missing and it's required to access your store`
+  )
+}
+
+export const contentfulClient = () => {
+  return createClient({
+    space: CONTENTFUL_SPACE_ID,
+    accessToken: CONTENTFUL_DELIVERY_API_ACCESS_TOKEN,
+  })
 }
 
 export async function getContentfulPages() {

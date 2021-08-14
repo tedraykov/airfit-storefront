@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject, useEffect, useState } from 'react'
 
-import { ProductImage } from '@commerce/types'
+import { ProductImage } from '@framework/types/product'
 import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css'
 

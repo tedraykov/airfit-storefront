@@ -2,8 +2,8 @@ import { OperationContext } from '@commerce/api/operations'
 import { ReactionCommerceConfig, Provider } from '..'
 import { normalizeContentfulPage } from '@framework/utils'
 import { getContentfulPage } from '@lib/contentful/contentful'
-import { Page } from '@framework/types'
 import { IPage } from '@lib/contentful/schema'
+import { Page } from '@framework/types/page'
 
 export type GetPageResult<T extends { page?: any } = { page?: Page }> = T
 

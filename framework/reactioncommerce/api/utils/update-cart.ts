@@ -1,7 +1,7 @@
 import { addCartItemsMutation } from '@framework/utils'
 import getAuthorizationHeader from '@framework/api/utils/request-authorization'
 import { ReactionCommerceConfig } from '@framework/api'
-import { CartItemBody } from '@framework/types'
+import { CartItemBody } from '@framework/types/cart'
 
 export const updateCart = async (
   item: CartItemBody,

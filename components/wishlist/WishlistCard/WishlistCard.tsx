@@ -7,10 +7,10 @@ import { Trash } from '@components/icons'
 import { Button, Text } from '@components/ui'
 
 import { useUI } from '@components/ui/context'
-import type { Product } from '@commerce/types'
 import usePrice from '@framework/product/use-price'
 import useAddItem from '@framework/cart/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
+import { Product } from '@framework/types/product'
 
 interface Props {
   product: Product
@@ -18,9 +18,9 @@ interface Props {
 
 const WishlistCard: FC<Props> = ({ product }) => {
   const { price } = usePrice({
-    amount: product.prices?.price?.value,
-    baseAmount: product.prices?.retailPrice?.value,
-    currencyCode: product.prices?.price?.currencyCode!,
+    amount: product.price?.value,
+    baseAmount: product.price?.retailPrice,
+    currencyCode: product.price?.currencyCode!,
   })
   // @ts-ignore Wishlist is not always enabled
   const removeItem = useRemoveItem({ wishlist: { includeProducts: true } })
@@ -46,6 +46,10 @@ const WishlistCard: FC<Props> = ({ product }) => {
       await addItem({
         productId: String(product.id),
         variantId: String(product.variants[0].id),
+        pricing: {
+          amount: product.variants[0].price,
+          currencyCode: 'USD',
+        },
       })
       openSidebar()
       setLoading(false)

@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { ProductImage } from '@commerce/types'
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import s from '@components/product/ProductSlider/ProductSlider.module.css'
 import Image from 'next/image'
+import { ProductImage } from '@framework/types/product'
 
 interface Props {
   images: ProductImage[]

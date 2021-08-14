@@ -4,7 +4,8 @@
   ease-linear cursor-pointer;
   height: 100% !important;
 
-&:hover, &:focus {
+  &:hover,
+  &:focus {
     & .squareBg:before {
       transform: scale(0.98);
     }

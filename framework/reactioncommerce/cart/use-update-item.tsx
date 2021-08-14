@@ -9,11 +9,11 @@ import useUpdateItem, { UseUpdateItem } from '@commerce/cart/use-update-item'
 
 import useCart from './use-cart'
 import { handler as removeItemHandler } from './use-remove-item'
-import type { LineItem, UpdateItemHook } from '../types'
 import { updateCartItemsQuantityMutation, normalizeCart } from '../utils'
 import { Mutation, MutationUpdateCartItemsQuantityArgs } from '../schema'
 import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
+import { LineItem, UpdateItemHook } from '@framework/types/cart'
 
 export type UpdateItemInput<T = any> = T extends LineItem
   ? Partial<UpdateItemHook['actionInput']>
@@ -96,7 +96,7 @@ export const handler = {
                 productId,
                 variantId,
                 quantity: input.quantity,
-                pricing: input.pricing ?? 0,
+                pricing: input.pricing ?? { amount: 0, currencyCode: 'USD' },
               },
               itemId,
             },

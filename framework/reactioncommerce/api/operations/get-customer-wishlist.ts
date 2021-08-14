@@ -1,5 +1,5 @@
 import { OperationContext } from '@commerce/api/operations'
-import { Provider, VendureConfig } from '../'
+import { Provider, ReactionCommerceConfig } from '../'
 
 export default function getCustomerWishlistOperation({
   commerce,
@@ -11,10 +11,9 @@ export default function getCustomerWishlistOperation({
   }: {
     url?: string
     variables: any
-    config?: Partial<VendureConfig>
+    config?: Partial<ReactionCommerceConfig>
     includeProducts?: boolean
   }): Promise<any> {
-    // Not implemented as Vendure does not ship with wishlist functionality at present
     const config = commerce.getConfig(cfg)
     return { wishlist: {} }
   }

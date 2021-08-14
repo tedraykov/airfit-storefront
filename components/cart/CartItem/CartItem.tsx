@@ -5,10 +5,10 @@ import Link from 'next/link'
 import s from './CartItem.module.css'
 import { Trash, Plus, Minus } from '@components/icons'
 import { useUI } from '@components/ui/context'
-import type { LineItem } from '@framework/types'
 import usePrice from '@framework/product/use-price'
 import useUpdateItem from '@framework/cart/use-update-item'
 import useRemoveItem from '@framework/cart/use-remove-item'
+import { LineItem } from '@framework/types/cart'
 
 type ItemOption = {
   name: string
