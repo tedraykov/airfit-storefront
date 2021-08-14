@@ -5,7 +5,7 @@ import {
   ProductImage,
 } from '@commerce/types/product'
 
-import { Product } from '../types'
+import { Page, Product } from '../types'
 
 import { Customer } from '@commerce/types/customer'
 
@@ -22,7 +22,10 @@ import {
 } from '../schema'
 
 import type { Cart, LineItem } from '../types'
-import { Page } from '@framework/common/get-all-pages'
+import { IPage } from '@lib/contentful/schema'
+import { Document } from '@contentful/rich-text-types'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { ReactNode } from 'react'
 
 const normalizeProductImages = (
   images: ImageInfo[],
@@ -311,6 +314,28 @@ export function normalizePages(shop: Shop): Page[] {
       }
     }) ?? []
   )
+}
+
+export function normalizeContentfulPages(pages: IPage[]): Page[] {
+  return pages.map((page) => {
+    return <Page>{
+      id: page.sys.id,
+      name: page.fields.seo?.fields.displayTitle,
+      // Relative URL on the storefront for this page.
+      url: `/${page.fields.slug}`,
+    }
+  })
+}
+
+export function normalizeContentfulPage(page: IPage): Page {
+  return <Page>{
+    id: page.sys.id,
+    name: page.fields.seo?.fields.displayTitle,
+    // Relative URL on the storefront for this page.
+    url: `/${page.fields.slug}`,
+    // HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
+    body: page.fields.body,
+  }
 }
 
 function flatVariantOptions(variant: CatalogProductVariant): ProductVariant[] {

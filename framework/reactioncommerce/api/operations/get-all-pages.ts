@@ -1,7 +1,9 @@
+import { getContentfulPages } from '@lib/contentful/contentful'
+import { Page } from '@framework/types'
+import { normalizeContentfulPages } from '@framework/utils'
 import { OperationContext } from '@commerce/api/operations'
-import { Provider, ReactionCommerceConfig } from '..'
-
-export type Page = any
+import { Provider, ReactionCommerceConfig } from '@framework/api'
+import { IPage } from '@lib/contentful/schema'
 
 export type GetAllPagesResult<T extends { pages: any[] } = { pages: Page[] }> =
   T
@@ -9,17 +11,6 @@ export type GetAllPagesResult<T extends { pages: any[] } = { pages: Page[] }> =
 export default function getAllPagesOperation({
   commerce,
 }: OperationContext<Provider>) {
-  async function getAllPages(opts?: {
-    config?: Partial<ReactionCommerceConfig>
-    preview?: boolean
-  }): Promise<GetAllPagesResult>
-
-  async function getAllPages<T extends { pages: any[] }>(opts: {
-    url: string
-    config?: Partial<ReactionCommerceConfig>
-    preview?: boolean
-  }): Promise<GetAllPagesResult<T>>
-
   async function getAllPages({
     config: cfg,
     preview,
@@ -28,10 +19,10 @@ export default function getAllPagesOperation({
     config?: Partial<ReactionCommerceConfig>
     preview?: boolean
   } = {}): Promise<GetAllPagesResult> {
-    const config = commerce.getConfig(cfg)
-
+    const contentfulPages = await getContentfulPages()
+    const pages = normalizeContentfulPages(contentfulPages as IPage[])
     return {
-      pages: [],
+      pages,
     }
   }
 

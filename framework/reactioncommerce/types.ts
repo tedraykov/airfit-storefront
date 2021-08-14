@@ -1,5 +1,11 @@
 import * as Core from '@commerce/types/cart'
+import { Page as CorePage } from '@commerce/types/page'
 import { Product as CoreProduct } from '@commerce/types/product'
+import { Document } from '@contentful/rich-text-types'
+
+export type Page = CorePage & {
+  body: Document
+}
 
 export type Product = CoreProduct & {
   vendor: string
