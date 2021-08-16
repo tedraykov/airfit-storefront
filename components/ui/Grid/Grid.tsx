@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import { FC, ReactNode, Component } from 'react'
-import s from './Grid.module.css'
+import s from './Grid.module.scss'
 
 interface Props {
   className?: string

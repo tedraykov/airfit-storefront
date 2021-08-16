@@ -2,7 +2,6 @@ import { FC } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import getSlug from '@lib/get-slug'
-import { Github, Vercel } from '@components/icons'
 import { Logo, Container } from '@components/ui'
 import s from './Footer.module.scss'
 import { Page } from '@framework/types/page'
@@ -39,7 +38,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
             <div className="grid md:grid-rows-4 md:grid-cols-3 md:grid-flow-col">
               {[...links, ...sitePages].map((page) => (
                 <span key={page.url} className="py-3 md:py-0 md:pb-4">
-                  <Link href={page.url!}>
+                  <Link href={'/article' + page.url!}>
                     <a className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150">
                       {page.name}
                     </a>
@@ -66,7 +65,6 @@ function usePages(pages?: Page[]) {
     pages.forEach((page) => {
       const slug = page.url && getSlug(page.url)
       if (!slug) return
-      page.url = '/article' + page.url
       return sitePages.push(page)
     })
   }

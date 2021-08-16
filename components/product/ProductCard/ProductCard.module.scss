@@ -23,7 +23,7 @@
     &:nth-child(6n + 1) .productTitle > span,
     &:nth-child(6n + 1) .productPrice,
     &:nth-child(6n + 1) .wishlistButton {
-      @apply bg-violet text-white;
+      @apply bg-violet-light text-white;
     }
 
     &:nth-child(6n + 5) .productTitle > span,
@@ -35,7 +35,7 @@
     &:nth-child(6n + 3) .productTitle > span,
     &:nth-child(6n + 3) .productPrice,
     &:nth-child(6n + 3) .wishlistButton {
-      @apply bg-pink text-white;
+      @apply bg-pink-light text-white;
     }
 
     &:nth-child(6n + 6) .productTitle > span,
@@ -82,7 +82,7 @@
 
 .simple {
   & .squareBg {
-    @apply bg-accents-0 !important;
+    @apply bg-accents-0;
     background-image: url('/bg-products.svg');
   }
 

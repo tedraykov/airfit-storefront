@@ -6,7 +6,6 @@
   & > * {
     @apply row-span-1 bg-transparent box-border overflow-hidden;
     height: 500px;
-    max-height: 800px;
 
     @screen lg {
       @apply col-span-1;
@@ -21,11 +20,11 @@
     min-height: initial;
     height: var(--row-height);
     max-height: 1000px;
-  }
 
-  .root & > * {
-    @apply col-span-1;
-    height: inherit;
+    & > * {
+      @apply col-span-1;
+      height: inherit;
+    }
   }
 }
 
