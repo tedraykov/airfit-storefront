@@ -1,5 +1,9 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from '@material-ui/core'
 
 export interface State {
   displaySidebar: boolean
@@ -201,6 +205,17 @@ export const UIProvider: FC = (props) => {
   return <UIContext.Provider value={value} {...props} />
 }
 
+export const muiTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#5f3dc4',
+    },
+  },
+  typography: {
+    fontFamily: '"Ubuntu", sans-serif',
+  },
+})
+
 export const useUI = () => {
   const context = React.useContext(UIContext)
   if (context === undefined) {
@@ -211,6 +226,8 @@ export const useUI = () => {
 
 export const ManagedUIContext: FC = ({ children }) => (
   <UIProvider>
-    <ThemeProvider>{children}</ThemeProvider>
+    <ThemeProvider>
+      <MuiThemeProvider theme={muiTheme}>{children}</MuiThemeProvider>
+    </ThemeProvider>
   </UIProvider>
 )

@@ -19,11 +19,7 @@
 }
 
 .slim {
-  @apply px-4 py-2 transform-none normal-case;
-}
-
-.secondary {
-  @apply bg-primary text-primary border-accents-4
+  @apply py-2 transform-none normal-case;
 }
 
 .disabled,

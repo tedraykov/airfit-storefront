@@ -1,0 +1,19 @@
+.root {
+  @apply flex flex-col overflow-hidden;
+  min-height: 100vh;
+}
+
+.gradientLine {
+  @apply w-full;
+  height: 4px;
+  background: linear-gradient(90deg, #E2792D 0%, #FBFF34 54.69%, #23BDFF 100%);
+}
+
+.header {
+  margin: 0 -1.5rem 1rem;
+}
+
+.logo {
+  @apply flex justify-center p-6 bg-secondary;
+  background-image: url("/bg-products.svg");
+}

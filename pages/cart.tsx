@@ -50,7 +50,7 @@ export default function Cart() {
               <Bag className="absolute" />
             </span>
             <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-              Your cart is empty
+              Вашата количка е празна
             </h2>
             <p className="text-accents-6 px-10 text-center pt-2">
               Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
@@ -62,8 +62,8 @@ export default function Cart() {
               <Cross width={24} height={24} />
             </span>
             <h2 className="pt-6 text-xl font-light text-center">
-              We couldn’t process the purchase. Please check your card
-              information and try again.
+              Не можахме да обработим поръчката Ви. Моля проверете информацията
+              за вашата платежна карта и опитайте отново.
             </h2>
           </div>
         ) : success ? (
@@ -72,13 +72,13 @@ export default function Cart() {
               <Check />
             </span>
             <h2 className="pt-6 text-xl font-light text-center">
-              Thank you for your order.
+              Благодарим за вашата поръчка!
             </h2>
           </div>
         ) : (
           <div className="px-4 sm:px-6 flex-1">
-            <Text variant="pageHeading">My Cart</Text>
-            <Text variant="sectionHeading">Review your Order</Text>
+            <Text variant="pageHeading">Моята количка</Text>
+            <Text variant="sectionHeading">Преглед на поръчка</Text>
             <ul className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-accents-2 border-b border-accents-2">
               {data!.lineItems.map((item: LineItem) => (
                 <CartItem
@@ -88,20 +88,6 @@ export default function Cart() {
                 />
               ))}
             </ul>
-            <div className="my-6">
-              <Text>
-                Before you leave, take a look at these items. We picked them
-                just for you
-              </Text>
-              <div className="flex py-6 space-x-6">
-                {[1, 2, 3, 4, 5, 6].map((x) => (
-                  <div
-                    key={x}
-                    className="border border-accents-3 w-full h-24 bg-accents-2 bg-opacity-50 transform cursor-pointer hover:scale-110 duration-75"
-                  />
-                ))}
-              </div>
-            </div>
           </div>
         )}
       </div>
@@ -139,20 +125,20 @@ export default function Cart() {
           <div className="border-t border-accents-2">
             <ul className="py-3">
               <li className="flex justify-between py-1">
-                <span>Subtotal</span>
+                <span>Междинна сума</span>
                 <span>{subTotal}</span>
               </li>
               <li className="flex justify-between py-1">
-                <span>Taxes</span>
-                <span>Calculated at checkout</span>
+                <span>Такси</span>
+                <span>Калкулирани при финализиране</span>
               </li>
               <li className="flex justify-between py-1">
-                <span>Estimated Shipping</span>
-                <span className="font-bold tracking-wide">FREE</span>
+                <span>Доставка</span>
+                <span className="font-bold tracking-wide">БЕЗПЛАТНА</span>
               </li>
             </ul>
             <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-10">
-              <span>Total</span>
+              <span>Общо</span>
               <span>{total}</span>
             </div>
           </div>
@@ -160,11 +146,11 @@ export default function Cart() {
             <div className="w-full lg:w-72">
               {isEmpty ? (
                 <Button href="/" Component="a" width="100%">
-                  Continue Shopping
+                  Продължи с пазаруването
                 </Button>
               ) : (
                 <Button href="/checkout" Component="a" width="100%">
-                  Proceed to Checkout
+                  Завършване на поръчката
                 </Button>
               )}
             </div>

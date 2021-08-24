@@ -13,6 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   className?: string
   variant?: 'flat' | 'slim'
+  color?: 'primary' | 'secondary'
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
   Component?: string | JSXElementConstructor<any>
@@ -25,6 +26,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
     variant = 'flat',
+    color,
     children,
     active,
     width,
@@ -42,6 +44,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       [s.slim]: variant === 'slim',
       [s.loading]: loading,
       [s.disabled]: disabled,
+      [s.secondary]: color === 'secondary',
     },
     className
   )

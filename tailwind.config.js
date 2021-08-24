@@ -3,6 +3,9 @@ module.exports = {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
   },
+  corePlugins: {
+    fontFamily: false,
+  },
   purge: {
     content: [
       './pages/**/*.{js,ts,jsx,tsx}',
