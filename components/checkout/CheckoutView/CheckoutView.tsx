@@ -6,8 +6,20 @@ import { PaymentView } from '@components/checkout/PaymentView/PaymentView'
 import { Drawer, MobileStepper } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import s from './CheckoutView.module.scss'
+import { CartView } from '@components/cart/CartView/CartView'
+import { Cart } from '@framework/types/cart'
 
-export const CheckoutView: FC = () => {
+interface CheckoutViewProps {
+  cart: Cart | null | undefined
+  isLoading: boolean
+  isEmpty: boolean
+}
+
+export const CheckoutView: FC<CheckoutViewProps> = ({
+  cart,
+  isLoading,
+  isEmpty,
+}) => {
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
   const [cartOpened, setCartOpened] = useState(false)
@@ -77,7 +89,7 @@ export const CheckoutView: FC = () => {
           </ul>
           <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-2">
             <span>Общо</span>
-            <span>309.99 лв.</span>
+            <span>{cart?.totalPrice ?? '0.00 лв.'}</span>
           </div>
         </div>
         <Button
@@ -132,7 +144,15 @@ export const CheckoutView: FC = () => {
           keepMounted: true, // Better open performance on mobile.
         }}
       >
-        Content
+        <div className={s.cartDrawerContent}>
+          <CartView
+            data={cart}
+            isEmpty={isEmpty}
+            isLoading={isLoading}
+            checkoutButton={false}
+            onClose={handleCloseCart}
+          />
+        </div>
       </Drawer>
     </Container>
   )

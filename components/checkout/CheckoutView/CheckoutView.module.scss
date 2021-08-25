@@ -17,3 +17,8 @@
   @apply flex justify-center p-6 bg-secondary;
   background-image: url("/bg-products.svg");
 }
+
+.cartDrawerContent {
+  @apply pt-6;
+  max-height: 80vh;
+}

@@ -13,7 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   className?: string
   variant?: 'flat' | 'slim'
-  color?: 'primary' | 'secondary'
+  color?: 'primary' | 'secondary' | string
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
   Component?: string | JSXElementConstructor<any>

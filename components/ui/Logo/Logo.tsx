@@ -3,6 +3,8 @@ import { FC } from 'react'
 interface LogoProps {
   className?: string
   reversedColor?: boolean
+  width?: string
+  height?: string
 }
 
 const Logo: FC<LogoProps> = ({

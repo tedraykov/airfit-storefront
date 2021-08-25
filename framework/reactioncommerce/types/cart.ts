@@ -5,9 +5,7 @@ export type Cart = Core.Cart & {
   lineItems: LineItem[]
 }
 
-export interface LineItem extends Core.LineItem {
-  options: any[]
-}
+export interface LineItem extends Core.LineItem {}
 
 export type OptionSelections = {
   option_id: number

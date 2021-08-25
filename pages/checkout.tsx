@@ -2,6 +2,8 @@ import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import React from 'react'
 import { CheckoutView } from '@components/checkout/CheckoutView/CheckoutView'
+import useCart from '@framework/cart/use-cart'
+import { StrippedLayout } from '@components/common/Layout/Layout'
 
 export async function getStaticProps({
   preview,
@@ -18,6 +20,10 @@ export async function getStaticProps({
   }
 }
 
-export default function Cart() {
-  return <CheckoutView />
+export default function Checkout() {
+  const { data, isLoading, isEmpty } = useCart()
+
+  return <CheckoutView cart={data} isEmpty={isEmpty} isLoading={isLoading} />
 }
+
+Checkout.Layout = StrippedLayout

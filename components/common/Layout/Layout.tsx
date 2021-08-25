@@ -123,4 +123,17 @@ const Layout: FC<Props> = ({
   )
 }
 
+export const StrippedLayout: FC<Props> = ({
+  children,
+  pageProps: { categories = [] },
+}) => {
+  const { locale = 'en-US' } = useRouter()
+
+  return (
+    <CommerceProvider locale={locale}>
+      <div className={cn(s.root)}>{children}</div>
+    </CommerceProvider>
+  )
+}
+
 export default Layout
