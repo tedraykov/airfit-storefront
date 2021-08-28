@@ -1,19 +1,46 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Input, Logo, Text } from '@components/ui'
 import SwipeableViews from 'react-swipeable-views'
-import { ShippingAddress } from '@components/checkout/ShippingAddress/ShippingAddress'
-import { PaymentView } from '@components/checkout/PaymentView/PaymentView'
+import { ShippingAddressForm } from '@components/checkout/ShippingAddressForm/ShippingAddressForm'
+import { PaymentForm } from '@components/checkout/PaymentForm/PaymentForm'
 import { Drawer, MobileStepper } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import s from './CheckoutView.module.scss'
 import { CartView } from '@components/cart/CartView/CartView'
 import { Cart } from '@framework/types/cart'
+import { FieldErrors, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { UseFormRegister } from 'react-hook-form/dist/types/form'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
   isLoading: boolean
   isEmpty: boolean
 }
+
+interface UserDataFieldValues {
+  firstName: string
+  sureName: string
+  phone: number
+  email: string
+}
+
+export interface ShippingAddressFieldValues {
+  address: string
+  locality: string
+  postalCode: string
+}
+
+const userDataFormSchema = yup.object().shape({
+  firstName: yup.string().required('Задължително поле'),
+  sureName: yup.string().required('Задължително поле'),
+  phone: yup.number().required('Задължително поле'),
+  email: yup
+    .string()
+    .email('Въведете валиден мейл')
+    .required('Задължително поле'),
+})
 
 export const CheckoutView: FC<CheckoutViewProps> = ({
   cart,
@@ -23,7 +50,24 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
   const [cartOpened, setCartOpened] = useState(false)
+  const {
+    register: userDataRegister,
+    formState: { errors: userDataErrors, isValid: userDataIsValid },
+  } = useForm<UserDataFieldValues>({
+    resolver: yupResolver(userDataFormSchema),
+    mode: 'all',
+  })
 
+  const {
+    register: shippingAddressRegister,
+    setValue: shippingAddressSetValue,
+    formState: {
+      errors: shippingAddressErrors,
+      isValid: shippingAddressIsValid,
+    },
+  } = useForm<ShippingAddressFieldValues>()
+
+  const {} = useForm({})
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
@@ -44,6 +88,16 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     activeStep === 2 ? setReadyToFinalize(true) : setReadyToFinalize(false)
   }, [activeStep])
 
+  const canContinueNextStep = (pageIndex: number): boolean => {
+    switch (pageIndex) {
+      case 0:
+        return userDataIsValid
+      case 1:
+        return shippingAddressIsValid
+    }
+    return false
+  }
+
   return (
     <Container className={s.root}>
       <div className={s.header}>
@@ -52,31 +106,27 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         </div>
         <div className={s.gradientLine} />
       </div>
-      <SwipeableViews className="flex-1" index={activeStep} disabled={true}>
+      <SwipeableViews
+        className="flex-1"
+        index={activeStep}
+        disabled={true}
+        animateHeight={true}
+      >
         <div className="flex flex-1 flex-col space-y-4">
-          <Text variant="pageHeading">🧑‍🚀 Данни за доставка</Text>
-          <div className="flex flex-row space-x-3">
-            <div className="flex-grow">
-              <Input type="text" placeholder="Име" />
-            </div>
-            <div className="flex-grow">
-              <Input type="text" placeholder="Фамилия" />
-            </div>
-          </div>
-          <Input
-            type="tel"
-            placeholder="Телефонен номер"
-            pattern="[0]{1}[0-9]{9}"
-          />
-          <Input type="email" placeholder="Емейл" />
+          <Text variant="pageHeading">🧑‍🚀 Данни за клиента</Text>
+          <UserDataForm register={userDataRegister} errors={userDataErrors} />
         </div>
         <div>
           <Text variant="pageHeading">📦 Адрес за доставка</Text>
-          <ShippingAddress />
+          <ShippingAddressForm
+            register={shippingAddressRegister}
+            errors={shippingAddressErrors}
+            setValue={shippingAddressSetValue}
+          />
         </div>
         <div>
           <Text variant="pageHeading">💵 Метод за плащане</Text>
-          <PaymentView />
+          <PaymentForm />
         </div>
       </SwipeableViews>
       <section className="my-6">
@@ -118,7 +168,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
               className="ml-4 mr-2"
               variant="slim"
               onClick={handleNext}
-              disabled={activeStep === 2}
+              disabled={activeStep === 2 || !canContinueNextStep(activeStep)}
             >
               Продължи
             </Button>
@@ -155,5 +205,47 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         </div>
       </Drawer>
     </Container>
+  )
+}
+
+interface UserDataFormProps {
+  register: UseFormRegister<UserDataFieldValues>
+  errors: FieldErrors<UserDataFieldValues>
+}
+
+const UserDataForm: FC<UserDataFormProps> = ({ register, errors }) => {
+  return (
+    <>
+      <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
+        <Input
+          register={register}
+          label="firstName"
+          error={errors.firstName}
+          type="text"
+          placeholder="Име"
+        />
+        <Input
+          register={register}
+          label="sureName"
+          error={errors.sureName}
+          type="text"
+          placeholder="Фамилия"
+        />
+      </div>
+      <Input
+        register={register}
+        type="tel"
+        label="phone"
+        error={errors.phone}
+        placeholder="Телефонен номер"
+      />
+      <Input
+        register={register}
+        type="email"
+        label="email"
+        error={errors.email}
+        placeholder="Емейл"
+      />
+    </>
   )
 }
