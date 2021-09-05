@@ -12,10 +12,7 @@ import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
-import {
-  AddressInput,
-  SetShippingAddressOnCartPayload,
-} from '@framework/schema'
+import { AddressInput, PaymentMethod } from '@framework/schema'
 import Link from '@components/ui/Link'
 
 interface CheckoutViewProps {
@@ -25,6 +22,7 @@ interface CheckoutViewProps {
   mutationQueries: {
     setShippingAddress: (address: Partial<AddressInput>) => Promise<void>
   }
+  paymentMethods: PaymentMethod[]
 }
 
 interface UserDataFieldValues {
@@ -55,6 +53,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   isLoading,
   isEmpty,
   mutationQueries,
+  paymentMethods,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
@@ -80,6 +79,8 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     },
   } = useForm<ShippingAddressFieldValues>({ mode: 'all' })
 
+  const [payment, setPayment] = useState<PaymentMethod | undefined>(undefined)
+
   const handleNext = async () => {
     if (continueButtonLoading) return
 
@@ -87,6 +88,13 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       case 1:
         setContinueButtonLoading(true)
         await handleSetShippingAddress()
+        setContinueButtonLoading(false)
+        break
+      case 2:
+        setContinueButtonLoading(true)
+        await handlePlaceOrder()
+        setContinueButtonLoading(false)
+        break
     }
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -114,6 +122,8 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         return userDataIsValid
       case 1:
         return shippingAddressIsValid
+      case 2:
+        return !!payment
     }
     return false
   }
@@ -133,6 +143,8 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       postal: shippingAddressGetValues('postalCode'),
     })
   }
+
+  const handlePlaceOrder = () => {}
 
   return (
     <Container className={s.root}>
@@ -164,7 +176,10 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         </div>
         <div>
           <Text variant="pageHeading">💵 Метод за плащане</Text>
-          <PaymentForm />
+          <PaymentForm
+            availablePaymentMethods={paymentMethods}
+            setPaymentMethod={setPayment}
+          />
         </div>
       </SwipeableViews>
       <section className="my-6">

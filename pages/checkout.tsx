@@ -3,8 +3,10 @@ import commerce from '@lib/api/commerce'
 import React, { useEffect } from 'react'
 import { CheckoutView } from '@components/checkout/CheckoutView/CheckoutView'
 import useCart from '@framework/cart/use-cart'
+import { PaymentMethod } from '@framework/schema'
 import { StrippedLayout } from '@components/common/Layout/Layout'
 import useCheckoutCart from '@lib/reactioncommerce/cart/useCheckoutCart'
+import getPaymentMethods from '@lib/reactioncommerce/cart/getPaymentMethods'
 
 export async function getStaticProps({
   preview,
@@ -16,12 +18,17 @@ export async function getStaticProps({
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const { pages } = await pagesPromise
   const { categories } = await siteInfoPromise
+  const paymentMethods = await getPaymentMethods()
   return {
-    props: { pages, categories },
+    props: { pages, categories, paymentMethods },
   }
 }
 
-export default function Checkout() {
+export default function Checkout({
+  paymentMethods,
+}: {
+  paymentMethods: PaymentMethod[]
+}) {
   const { data, isLoading, isEmpty } = useCart()
   const { cart: checkoutCart, mutationQueries } = useCheckoutCart()
 
@@ -36,6 +43,7 @@ export default function Checkout() {
       cart={data}
       isEmpty={isEmpty}
       isLoading={isLoading}
+      paymentMethods={paymentMethods}
     />
   )
 }

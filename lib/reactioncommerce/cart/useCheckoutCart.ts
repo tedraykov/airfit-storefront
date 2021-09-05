@@ -8,14 +8,8 @@ import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
 import { useEffect, useState } from 'react'
 import updateFulfillmentOptionsForGroupMutation from '@framework/utils/mutations/updateFulfillmentOptionsForGroup'
-import {
-  AddressInput,
-  Cart,
-  SetShippingAddressOnCartPayload,
-  UpdateFulfillmentOptionsForGroupPayload,
-} from '@framework/schema'
+import { AddressInput } from '@framework/schema'
 import setShippingAddressOnCartMutation from '@framework/utils/mutations/setShippingAddressOnCart'
-import { data } from 'autoprefixer'
 
 const fetcher = (query: string, input: any) => request(API_URL, query, input)
 

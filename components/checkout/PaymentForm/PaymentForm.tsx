@@ -7,11 +7,17 @@ import {
 } from '@material-ui/core'
 import s from '@components/checkout/PaymentForm/PaymentForm.module.scss'
 import { Text } from '@components/ui'
+import { PaymentMethod } from '@framework/schema'
+
+interface PaymentFormProps {
+  availablePaymentMethods: PaymentMethod[]
+  setPaymentMethod: (payment: PaymentMethod) => void
+}
 
 enum PaymentType {
-  COURIER,
-  CARD,
-  REVOLUT,
+  COURIER = 'iou_example',
+  CARD = 'CARD',
+  REVOLUT = 'REVOLUT',
 }
 
 const paymentTypeTitles = {
@@ -20,16 +26,34 @@ const paymentTypeTitles = {
   [PaymentType.REVOLUT]: 'Revolut',
 }
 
-export const PaymentForm: FC = () => {
-  const [paymentType, setPaymentType] = useState<PaymentType>(
-    PaymentType.COURIER
-  )
+export const PaymentForm: FC<PaymentFormProps> = ({
+  availablePaymentMethods,
+  setPaymentMethod,
+}) => {
+  const [paymentType, setPaymentType] = useState<PaymentType>()
 
-  const handleChangeDeliveryType =
+  const handleChangePaymentType =
     (selectedPaymentType: PaymentType) =>
     (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-      isExpanded ? setPaymentType(selectedPaymentType) : null
+      if (isExpanded) {
+        setPaymentType(selectedPaymentType)
+        handleChangePaymentMethod(selectedPaymentType)
+      }
     }
+
+  const handleChangePaymentMethod = (paymentType: PaymentType) => {
+    const paymentMethod = availablePaymentMethods.find(
+      (method) => method.name === paymentType
+    )
+
+    if (!paymentMethod) {
+      console.log('No available payment method found')
+      console.log(`Currently selected type is ${paymentType}`)
+      return
+    }
+
+    setPaymentMethod(paymentMethod)
+  }
 
   return (
     <div className={s.root}>
@@ -38,7 +62,7 @@ export const PaymentForm: FC = () => {
         elevation={0}
         square={true}
         expanded={paymentType === PaymentType.COURIER}
-        onChange={handleChangeDeliveryType(PaymentType.COURIER)}
+        onChange={handleChangePaymentType(PaymentType.COURIER)}
       >
         <AccordionSummary>
           <Radio
@@ -61,8 +85,9 @@ export const PaymentForm: FC = () => {
         className={s.deliveryTypeAccordion}
         elevation={0}
         square={true}
+        disabled
         expanded={paymentType === PaymentType.CARD}
-        onChange={handleChangeDeliveryType(PaymentType.CARD)}
+        onChange={handleChangePaymentType(PaymentType.CARD)}
       >
         <AccordionSummary>
           <Radio color={'primary'} checked={paymentType === PaymentType.CARD} />
@@ -78,8 +103,9 @@ export const PaymentForm: FC = () => {
         className={s.deliveryTypeAccordion}
         elevation={0}
         square={true}
+        disabled
         expanded={paymentType === PaymentType.REVOLUT}
-        onChange={handleChangeDeliveryType(PaymentType.REVOLUT)}
+        onChange={handleChangePaymentType(PaymentType.REVOLUT)}
       >
         <AccordionSummary>
           <Radio
