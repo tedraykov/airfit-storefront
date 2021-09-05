@@ -1,6 +1,6 @@
 import { cartQueryFragment } from './get-cart-query'
 
-export const getAnomymousCart = `
+export const getAnonymousCart = `
   query anonymousCartByCartIdQuery($cartId: ID!, $cartToken: String!, $itemsAfterCursor: ConnectionCursor) {
     cart: anonymousCartByCartId(cartId: $cartId, cartToken: $cartToken) {
       ${cartQueryFragment}
@@ -8,4 +8,4 @@ export const getAnomymousCart = `
   }
 `
 
-export default getAnomymousCart
+export default getAnonymousCart

@@ -15,7 +15,7 @@
 }
 
 .input {
-  @apply flex-1 w-full;
+  @apply flex-1 w-full bg-primary text-accents-6;
 }
 
 .input:focus {

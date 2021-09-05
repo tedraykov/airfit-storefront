@@ -11,6 +11,6 @@ export const REACTION_EMPTY_DUMMY_CART_ID = 'DUMMY_EMPTY_CART_ID'
 
 export const REACTION_COOKIE_EXPIRE = 30
 
-export const API_URL = `${process.env.REACTION_API_DOMAIN}/graphql`
+export const API_URL = `${process.env.NEXT_PUBLIC_REACTION_API_DOMAIN}/graphql`
 
-export const SHOP_ID = process.env.REACTION_SHOP_ID ?? ''
+export const SHOP_ID = process.env.NEXT_PUBLIC_REACTION_SHOP_ID ?? ''

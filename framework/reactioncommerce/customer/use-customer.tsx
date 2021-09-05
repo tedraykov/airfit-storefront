@@ -1,7 +1,7 @@
 import useCustomer, { UseCustomer } from '@commerce/customer/use-customer'
 import { SWRHook } from '@commerce/utils/types'
 import { viewerQuery, normalizeCustomer } from '../utils'
-import { CustomerHook } from '@commerce/types/customer'
+import { CustomerHook } from '@framework/types/customer'
 
 export default useCustomer as UseCustomer<typeof handler>
 

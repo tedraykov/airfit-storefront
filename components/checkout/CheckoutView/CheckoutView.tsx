@@ -12,11 +12,19 @@ import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
+import {
+  AddressInput,
+  SetShippingAddressOnCartPayload,
+} from '@framework/schema'
+import Link from '@components/ui/Link'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
   isLoading: boolean
   isEmpty: boolean
+  mutationQueries: {
+    setShippingAddress: (address: Partial<AddressInput>) => Promise<void>
+  }
 }
 
 interface UserDataFieldValues {
@@ -46,12 +54,16 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   cart,
   isLoading,
   isEmpty,
+  mutationQueries,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
   const [cartOpened, setCartOpened] = useState(false)
+  const [continueButtonLoading, setContinueButtonLoading] = useState(false)
+
   const {
     register: userDataRegister,
+    getValues: userDataGetValues,
     formState: { errors: userDataErrors, isValid: userDataIsValid },
   } = useForm<UserDataFieldValues>({
     resolver: yupResolver(userDataFormSchema),
@@ -60,15 +72,23 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
 
   const {
     register: shippingAddressRegister,
+    getValues: shippingAddressGetValues,
     setValue: shippingAddressSetValue,
     formState: {
       errors: shippingAddressErrors,
       isValid: shippingAddressIsValid,
     },
-  } = useForm<ShippingAddressFieldValues>()
+  } = useForm<ShippingAddressFieldValues>({ mode: 'all' })
 
-  const {} = useForm({})
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (continueButtonLoading) return
+
+    switch (activeStep) {
+      case 1:
+        setContinueButtonLoading(true)
+        await handleSetShippingAddress()
+    }
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
@@ -98,11 +118,29 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     return false
   }
 
+  const handleSetShippingAddress = async () => {
+    await mutationQueries.setShippingAddress({
+      phone: userDataGetValues('phone').toString(),
+      firstName: userDataGetValues('firstName'),
+      lastName: userDataGetValues('sureName'),
+      fullName: `${userDataGetValues('firstName')} ${userDataGetValues(
+        'sureName'
+      )}`,
+      address1: shippingAddressGetValues('address'),
+      city: shippingAddressGetValues('locality'),
+      region: shippingAddressGetValues('locality'),
+      country: 'България',
+      postal: shippingAddressGetValues('postalCode'),
+    })
+  }
+
   return (
     <Container className={s.root}>
       <div className={s.header}>
         <div className={s.logo}>
-          <Logo reversedColor={true} />
+          <Link href="/">
+            <Logo reversedColor={true} />
+          </Link>
         </div>
         <div className={s.gradientLine} />
       </div>
@@ -167,6 +205,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
             <Button
               className="ml-4 mr-2"
               variant="slim"
+              loading={continueButtonLoading}
               onClick={handleNext}
               disabled={activeStep === 2 || !canContinueNextStep(activeStep)}
             >

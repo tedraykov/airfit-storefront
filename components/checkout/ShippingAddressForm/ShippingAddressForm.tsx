@@ -103,14 +103,12 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       }
-      console.log(coordinates)
 
       setLocationMarker(coordinates)
     })
 
   useEffect(() => {
     if (!geocoder || !locationMarker) return
-
     ;(async () => {
       const geocoderResponse = await geocoder.geocode({
         location: new google.maps.LatLng(locationMarker),
@@ -167,6 +165,7 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
                 placeholder="Адрес"
                 label="address"
                 register={register}
+                required={deliveryType === DeliveryType.CLIENT_ADDRESS}
                 error={errors.address}
               />
               <Button
@@ -195,6 +194,7 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
                   placeholder="Град / Село"
                   label="locality"
                   register={register}
+                  required={deliveryType === DeliveryType.CLIENT_ADDRESS}
                   error={errors.locality}
                 />
               </div>
@@ -204,6 +204,7 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
                   placeholder="Пощенски код"
                   label="postalCode"
                   register={register}
+                  required={deliveryType === DeliveryType.CLIENT_ADDRESS}
                   error={errors.postalCode}
                 />
               </div>

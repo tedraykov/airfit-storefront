@@ -25,6 +25,7 @@ export type CartTypes = {
 }
 export type CartSchema = Core.CartSchema<CartTypes>
 export type CartHooks = Core.CartHooks<CartTypes>
+
 export type GetCartHook = CartHooks['getCart']
 export type AddItemHook = CartHooks['addItem']
 export type UpdateItemHook = CartHooks['updateItem']

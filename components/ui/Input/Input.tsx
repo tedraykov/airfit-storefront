@@ -21,7 +21,7 @@ const Input: React.FC<Props> = (props) => {
     onChange,
     register,
     label,
-    required,
+    required = false,
     error,
     ...rest
   } = props
@@ -60,7 +60,7 @@ const Input: React.FC<Props> = (props) => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
-        {...register?.(label ?? '')}
+        {...register?.(label ?? '', { required })}
         {...rest}
       />
       {error && (
