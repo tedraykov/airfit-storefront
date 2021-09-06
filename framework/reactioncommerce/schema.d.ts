@@ -4481,7 +4481,7 @@ export type PaymentInput = {
   /** Any additional user-provided input necessary to authorize and capture the payment */
   data: Maybe<Scalars['JSONObject']>
   /** The name of the payment method to use for this payment */
-  method: PaymentMethodName
+  method: string
 }
 
 /** Describes a payment method */

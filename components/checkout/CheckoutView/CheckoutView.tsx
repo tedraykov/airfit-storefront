@@ -7,13 +7,20 @@ import { Drawer, MobileStepper } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import s from './CheckoutView.module.scss'
 import { CartView } from '@components/cart/CartView/CartView'
-import { Cart } from '@framework/types/cart'
+import {
+  Cart,
+  OrderFulfillmentGroupInput,
+  OrderInput,
+  PaymentInput,
+} from '@framework/schema'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
 import { AddressInput, PaymentMethod } from '@framework/schema'
 import Link from '@components/ui/Link'
+import placeOrder from '@lib/reactioncommerce/utils/placeOrder'
+import { normalizeCart } from '@framework/utils'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
@@ -21,6 +28,10 @@ interface CheckoutViewProps {
   isEmpty: boolean
   mutationQueries: {
     setShippingAddress: (address: Partial<AddressInput>) => Promise<void>
+    setFulfillmentOption: (
+      fulfillmentGroupId: string,
+      fulfillmentMethodId: string
+    ) => Promise<void>
   }
   paymentMethods: PaymentMethod[]
 }
@@ -142,9 +153,67 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       country: 'България',
       postal: shippingAddressGetValues('postalCode'),
     })
+    await mutationQueries.setFulfillmentOption(
+      cart!.checkout!.fulfillmentGroups[0]!._id,
+      cart!.checkout!.fulfillmentGroups[0]!.availableFulfillmentOptions[0]!
+        .fulfillmentMethod!._id
+    )
   }
 
-  const handlePlaceOrder = () => {}
+  const handlePlaceOrder = async () => {
+    const orderInput = buildOrder()
+
+    if (!orderInput) return
+
+    await placeOrder({
+      order: orderInput as OrderInput,
+      payments: [
+        {
+          amount: cart?.checkout?.summary.total.amount ?? 0,
+          method: payment!.name,
+        } as PaymentInput,
+      ],
+    })
+  }
+
+  const buildOrder = (): Partial<OrderInput> | undefined => {
+    if (!cart) return
+
+    const { checkout } = cart
+
+    const fulfillmentGroups = checkout!.fulfillmentGroups!.map((group) => {
+      const { data, selectedFulfillmentOption } = group!
+
+      const items = cart.items!.edges!.map((edge) => {
+        const item = edge!.node
+
+        return {
+          addedAt: item!.addedAt,
+          price: item!.price.amount,
+          productConfiguration: item!.productConfiguration,
+          quantity: item!.quantity,
+        }
+      })
+
+      return {
+        data,
+        items,
+        selectedFulfillmentMethodId:
+          selectedFulfillmentOption!.fulfillmentMethod!._id,
+        shopId: group!.shop._id,
+        totalPrice: checkout!.summary.total.amount,
+        type: group!.type,
+      }
+    })
+
+    return {
+      cartId: cart._id,
+      currencyCode: checkout!.summary.total.currency.code,
+      email: userDataGetValues('email'),
+      fulfillmentGroups: fulfillmentGroups as OrderFulfillmentGroupInput[],
+      shopId: cart.shop._id,
+    }
+  }
 
   return (
     <Container className={s.root}>
@@ -192,7 +261,9 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           </ul>
           <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-2">
             <span>Общо</span>
-            <span>{cart?.totalPrice ?? '0.00 лв.'}</span>
+            <span>
+              {cart?.checkout?.summary.total.displayAmount ?? '0.00 лв.'}
+            </span>
           </div>
         </div>
         <Button
@@ -212,21 +283,15 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         elevation={10}
         activeStep={activeStep}
         nextButton={
-          readyToFinalize ? (
-            <Button className="ml-4 mr-2" variant="slim">
-              Завърши
-            </Button>
-          ) : (
-            <Button
-              className="ml-4 mr-2"
-              variant="slim"
-              loading={continueButtonLoading}
-              onClick={handleNext}
-              disabled={activeStep === 2 || !canContinueNextStep(activeStep)}
-            >
-              Продължи
-            </Button>
-          )
+          <Button
+            className="ml-4 mr-2"
+            variant="slim"
+            loading={continueButtonLoading}
+            onClick={handleNext}
+            disabled={activeStep === 3 || !canContinueNextStep(activeStep)}
+          >
+            {!readyToFinalize ? 'Продължи' : 'Завърши'}
+          </Button>
         }
         backButton={
           <Button
@@ -250,7 +315,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       >
         <div className={s.cartDrawerContent}>
           <CartView
-            data={cart}
+            data={normalizeCart(cart!)}
             isEmpty={isEmpty}
             isLoading={isLoading}
             checkoutButton={false}

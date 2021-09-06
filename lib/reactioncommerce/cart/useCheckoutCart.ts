@@ -8,8 +8,13 @@ import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
 import { useEffect, useState } from 'react'
 import updateFulfillmentOptionsForGroupMutation from '@framework/utils/mutations/updateFulfillmentOptionsForGroup'
-import { AddressInput } from '@framework/schema'
+import {
+  AddressInput,
+  Cart,
+  SelectFulfillmentOptionForGroupInput,
+} from '@framework/schema'
 import setShippingAddressOnCartMutation from '@framework/utils/mutations/setShippingAddressOnCart'
+import selectFulfillmentOptionForGroup from '@framework/utils/mutations/select-fulfillment-option-for-group'
 
 const fetcher = (query: string, input: any) => request(API_URL, query, input)
 
@@ -39,10 +44,10 @@ const useCheckoutCart = () => {
   }, [account])
 
   const {
-    data: cart,
+    data: cartRes,
     error,
     mutate,
-  } = useSWR(query, (query) => fetcher(query, queryInput))
+  } = useSWR<{ cart: Cart }>(query, (query) => fetcher(query, queryInput))
 
   const handleUpdateFulfillmentOptionsForGroup = async (
     fulfillmentGroupId: string
@@ -76,11 +81,29 @@ const useCheckoutCart = () => {
     await mutate({ cart: cartWithFulfilmentOptions }, false)
   }
 
+  const setFulfillmentOption = async (
+    fulfillmentGroupId: string,
+    fulfillmentMethodId: string
+  ) => {
+    const {
+      selectFulfillmentOptionForGroup: { cart: cartWithOptionsSelected },
+    } = await request(API_URL, selectFulfillmentOptionForGroup, {
+      input: <SelectFulfillmentOptionForGroupInput>{
+        cartId: cartRes!.cart._id,
+        fulfillmentGroupId,
+        fulfillmentMethodId,
+      },
+    })
+
+    await mutate({ cart: cartWithOptionsSelected }, false)
+  }
+
   return {
-    cart,
+    cart: cartRes,
     error,
     mutationQueries: {
       setShippingAddress,
+      setFulfillmentOption,
     },
   }
 }

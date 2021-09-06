@@ -275,6 +275,7 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
     discounts: [],
     options: [
       {
+        name: '',
         value: String(optionTitle || variantTitle),
       },
     ],
