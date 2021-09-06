@@ -34,7 +34,7 @@ export default function Profile() {
             </div>
             <div className="mt-5">
               <Text variant="sectionHeading">Email</Text>
-              <span>{data.email}</span>
+              <span>{data.primaryEmailAddress}</span>
             </div>
           </div>
         </div>
