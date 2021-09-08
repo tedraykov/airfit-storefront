@@ -27,7 +27,7 @@ interface CheckoutViewProps {
   isLoading: boolean
   isEmpty: boolean
   mutationQueries: {
-    setShippingAddress: (address: Partial<AddressInput>) => Promise<void>
+    setShippingAddress: (address: Partial<AddressInput>) => Promise<Cart>
     setFulfillmentOption: (
       fulfillmentGroupId: string,
       fulfillmentMethodId: string
@@ -140,7 +140,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   }
 
   const handleSetShippingAddress = async () => {
-    await mutationQueries.setShippingAddress({
+    const updatedCart = await mutationQueries.setShippingAddress({
       phone: userDataGetValues('phone').toString(),
       firstName: userDataGetValues('firstName'),
       lastName: userDataGetValues('sureName'),
@@ -153,10 +153,12 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       country: 'България',
       postal: shippingAddressGetValues('postalCode'),
     })
+
+    console.log(updatedCart)
     await mutationQueries.setFulfillmentOption(
-      cart!.checkout!.fulfillmentGroups[0]!._id,
-      cart!.checkout!.fulfillmentGroups[0]!.availableFulfillmentOptions[0]!
-        .fulfillmentMethod!._id
+      updatedCart!.checkout!.fulfillmentGroups[0]!._id,
+      updatedCart!.checkout!.fulfillmentGroups[0]!
+        .availableFulfillmentOptions[0]!.fulfillmentMethod!._id
     )
   }
 

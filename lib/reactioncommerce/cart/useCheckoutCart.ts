@@ -61,7 +61,9 @@ const useCheckoutCart = () => {
     })
   }
 
-  const setShippingAddress = async (address: Partial<AddressInput>) => {
+  const setShippingAddress = async (
+    address: Partial<AddressInput>
+  ): Promise<Cart> => {
     const {
       setShippingAddressOnCart: { cart: cartWithAddress },
     } = await request(API_URL, setShippingAddressOnCartMutation, {
@@ -79,6 +81,7 @@ const useCheckoutCart = () => {
     )
 
     await mutate({ cart: cartWithFulfilmentOptions }, false)
+    return cartWithFulfilmentOptions as Cart
   }
 
   const setFulfillmentOption = async (
