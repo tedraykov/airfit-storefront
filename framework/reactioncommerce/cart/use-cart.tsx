@@ -2,6 +2,9 @@ import { useMemo } from 'react'
 import { SWRHook } from '@commerce/utils/types'
 import useCart, { UseCart } from '@commerce/cart/use-cart'
 import { GetCartHook } from '@framework/types/cart'
+import { useFetcher } from '@commerce/utils/use-hook'
+import { setShippingAddress } from '@framework/cart/utils/setShippingAddress'
+import { setShipmentMethod } from '@framework/cart/utils/setShipmentMethod'
 
 export default useCart as UseCart<typeof handler>
 
@@ -20,6 +23,16 @@ export const handler: SWRHook<GetCartHook> = {
       const response = useData({
         swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },
       })
+
+      const fetcher = useFetcher()
+
+      if (response.data) {
+        response.data.mutationQueries = {
+          setShippingAddress: setShippingAddress(fetcher, response),
+          setShipmentMethod: setShipmentMethod(fetcher, response),
+        }
+      }
+
       return useMemo(
         () =>
           Object.create(response, {

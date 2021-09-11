@@ -1,8 +1,66 @@
 import * as Core from '@commerce/types/cart'
+import { Money } from '@framework/types/common'
+import { Order, OrderInput, PlaceOrderInput } from '@framework/types/order'
 
 export type Cart = Core.Cart & {
   id: string
   lineItems: LineItem[]
+  fulfillmentGroups: FulfillmentGroup[]
+  shopId: string
+  mutationQueries: {
+    setShippingAddress: (address: ShippingAddress) => Promise<Cart>
+    setShipmentMethod: (
+      fulfillmentGroupId: string,
+      fulfillmentMethodId: string
+    ) => Promise<Cart>
+    placeOrder: (input: PlaceOrderInput) => Promise<Order>
+  }
+}
+
+export type ShippingAddress = {
+  address: string
+  city: string
+  country: string
+  firstName: string
+  fullName: string
+  sureName: string
+  phone: string
+  postal: string
+  region: string
+}
+
+export type FulfillmentGroup = {
+  id: string
+  data: {
+    shippingAddress: ShippingAddress
+  }
+  items: LineItem[]
+  availableFulfillmentOptions: FulfillmentOption[]
+  selectedFulfillmentOption: FulfillmentOption | undefined
+  shopId: string
+  type: string
+}
+
+export type FulfillmentGroupOrderInput = {
+  data: {
+    shippingAddress: ShippingAddress
+  }
+  items: LineItem[]
+  selectedFulfillmentMethodId: string
+  shopId: string
+  type: string
+  totalPrice: number
+}
+
+export type FulfillmentOption = {
+  fulfillmentMethod: FulfillmentMethod
+  handlingPrice: Money
+  price: Money
+}
+
+export type FulfillmentMethod = {
+  id: string
+  name: string
 }
 
 export interface LineItem extends Core.LineItem {}
@@ -12,10 +70,7 @@ export type OptionSelections = {
   option_value: number | string
 }
 export type CartItemBody = Core.CartItemBody & {
-  pricing: {
-    amount: number
-    currencyCode: string
-  }
+  pricing: Money
   optionSelections?: OptionSelections
 }
 export type CartTypes = {
@@ -23,7 +78,7 @@ export type CartTypes = {
   item: LineItem
   itemBody: CartItemBody
 }
-export type CartSchema = Core.CartSchema<CartTypes>
+
 export type CartHooks = Core.CartHooks<CartTypes>
 
 export type GetCartHook = CartHooks['getCart']

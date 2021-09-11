@@ -13,10 +13,19 @@ import {
   CartItem,
   Shop,
   TagEdge,
+  FulfillmentGroup as ReactionFulfillmentGroup,
+  FulfillmentOption as ReactionFulfillmentOption,
+  Address,
 } from '../schema'
 
 import { IPage } from '@lib/contentful/schema'
-import { Cart, LineItem } from '@framework/types/cart'
+import {
+  Cart,
+  FulfillmentGroup,
+  FulfillmentOption,
+  LineItem,
+  ShippingAddress,
+} from '@framework/types/cart'
 import { Product, ProductVariant } from '@framework/types/product'
 import { ProductOptionValues } from '@commerce/types/product'
 import { Category } from '@commerce/types/site'
@@ -232,6 +241,68 @@ export function normalizeCart(cart: ReactionCart): Cart | null {
     subtotalPrice: +(cart.checkout?.summary?.itemTotal?.amount ?? 0),
     totalPrice: cart.checkout?.summary?.total?.amount ?? 0,
     discounts: [],
+    shopId: cart.shop._id,
+    fulfillmentGroups:
+      cart.checkout?.fulfillmentGroups.map((fg) =>
+        normalizeFulfillmentGroup(<ReactionFulfillmentGroup>fg)
+      ) ?? [],
+  }
+}
+
+function normalizeFulfillmentGroup(
+  fulfillmentGroup: ReactionFulfillmentGroup
+): FulfillmentGroup {
+  return <FulfillmentGroup>{
+    id: fulfillmentGroup._id,
+    availableFulfillmentOptions:
+      fulfillmentGroup?.availableFulfillmentOptions.map((fo) =>
+        normalizeFulfillmentOption(<ReactionFulfillmentOption>fo)
+      ) ?? [],
+    selectedFulfillmentOption: {},
+    ...(fulfillmentGroup.data?.shippingAddress && {
+      data: {
+        shippingAddress: normalizeAddress(
+          fulfillmentGroup.data.shippingAddress
+        ),
+      },
+    }),
+    shopId: fulfillmentGroup.shop._id,
+    type: fulfillmentGroup.type,
+  }
+}
+
+function normalizeFulfillmentOption(
+  fo: ReactionFulfillmentOption
+): FulfillmentOption {
+  return <FulfillmentOption>{
+    fulfillmentMethod: {
+      id: fo.fulfillmentMethod?._id ?? '',
+      name: fo.fulfillmentMethod?.displayName ?? '',
+    },
+    ...(!!fo.handlingPrice && {
+      handlingPrice: {
+        amount: fo.handlingPrice.amount,
+        displayAmount: fo.handlingPrice.displayAmount,
+      },
+    }),
+    price: {
+      amount: fo.price.amount,
+      displayAmount: fo.price.displayAmount,
+    },
+  }
+}
+
+function normalizeAddress(address: Address): ShippingAddress {
+  return <ShippingAddress>{
+    address: address.address1,
+    city: address.city,
+    country: address.country,
+    firstName: address.firstName,
+    fullName: address.fullName,
+    sureName: address.lastName,
+    phone: address.phone,
+    postal: address.postal,
+    region: address.region,
   }
 }
 

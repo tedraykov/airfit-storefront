@@ -24,8 +24,7 @@ export function useSWRHook<H extends SWRHook<any>>(
 
   return hook.useHook({
     useData(ctx) {
-      const response = useData(hook, ctx?.input ?? [], fetcher, ctx?.swrOptions)
-      return response
+      return useData(hook, ctx?.input ?? [], fetcher, ctx?.swrOptions)
     },
   })
 }

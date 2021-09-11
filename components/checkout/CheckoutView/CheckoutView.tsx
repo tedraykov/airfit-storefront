@@ -7,32 +7,20 @@ import { Drawer, MobileStepper } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import s from './CheckoutView.module.scss'
 import { CartView } from '@components/cart/CartView/CartView'
-import {
-  Cart,
-  OrderFulfillmentGroupInput,
-  OrderInput,
-  PaymentInput,
-} from '@framework/schema'
+import { PaymentInput } from '@framework/schema'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
-import { AddressInput, PaymentMethod } from '@framework/schema'
+import { PaymentMethod } from '@framework/schema'
 import Link from '@components/ui/Link'
-import placeOrder from '@lib/reactioncommerce/utils/placeOrder'
-import { normalizeCart } from '@framework/utils'
+import { Cart, FulfillmentGroupOrderInput } from '@framework/types/cart'
+import { OrderInput } from '@framework/types/order'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
   isLoading: boolean
   isEmpty: boolean
-  mutationQueries: {
-    setShippingAddress: (address: Partial<AddressInput>) => Promise<Cart>
-    setFulfillmentOption: (
-      fulfillmentGroupId: string,
-      fulfillmentMethodId: string
-    ) => Promise<void>
-  }
   paymentMethods: PaymentMethod[]
 }
 
@@ -63,7 +51,6 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   cart,
   isLoading,
   isEmpty,
-  mutationQueries,
   paymentMethods,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
@@ -140,80 +127,66 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   }
 
   const handleSetShippingAddress = async () => {
+    const { mutationQueries } = cart!
     const updatedCart = await mutationQueries.setShippingAddress({
       phone: userDataGetValues('phone').toString(),
       firstName: userDataGetValues('firstName'),
-      lastName: userDataGetValues('sureName'),
+      sureName: userDataGetValues('sureName'),
       fullName: `${userDataGetValues('firstName')} ${userDataGetValues(
         'sureName'
       )}`,
-      address1: shippingAddressGetValues('address'),
+      address: shippingAddressGetValues('address'),
       city: shippingAddressGetValues('locality'),
       region: shippingAddressGetValues('locality'),
       country: 'България',
       postal: shippingAddressGetValues('postalCode'),
     })
 
-    console.log(updatedCart)
-    await mutationQueries.setFulfillmentOption(
-      updatedCart!.checkout!.fulfillmentGroups[0]!._id,
-      updatedCart!.checkout!.fulfillmentGroups[0]!
-        .availableFulfillmentOptions[0]!.fulfillmentMethod!._id
+    await mutationQueries.setShipmentMethod(
+      updatedCart.fulfillmentGroups[0].id,
+      updatedCart.fulfillmentGroups[0].availableFulfillmentOptions[0]
+        .fulfillmentMethod.id
     )
   }
 
   const handlePlaceOrder = async () => {
     const orderInput = buildOrder()
+    if (!orderInput || !cart) return
 
-    if (!orderInput) return
+    const { mutationQueries } = cart
 
-    await placeOrder({
-      order: orderInput as OrderInput,
+    await mutationQueries.placeOrder({
+      order: orderInput,
       payments: [
         {
-          amount: cart?.checkout?.summary.total.amount ?? 0,
+          amount: cart?.totalPrice ?? 0,
           method: payment!.name,
         } as PaymentInput,
       ],
     })
   }
 
-  const buildOrder = (): Partial<OrderInput> | undefined => {
-    if (!cart) return
-
-    const { checkout } = cart
-
-    const fulfillmentGroups = checkout!.fulfillmentGroups!.map((group) => {
+  const buildOrder = (): OrderInput | undefined => {
+    const fulfillmentGroups = cart!.fulfillmentGroups!.map((group) => {
       const { data, selectedFulfillmentOption } = group!
-
-      const items = cart.items!.edges!.map((edge) => {
-        const item = edge!.node
-
-        return {
-          addedAt: item!.addedAt,
-          price: item!.price.amount,
-          productConfiguration: item!.productConfiguration,
-          quantity: item!.quantity,
-        }
-      })
 
       return {
         data,
-        items,
+        items: cart?.lineItems,
         selectedFulfillmentMethodId:
-          selectedFulfillmentOption!.fulfillmentMethod!._id,
-        shopId: group!.shop._id,
-        totalPrice: checkout!.summary.total.amount,
+          selectedFulfillmentOption!.fulfillmentMethod.id,
+        shopId: group!.shopId,
+        totalPrice: cart?.totalPrice,
         type: group!.type,
-      }
+      } as FulfillmentGroupOrderInput
     })
 
     return {
-      cartId: cart._id,
-      currencyCode: checkout!.summary.total.currency.code,
-      email: userDataGetValues('email'),
-      fulfillmentGroups: fulfillmentGroups as OrderFulfillmentGroupInput[],
-      shopId: cart.shop._id,
+      cartId: cart!.id,
+      currencyCode: cart!.currency.code,
+      email: cart!.email!,
+      fulfillmentGroups: fulfillmentGroups,
+      shopId: cart!.shopId,
     }
   }
 
@@ -264,7 +237,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-2">
             <span>Общо</span>
             <span>
-              {cart?.checkout?.summary.total.displayAmount ?? '0.00 лв.'}
+              {cart ? `${cart.totalPrice} ${cart.currency.code}` : '0.00 лв.'}
             </span>
           </div>
         </div>
@@ -317,7 +290,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       >
         <div className={s.cartDrawerContent}>
           <CartView
-            data={normalizeCart(cart!)}
+            data={cart}
             isEmpty={isEmpty}
             isLoading={isLoading}
             checkoutButton={false}

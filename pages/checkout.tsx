@@ -5,8 +5,9 @@ import { CheckoutView } from '@components/checkout/CheckoutView/CheckoutView'
 import useCart from '@framework/cart/use-cart'
 import { PaymentMethod } from '@framework/schema'
 import { StrippedLayout } from '@components/common/Layout/Layout'
-import useCheckoutCart from '@lib/reactioncommerce/cart/useCheckoutCart'
 import getPaymentMethods from '@lib/reactioncommerce/utils/getPaymentMethods'
+import { router } from 'next/client'
+import { useRouter } from 'next/router'
 
 export async function getStaticProps({
   preview,
@@ -29,20 +30,20 @@ export default function Checkout({
 }: {
   paymentMethods: PaymentMethod[]
 }) {
-  const { isLoading, isEmpty } = useCart()
-  const { cart: data, mutationQueries } = useCheckoutCart()
+  const { data, isLoading, isEmpty } = useCart()
+  const router = useRouter()
 
   useEffect(() => {
-    console.log('Checkout cart modified')
-    console.log(data?.cart)
+    if (!data && !isLoading) {
+      router.push('/')
+    }
   }, [data])
 
-  return !data ? (
+  return isLoading || (!isLoading && !data) ? (
     <h1>Loading...</h1>
   ) : (
     <CheckoutView
-      mutationQueries={mutationQueries}
-      cart={data.cart}
+      cart={data}
       isEmpty={isEmpty}
       isLoading={isLoading}
       paymentMethods={paymentMethods}
