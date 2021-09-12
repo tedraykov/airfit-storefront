@@ -3,6 +3,7 @@ import type { MutationHook } from '@commerce/utils/types'
 import { CommerceError } from '@commerce/utils/errors'
 import useCustomer from '../customer/use-customer'
 import authenticateMutation from '../utils/mutations/authenticate'
+import hashPassword from '../utils/hash-password'
 import { Mutation, MutationAuthenticateArgs } from '../schema'
 import useLogin, { UseLogin } from '@commerce/auth/use-login'
 import { setCustomerToken, setRefreshToken } from '../utils'
@@ -21,13 +22,14 @@ export const handler: MutationHook<LoginHook> = {
       })
     }
 
-    console.log('querying API')
-
     const { authenticate } = await fetch<Mutation, MutationAuthenticateArgs>({
       ...options,
       variables: {
         serviceName: 'password',
-        params: { user: { email }, password },
+        params: {
+          user: { email },
+          password: hashPassword(password),
+        },
       },
     })
 
