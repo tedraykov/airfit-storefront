@@ -1,5 +1,6 @@
 import getAnonymousCartQuery from '@framework/utils/queries/get-anonymous-cart'
 import { ReactionCommerceConfig } from '@framework/api'
+import { setDummyCartCookie } from '@framework/api/endpoints/cart/utils'
 
 export const getAnonymousCart = async (
   cookies: { [p: string]: string },

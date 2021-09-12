@@ -69,7 +69,7 @@
 }
 
 .sidebar {
-  @apply flex flex-col col-span-1 mx-auto max-w-8xl px-6 w-full;
+  @apply flex flex-col col-span-1 mx-auto max-w-2xl xl:max-w-8xl px-6 w-full;
 
   @screen md {
     @apply sticky;

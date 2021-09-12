@@ -46,6 +46,13 @@ const Input: React.FC<Props> = (props) => {
     setTooltipOpen(false)
   }
 
+  const handleValueChanged = (e: any) => {
+    if (onChange) {
+      onChange(e.target.value)
+    }
+    return null
+  }
+
   return (
     <label
       onFocus={showTooltip}
@@ -60,6 +67,7 @@ const Input: React.FC<Props> = (props) => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
+        onChange={handleValueChanged}
         {...register?.(label ?? '', { required })}
         {...rest}
       />

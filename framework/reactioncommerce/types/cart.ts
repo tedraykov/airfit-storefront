@@ -71,6 +71,7 @@ export type CartTypes = {
   itemBody: CartItemBody
 }
 
+export type CartSchema = Core.CartSchema<CartTypes>
 export type CartHooks = Core.CartHooks<CartTypes>
 
 export type GetCartHook = CartHooks['getCart'] & {

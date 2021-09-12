@@ -1,7 +1,5 @@
 import { ReactionCommerceConfig } from '@framework/api'
 import getCartCookie from '@framework/api/utils/get-cart-cookie'
-import { getCustomerToken } from '@framework/utils'
-import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
 
 export const cartNeedsToBeReconciled = (
   cookies: { [p: string]: string },
@@ -34,12 +32,12 @@ export const updateCookiesForAnonymousCart = (
     getCartCookie(
       config.anonymousCartTokenCookie ?? '',
       createdCart.data.createCart.token,
-      999
+      60 * 60 * 168
     ),
     getCartCookie(
       config.cartIdCookie,
       createdCart.data.createCart.cart._id,
-      999
+      60 * 60 * 168
     ),
   ])
 }
@@ -54,7 +52,7 @@ export const updateCookiesForReconciledCart = (
 ): void => {
   res.setHeader('Set-Cookie', [
     getCartCookie(config.anonymousCartTokenCookie ?? ''),
-    getCartCookie(config.cartIdCookie, cartId, 999),
+    getCartCookie(config.cartIdCookie, cartId, 60 * 60 * 168),
   ])
 }
 
@@ -63,7 +61,10 @@ export const updateCookiesForAccountCart = (
   res: any,
   config: ReactionCommerceConfig
 ) => {
-  res.setHeader('Set-Cookie', getCartCookie(config.cartIdCookie, cartId, 999))
+  res.setHeader('Set-Cookie', [
+    getCartCookie(config.cartIdCookie, cartId, 60 * 60 * 168),
+    getCartCookie(config.anonymousCartTokenCookie ?? ''),
+  ])
 }
 
 /**
@@ -74,7 +75,7 @@ export const setDummyCartCookie = (
   res: any,
   config: ReactionCommerceConfig
 ): void =>
-  res.setHeader(
-    'Set-Cookie',
-    getCartCookie(config.cartIdCookie, config.dummyEmptyCartId, 999)
-  )
+  res.setHeader('Set-Cookie', [
+    getCartCookie(config.cartIdCookie, config.dummyEmptyCartId, 60 * 60 * 168),
+    getCartCookie(config.anonymousCartTokenCookie ?? ''),
+  ])

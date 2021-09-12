@@ -114,7 +114,7 @@ const ProductView: FC<Props> = ({ product }) => {
               selectedOptions={selectedOptions}
               setSelectedOptions={setSelectedOptions}
             />
-            <div className="pb-14 break-words w-full max-w-xl">
+            <div className="pb-14 break-words w-full max-w-2xl text-justify">
               <Text html={product.descriptionHtml || product.description} />
             </div>
           </section>
@@ -126,7 +126,7 @@ const ProductView: FC<Props> = ({ product }) => {
               onClick={addToCart}
               loading={loading}
             >
-              Add to Cart
+              Добави в количката
             </Button>
           </div>
         </div>

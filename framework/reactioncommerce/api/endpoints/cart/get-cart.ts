@@ -13,11 +13,6 @@ import { getAnonymousCart } from '@framework/api/utils/get-anonymous-cart'
 import { getAccountCart } from '@framework/api/utils/get-account-cart'
 import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { CartEndpoint } from '.'
-import request from 'graphql-request'
-import { API_URL } from '@framework/const'
-import updateFulfillmentOptionsForGroupMutation from '@framework/utils/mutations/updateFulfillmentOptionsForGroup'
-import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
-import { CartData } from '@framework/types/cart'
 
 // Return current cart info
 const getCart: CartEndpoint['handlers']['getCart'] = async ({
@@ -25,11 +20,8 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
   res,
   config,
 }) => {
-  console.log('Get cart endpoint called')
   let normalizedCart
-
   if (cartNeedsToBeReconciled(cookies, config)) {
-    console.log('Reconciling cart')
     const rawReconciledCart = await reconcileCarts(cookies, config)
 
     normalizedCart = normalizeCart(rawReconciledCart)
@@ -39,6 +31,10 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     const rawAnonymousCart = await getAnonymousCart(cookies, config)
 
     normalizedCart = normalizeCart(rawAnonymousCart)
+
+    if (!normalizedCart) {
+      setDummyCartCookie(res, config)
+    }
   } else if (accountCartIsPresent(cookies, config)) {
     const accountId = await getViewerId(cookies, config)
 
@@ -53,21 +49,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     setDummyCartCookie(res, config)
   }
 
-  const handleUpdateFulfillmentOptionsForGroup = async (
-    fulfillmentGroupId: string
-  ) => {
-    return await config.fetch(updateFulfillmentOptionsForGroupMutation, {
-      variables: {
-        input: {
-          fulfillmentGroupId,
-          cartId: getCartIdCookie(),
-          cartToken: getAnonymousCartToken(),
-        },
-      },
-    })
-  }
-
-  return res.status(200).json({ data: normalizedCart ?? null })
+  return res.status(200).json({ data: normalizedCart })
 }
 
 export default getCart
