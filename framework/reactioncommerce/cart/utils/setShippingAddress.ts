@@ -2,7 +2,7 @@ import updateFulfillmentOptionsForGroupMutation from '@framework/utils/mutations
 import { getCartIdCookie } from '@framework/utils/get-cart-id-cookie'
 import { getAnonymousCartToken } from '@framework/utils/anonymous-cart-token'
 import { Cart, ShippingAddress } from '@framework/types/cart'
-import setShippingAddressOnCartMutation from '@framework/utils/mutations/setShippingAddressOnCart'
+import setShippingAddressOnCartMutation from '@framework/utils/mutations/set-shipping-address-on-cart'
 import { normalizeCart } from '@framework/utils'
 import { AddressInput, Cart as ReactionCart } from '@framework/schema'
 import { FetcherOptions } from '@commerce/utils/types'
@@ -47,6 +47,7 @@ export const setShippingAddress =
           phone: address.phone,
           postal: address.postal,
           region: address.region,
+          isCommercial: false
         },
       },
     })

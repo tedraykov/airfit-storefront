@@ -1,4 +1,4 @@
-import { FulfillmentGroupOrderInput } from '@framework/types/cart'
+import { LineItem, ShippingAddress } from '@framework/types/cart'
 
 export type OrderInput = {
   cartId: string
@@ -18,4 +18,17 @@ export type PlaceOrderInput = {
   payments: PaymentInput[]
 }
 
-export type Order = {}
+export type Order = {
+  referenceId: string
+}
+
+export type FulfillmentGroupOrderInput = {
+  data: {
+    shippingAddress: ShippingAddress
+  }
+  items: LineItem[]
+  selectedFulfillmentMethodId: string
+  shopId: string
+  type: string
+  totalPrice: number
+}

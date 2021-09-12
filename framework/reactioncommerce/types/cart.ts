@@ -1,19 +1,21 @@
 import * as Core from '@commerce/types/cart'
 import { Money } from '@framework/types/common'
-import { Order, OrderInput, PlaceOrderInput } from '@framework/types/order'
+import { Order, PlaceOrderInput } from '@framework/types/order'
 
 export type Cart = Core.Cart & {
   id: string
   lineItems: LineItem[]
   fulfillmentGroups: FulfillmentGroup[]
   shopId: string
-  mutationQueries: {
+  mutationQueries?: {
     setShippingAddress: (address: ShippingAddress) => Promise<Cart>
+    setEmailOnAnonymousCart: (email: string) => Promise<Cart>
     setShipmentMethod: (
       fulfillmentGroupId: string,
       fulfillmentMethodId: string
     ) => Promise<Cart>
     placeOrder: (input: PlaceOrderInput) => Promise<Order>
+    getPaymentMethods: () => Promise<string[]>
   }
 }
 
@@ -34,22 +36,10 @@ export type FulfillmentGroup = {
   data: {
     shippingAddress: ShippingAddress
   }
-  items: LineItem[]
   availableFulfillmentOptions: FulfillmentOption[]
   selectedFulfillmentOption: FulfillmentOption | undefined
   shopId: string
   type: string
-}
-
-export type FulfillmentGroupOrderInput = {
-  data: {
-    shippingAddress: ShippingAddress
-  }
-  items: LineItem[]
-  selectedFulfillmentMethodId: string
-  shopId: string
-  type: string
-  totalPrice: number
 }
 
 export type FulfillmentOption = {
@@ -63,7 +53,9 @@ export type FulfillmentMethod = {
   name: string
 }
 
-export interface LineItem extends Core.LineItem {}
+export interface LineItem extends Core.LineItem {
+  addedAt: string
+}
 
 export type OptionSelections = {
   option_id: number
@@ -81,7 +73,11 @@ export type CartTypes = {
 
 export type CartHooks = Core.CartHooks<CartTypes>
 
-export type GetCartHook = CartHooks['getCart']
+export type GetCartHook = CartHooks['getCart'] & {
+  input: {
+    isCheckout?: boolean
+  }
+}
 export type AddItemHook = CartHooks['addItem']
 export type UpdateItemHook = CartHooks['updateItem']
 export type RemoveItemHook = CartHooks['removeItem']

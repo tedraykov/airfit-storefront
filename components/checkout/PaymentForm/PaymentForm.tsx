@@ -7,11 +7,10 @@ import {
 } from '@material-ui/core'
 import s from '@components/checkout/PaymentForm/PaymentForm.module.scss'
 import { Text } from '@components/ui'
-import { PaymentMethod } from '@framework/schema'
 
 interface PaymentFormProps {
-  availablePaymentMethods: PaymentMethod[]
-  setPaymentMethod: (payment: PaymentMethod) => void
+  availablePaymentMethods: string[]
+  setPaymentMethod: (payment: string) => void
 }
 
 enum PaymentType {
@@ -43,7 +42,7 @@ export const PaymentForm: FC<PaymentFormProps> = ({
 
   const handleChangePaymentMethod = (paymentType: PaymentType) => {
     const paymentMethod = availablePaymentMethods.find(
-      (method) => method.name === paymentType
+      (method) => method === paymentType
     )
 
     if (!paymentMethod) {

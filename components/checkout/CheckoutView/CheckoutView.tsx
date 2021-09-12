@@ -12,16 +12,14 @@ import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
-import { PaymentMethod } from '@framework/schema'
 import Link from '@components/ui/Link'
-import { Cart, FulfillmentGroupOrderInput } from '@framework/types/cart'
-import { OrderInput } from '@framework/types/order'
+import { Cart } from '@framework/types/cart'
+import { FulfillmentGroupOrderInput, OrderInput } from '@framework/types/order'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
   isLoading: boolean
   isEmpty: boolean
-  paymentMethods: PaymentMethod[]
 }
 
 interface UserDataFieldValues {
@@ -51,7 +49,6 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   cart,
   isLoading,
   isEmpty,
-  paymentMethods,
 }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
@@ -77,7 +74,8 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     },
   } = useForm<ShippingAddressFieldValues>({ mode: 'all' })
 
-  const [payment, setPayment] = useState<PaymentMethod | undefined>(undefined)
+  const [availablePayments, setAvailablePayments] = useState<string[]>([])
+  const [payment, setPayment] = useState<string | undefined>(undefined)
 
   const handleNext = async () => {
     if (continueButtonLoading) return
@@ -86,6 +84,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       case 1:
         setContinueButtonLoading(true)
         await handleSetShippingAddress()
+        await fetchAvailablePayments()
         setContinueButtonLoading(false)
         break
       case 2:
@@ -128,7 +127,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
 
   const handleSetShippingAddress = async () => {
     const { mutationQueries } = cart!
-    const updatedCart = await mutationQueries.setShippingAddress({
+    const updatedCart = await mutationQueries!.setShippingAddress({
       phone: userDataGetValues('phone').toString(),
       firstName: userDataGetValues('firstName'),
       sureName: userDataGetValues('sureName'),
@@ -142,31 +141,36 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       postal: shippingAddressGetValues('postalCode'),
     })
 
-    await mutationQueries.setShipmentMethod(
+    await mutationQueries!.setEmailOnAnonymousCart(userDataGetValues('email'))
+
+    await mutationQueries!.setShipmentMethod(
       updatedCart.fulfillmentGroups[0].id,
       updatedCart.fulfillmentGroups[0].availableFulfillmentOptions[0]
         .fulfillmentMethod.id
     )
   }
 
+  const fetchAvailablePayments = async () => {
+    const availablePayments = await cart?.mutationQueries?.getPaymentMethods() ?? []
+    setAvailablePayments(availablePayments)
+  }
+
   const handlePlaceOrder = async () => {
     const orderInput = buildOrder()
-    if (!orderInput || !cart) return
+    const { mutationQueries } = cart!
 
-    const { mutationQueries } = cart
-
-    await mutationQueries.placeOrder({
+    await mutationQueries!.placeOrder({
       order: orderInput,
       payments: [
         {
           amount: cart?.totalPrice ?? 0,
-          method: payment!.name,
+          method: payment!,
         } as PaymentInput,
       ],
     })
   }
 
-  const buildOrder = (): OrderInput | undefined => {
+  const buildOrder = (): OrderInput => {
     const fulfillmentGroups = cart!.fulfillmentGroups!.map((group) => {
       const { data, selectedFulfillmentOption } = group!
 
@@ -221,7 +225,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         <div>
           <Text variant="pageHeading">💵 Метод за плащане</Text>
           <PaymentForm
-            availablePaymentMethods={paymentMethods}
+            availablePaymentMethods={availablePayments}
             setPaymentMethod={setPayment}
           />
         </div>

@@ -5,6 +5,9 @@ import { GetCartHook } from '@framework/types/cart'
 import { useFetcher } from '@commerce/utils/use-hook'
 import { setShippingAddress } from '@framework/cart/utils/setShippingAddress'
 import { setShipmentMethod } from '@framework/cart/utils/setShipmentMethod'
+import { placeOrder } from '@framework/cart/utils/placeOrder'
+import { setEmailOnAnonymousCart } from '@framework/cart/utils/setEmailOnAnonymousCart'
+import { getPaymentMethods } from '@framework/cart/utils/getPaymentMethods'
 
 export default useCart as UseCart<typeof handler>
 
@@ -26,10 +29,13 @@ export const handler: SWRHook<GetCartHook> = {
 
       const fetcher = useFetcher()
 
-      if (response.data) {
+      if (response.data && input?.isCheckout) {
         response.data.mutationQueries = {
           setShippingAddress: setShippingAddress(fetcher, response),
           setShipmentMethod: setShipmentMethod(fetcher, response),
+          placeOrder: placeOrder(fetcher),
+          setEmailOnAnonymousCart: setEmailOnAnonymousCart(fetcher, response),
+          getPaymentMethods: getPaymentMethods(fetcher, response)
         }
       }
 
