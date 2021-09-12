@@ -14,7 +14,8 @@ import * as yup from 'yup'
 import { UseFormRegister } from 'react-hook-form/dist/types/form'
 import Link from '@components/ui/Link'
 import { Cart } from '@framework/types/cart'
-import { FulfillmentGroupOrderInput, OrderInput } from '@framework/types/order'
+import { FulfillmentGroupOrderInput, Order, OrderInput } from '@framework/types/order'
+import { CheckoutFinalize } from '@components/checkout/CheckoutFinalize/CheckoutFinalize'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
@@ -42,14 +43,14 @@ const userDataFormSchema = yup.object().shape({
   email: yup
     .string()
     .email('Въведете валиден мейл')
-    .required('Задължително поле'),
+    .required('Задължително поле')
 })
 
 export const CheckoutView: FC<CheckoutViewProps> = ({
-  cart,
-  isLoading,
-  isEmpty,
-}) => {
+                                                      cart,
+                                                      isLoading,
+                                                      isEmpty
+                                                    }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [readyToFinalize, setReadyToFinalize] = useState(false)
   const [cartOpened, setCartOpened] = useState(false)
@@ -58,10 +59,10 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   const {
     register: userDataRegister,
     getValues: userDataGetValues,
-    formState: { errors: userDataErrors, isValid: userDataIsValid },
+    formState: { errors: userDataErrors, isValid: userDataIsValid }
   } = useForm<UserDataFieldValues>({
     resolver: yupResolver(userDataFormSchema),
-    mode: 'all',
+    mode: 'all'
   })
 
   const {
@@ -70,12 +71,13 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     setValue: shippingAddressSetValue,
     formState: {
       errors: shippingAddressErrors,
-      isValid: shippingAddressIsValid,
-    },
+      isValid: shippingAddressIsValid
+    }
   } = useForm<ShippingAddressFieldValues>({ mode: 'all' })
 
   const [availablePayments, setAvailablePayments] = useState<string[]>([])
   const [payment, setPayment] = useState<string | undefined>(undefined)
+  const [order, setOrder] = useState<Order | undefined>(undefined)
 
   const handleNext = async () => {
     if (continueButtonLoading) return
@@ -138,7 +140,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       city: shippingAddressGetValues('locality'),
       region: shippingAddressGetValues('locality'),
       country: 'България',
-      postal: shippingAddressGetValues('postalCode'),
+      postal: shippingAddressGetValues('postalCode')
     })
 
     await mutationQueries!.setEmailOnAnonymousCart(userDataGetValues('email'))
@@ -155,21 +157,6 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     setAvailablePayments(availablePayments)
   }
 
-  const handlePlaceOrder = async () => {
-    const orderInput = buildOrder()
-    const { mutationQueries } = cart!
-
-    await mutationQueries!.placeOrder({
-      order: orderInput,
-      payments: [
-        {
-          amount: cart?.totalPrice ?? 0,
-          method: payment!,
-        } as PaymentInput,
-      ],
-    })
-  }
-
   const buildOrder = (): OrderInput => {
     const fulfillmentGroups = cart!.fulfillmentGroups!.map((group) => {
       const { data, selectedFulfillmentOption } = group!
@@ -178,10 +165,10 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         data,
         items: cart?.lineItems,
         selectedFulfillmentMethodId:
-          selectedFulfillmentOption!.fulfillmentMethod.id,
+        selectedFulfillmentOption!.fulfillmentMethod.id,
         shopId: group!.shopId,
         totalPrice: cart?.totalPrice,
-        type: group!.type,
+        type: group!.type
       } as FulfillmentGroupOrderInput
     })
 
@@ -190,32 +177,49 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       currencyCode: cart!.currency.code,
       email: cart!.email!,
       fulfillmentGroups: fulfillmentGroups,
-      shopId: cart!.shopId,
+      shopId: cart!.shopId
     }
+  }
+
+  const handlePlaceOrder = async () => {
+    const orderInput = buildOrder()
+    const { mutationQueries } = cart!
+
+    const order = await mutationQueries!.placeOrder({
+      order: orderInput,
+      payments: [
+        {
+          amount: cart?.totalPrice ?? 0,
+          method: payment!
+        } as PaymentInput
+      ]
+    })
+
+    setOrder(order)
   }
 
   return (
     <Container className={s.root}>
       <div className={s.header}>
         <div className={s.logo}>
-          <Link href="/">
+          <Link href='/'>
             <Logo reversedColor={true} />
           </Link>
         </div>
         <div className={s.gradientLine} />
       </div>
       <SwipeableViews
-        className="flex-1"
+        className='flex-1'
         index={activeStep}
         disabled={true}
         animateHeight={true}
       >
-        <div className="flex flex-1 flex-col space-y-4">
-          <Text variant="pageHeading">🧑‍🚀 Данни за клиента</Text>
+        <div className='flex flex-1 flex-col space-y-4'>
+          <Text variant='pageHeading'>🧑‍🚀 Данни за клиента</Text>
           <UserDataForm register={userDataRegister} errors={userDataErrors} />
         </div>
         <div>
-          <Text variant="pageHeading">📦 Адрес за доставка</Text>
+          <Text variant='pageHeading'>📦 Адрес за доставка</Text>
           <ShippingAddressForm
             register={shippingAddressRegister}
             errors={shippingAddressErrors}
@@ -223,22 +227,25 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           />
         </div>
         <div>
-          <Text variant="pageHeading">💵 Метод за плащане</Text>
+          <Text variant='pageHeading'>💵 Метод за плащане</Text>
           <PaymentForm
             availablePaymentMethods={availablePayments}
             setPaymentMethod={setPayment}
           />
         </div>
+        <div>
+          <CheckoutFinalize order={order} />
+        </div>
       </SwipeableViews>
-      <section className="my-6">
-        <div className="border-t border-accents-2">
-          <ul className="py-3">
-            <li className="flex justify-between py-1">
+      <section className='my-6'>
+        <div className='border-t border-accents-2'>
+          <ul className='py-3'>
+            <li className='flex justify-between py-1'>
               <span>Доставка</span>
-              <span className="font-bold tracking-wide">БЕЗПЛАТНА</span>
+              <span className='font-bold tracking-wide'>БЕЗПЛАТНА</span>
             </li>
           </ul>
-          <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-2">
+          <div className='flex justify-between border-t border-accents-2 py-3 font-bold mb-2'>
             <span>Общо</span>
             <span>
               {cart ? `${cart.totalPrice} ${cart.currency.code}` : '0.00 лв.'}
@@ -246,25 +253,25 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           </div>
         </div>
         <Button
-          className="w-full justify-between mb-12"
-          variant="slim"
-          color="secondary"
+          className='w-full justify-between mb-12'
+          variant='slim'
+          color='secondary'
           onClick={handleOpenCart}
         >
-          <span className="flex-1 font-light">🛒 Преглед на количката</span>
+          <span className='flex-1 font-light'>🛒 Преглед на количката</span>
           <ExpandLessIcon />
         </Button>
       </section>
       <MobileStepper
-        variant="progress"
-        steps={3}
-        position="bottom"
+        variant='progress'
+        steps={4}
+        position='bottom'
         elevation={10}
         activeStep={activeStep}
         nextButton={
           <Button
-            className="ml-4 mr-2"
-            variant="slim"
+            className='ml-4 mr-2'
+            variant='slim'
             loading={continueButtonLoading}
             onClick={handleNext}
             disabled={activeStep === 3 || !canContinueNextStep(activeStep)}
@@ -274,8 +281,8 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         }
         backButton={
           <Button
-            className="ml-2 mr-4"
-            variant="slim"
+            className='ml-2 mr-4'
+            variant='slim'
             onClick={handleBack}
             disabled={activeStep === 0}
           >
@@ -285,11 +292,11 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       />
 
       <Drawer
-        anchor="bottom"
+        anchor='bottom'
         open={cartOpened}
         onClose={handleCloseCart}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true // Better open performance on mobile.
         }}
       >
         <div className={s.cartDrawerContent}>
@@ -314,35 +321,35 @@ interface UserDataFormProps {
 const UserDataForm: FC<UserDataFormProps> = ({ register, errors }) => {
   return (
     <>
-      <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
+      <div className='flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3'>
         <Input
           register={register}
-          label="firstName"
+          label='firstName'
           error={errors.firstName}
-          type="text"
-          placeholder="Име"
+          type='text'
+          placeholder='Име'
         />
         <Input
           register={register}
-          label="sureName"
+          label='sureName'
           error={errors.sureName}
-          type="text"
-          placeholder="Фамилия"
+          type='text'
+          placeholder='Фамилия'
         />
       </div>
       <Input
         register={register}
-        type="tel"
-        label="phone"
+        type='tel'
+        label='phone'
         error={errors.phone}
-        placeholder="Телефонен номер"
+        placeholder='Телефонен номер'
       />
       <Input
         register={register}
-        type="email"
-        label="email"
+        type='email'
+        label='email'
         error={errors.email}
-        placeholder="Емейл"
+        placeholder='Емейл'
       />
     </>
   )
