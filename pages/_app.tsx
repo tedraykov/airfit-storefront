@@ -18,7 +18,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head />
+      <Head>
+        <title>Airfit | Спортно оборудване за дома</title>
+      </Head>
       <ManagedUIContext>
         <Layout pageProps={pageProps}>
           <Component {...pageProps} />

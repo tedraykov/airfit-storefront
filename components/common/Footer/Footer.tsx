@@ -20,7 +20,10 @@ const links = [
 ]
 
 const Footer: FC<Props> = ({ className, pages }) => {
-  const { sitePages } = usePages(pages)
+  const sitePages = usePages(pages).sitePages.map((sitePage) => ({
+    ...sitePage,
+    url: '/article' + sitePage.url,
+  }))
   const rootClassName = cn(s.root, className)
 
   return (
@@ -38,7 +41,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
             <div className="grid md:grid-rows-4 md:grid-cols-3 md:grid-flow-col">
               {[...links, ...sitePages].map((page) => (
                 <span key={page.url} className="py-3 md:py-0 md:pb-4">
-                  <Link href={'/article' + page.url!}>
+                  <Link href={page.url!}>
                     <a className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150">
                       {page.name}
                     </a>
