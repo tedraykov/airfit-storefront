@@ -5,6 +5,7 @@ import { CheckoutView } from '@components/checkout/CheckoutView/CheckoutView'
 import useCart from '@framework/cart/use-cart'
 import { StrippedLayout } from '@components/common/Layout/Layout'
 import { useRouter } from 'next/router'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 export async function getStaticProps({
   preview,
@@ -22,7 +23,7 @@ export async function getStaticProps({
 }
 
 export default function Checkout() {
-  const { data, isLoading, isEmpty } = useCart({isCheckout: true})
+  const { data, isLoading, isEmpty } = useCart({ isCheckout: true })
   const router = useRouter()
 
   useEffect(() => {
@@ -31,14 +32,10 @@ export default function Checkout() {
     }
   }, [data])
 
-  return isLoading || (!isLoading && !data) ? (
-    <h1>Loading...</h1>
+  return isLoading ? (
+    <CircularProgress disableShrink />
   ) : (
-    <CheckoutView
-      cart={data}
-      isEmpty={isEmpty}
-      isLoading={isLoading}
-    />
+    <CheckoutView cart={data} isEmpty={isEmpty} isLoading={isLoading} />
   )
 }
 
