@@ -1,8 +1,7 @@
 import { FC, useEffect, useMemo } from 'react'
 import cn from 'classnames'
-import s from './Searchbar.module.css'
+import s from './Searchbar.module.scss'
 import { useRouter } from 'next/router'
-import throttle from 'lodash.throttle'
 
 interface Props {
   className?: string

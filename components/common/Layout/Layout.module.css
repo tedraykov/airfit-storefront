@@ -1,4 +1,4 @@
 .root {
-  @apply flex flex-col h-screen bg-primary mx-auto transition-colors duration-150;
+  @apply flex flex-col min-h-screen bg-primary mx-auto transition-colors duration-150;
   max-width: 2460px;
 }
