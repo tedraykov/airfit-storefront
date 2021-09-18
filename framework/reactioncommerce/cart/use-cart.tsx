@@ -24,7 +24,7 @@ export const handler: SWRHook<GetCartHook> = {
     ({ useData }) =>
     (input) => {
       const response = useData({
-        swrOptions: { revalidateOnFocus: false, ...input?.swrOptions },
+        swrOptions: { revalidateOnFocus: true, ...input?.swrOptions },
       })
 
       const fetcher = useFetcher()
@@ -35,7 +35,7 @@ export const handler: SWRHook<GetCartHook> = {
           setShipmentMethod: setShipmentMethod(fetcher, response),
           placeOrder: placeOrder(fetcher),
           setEmailOnAnonymousCart: setEmailOnAnonymousCart(fetcher, response),
-          getPaymentMethods: getPaymentMethods(fetcher, response)
+          getPaymentMethods: getPaymentMethods(fetcher, response),
         }
       }
 

@@ -14,6 +14,7 @@ import {
 } from '../helpers'
 import { createMedia } from '@artsy/fresnel'
 import { DesktopGallery } from '@components/product/DesktopGallery/DesktopGallery'
+import { ProductVariant } from '@framework/types/product'
 
 interface Props {
   children?: any
@@ -25,11 +26,10 @@ const ProductView: FC<Props> = ({ product }) => {
   const addItem = useAddItem()
 
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
-
-  const variant = getVariant(product, selectedOptions)
+  const [variant, setVariant] = useState<ProductVariant>(product.variants[0])
 
   const { price } = usePrice({
-    amount: product.price.value,
+    amount: variant.price,
     baseAmount: product.price.retailPrice,
     currencyCode: product.price.currencyCode!,
   })
@@ -39,14 +39,17 @@ const ProductView: FC<Props> = ({ product }) => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setVariant(getVariant(product, selectedOptions)!)
+  }, [selectedOptions])
+
+  useEffect(() => {
     selectDefaultOptionFromProduct(product, setSelectedOptions)
   }, [])
 
   const addToCart = async () => {
     setLoading(true)
     try {
-      const selectedVariant = variant ? variant : product.variants[0]
-      console.log('Adding item to cart')
+      const selectedVariant = variant
       await addItem({
         productId: String(product.id),
         variantId: String(selectedVariant.id),
@@ -114,7 +117,7 @@ const ProductView: FC<Props> = ({ product }) => {
               selectedOptions={selectedOptions}
               setSelectedOptions={setSelectedOptions}
             />
-            <div className="pb-14 break-words w-full max-w-2xl text-justify">
+            <div className="pb-14 break-words w-full max-w-2xl text-left">
               <Text html={product.descriptionHtml || product.description} />
             </div>
           </section>

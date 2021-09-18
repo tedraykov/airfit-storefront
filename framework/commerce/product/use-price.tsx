@@ -43,22 +43,52 @@ export function formatVariantPrice({
   return { price, basePrice, discount }
 }
 
+function formatRange({
+  amountRange,
+  currencyCode,
+  locale,
+}: {
+  amountRange: { min: number; max: number }
+  currencyCode: string
+  locale: string
+}) {
+  const formatCurrency = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currencyCode,
+  })
+
+  return `${formatCurrency.format(amountRange.min)} - ${formatCurrency.format(
+    amountRange.max
+  )}`
+}
+
 export default function usePrice(
   data?: {
-    amount: number
+    amount?: number
+    amountRange?: { min: number; max: number }
     baseAmount?: number
     currencyCode: string
   } | null
 ) {
-  const { amount, baseAmount, currencyCode } = data ?? {}
+  const { baseAmount, currencyCode, amountRange } = data ?? {}
+  let { amount } = data ?? {}
   const { locale } = useCommerce()
   const value = useMemo(() => {
-    if (typeof amount !== 'number' || !currencyCode) return ''
+    if ((!amountRange && !amount) || !currencyCode) return ''
+
+    if (!!amountRange) {
+      if (amountRange.min !== amountRange.max) {
+        return formatRange({ amountRange, currencyCode, locale })
+      }
+      amount = amountRange.min
+    }
+
+    if (typeof amount !== 'number') return ''
 
     return baseAmount
       ? formatVariantPrice({ amount, baseAmount, currencyCode, locale })
       : formatPrice({ amount, currencyCode, locale })
-  }, [amount, baseAmount, currencyCode])
+  }, [amount, amountRange, baseAmount, currencyCode])
 
   return typeof value === 'string' ? { price: value } : value
 }

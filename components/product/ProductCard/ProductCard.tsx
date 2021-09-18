@@ -24,7 +24,10 @@ const ProductCard: FC<Props> = ({
   ...props
 }) => {
   const { price } = usePrice({
-    amount: product.price.value,
+    amountRange: {
+      min: product.price.minPrice,
+      max: product.price.maxPrice,
+    },
     currencyCode: product.price.currencyCode!,
   })
 

@@ -15,7 +15,7 @@ import {
   TagEdge,
   FulfillmentGroup as ReactionFulfillmentGroup,
   FulfillmentOption as ReactionFulfillmentOption,
-  Address
+  Address,
 } from '../schema'
 
 import { IPage } from '@lib/contentful/schema'
@@ -24,7 +24,7 @@ import {
   FulfillmentGroup,
   FulfillmentOption,
   LineItem,
-  ShippingAddress
+  ShippingAddress,
 } from '@framework/types/cart'
 import { Product, ProductVariant } from '@framework/types/product'
 import { ProductOptionValues } from '@commerce/types/product'
@@ -41,7 +41,7 @@ const normalizeProductImages = (
     small: image?.URLs?.small || '',
     thumbnail: image?.URLs?.thumbnail || '',
     large: image?.URLs?.large || '',
-    alt: name
+    alt: name,
   }))
 
 const normalizeProductOption = (variant: CatalogProductVariant) => {
@@ -49,7 +49,7 @@ const normalizeProductOption = (variant: CatalogProductVariant) => {
     __typename: 'MultipleChoiceOption',
     id: variant._id,
     displayName: variant.attributeLabel,
-    values: variant.optionTitle ? [{ label: variant.optionTitle }] : []
+    values: variant.optionTitle ? [{ label: variant.optionTitle }] : [],
   }
   option.values = option.values.map((value) =>
     colorizeProductOptionValue(value, option.displayName)
@@ -88,7 +88,7 @@ const normalizeProductVariants = (
         price: variantPrice,
         listPrice: pricing[0]?.compareAtPrice?.amount ?? variantPrice,
         requiresShipping: true,
-        options: [normalizeProductOption(variant)]
+        options: [normalizeProductOption(variant)],
       })
 
       return productVariants
@@ -138,10 +138,10 @@ function mergeVariantOptionsWithExistingOptions(
 
   return matchingOptionIndex !== -1
     ? mergeWithExistingOptions(
-      groupedOptions,
-      currentVariant,
-      matchingOptionIndex
-    )
+        groupedOptions,
+        currentVariant,
+        matchingOptionIndex
+      )
     : addNewProductOption(groupedOptions, currentVariant)
 }
 
@@ -164,7 +164,7 @@ function mergeWithExistingOptions(
   const currentVariantOption = normalizeProductOption(currentVariant)
   groupedOptions[matchingOptionIndex].values = [
     ...groupedOptions[matchingOptionIndex].values,
-    ...currentVariantOption.values
+    ...currentVariantOption.values,
   ]
 
   return groupedOptions
@@ -182,7 +182,6 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
   if (!product) {
     return <Product>{}
   }
-
   const {
     _id,
     productId,
@@ -192,12 +191,13 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     sku,
     media,
     pricing,
-    variants
+    variants,
   } = <CatalogProduct>product
 
   return {
     id: productId ?? _id,
     name: title ?? '',
+    descriptionHtml: description ?? '',
     description: description ?? '',
     slug: slug?.replace(/^\/+|\/+$/g, '') ?? '',
     path: slug ?? '',
@@ -208,14 +208,16 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     vendor: product.vendor ?? '',
     price: {
       value: pricing[0]?.minPrice ?? 0,
-      currencyCode: pricing[0]?.currency.code
+      currencyCode: pricing[0]?.currency.code,
+      minPrice: pricing[0]?.minPrice ?? 0,
+      maxPrice: pricing[0]?.maxPrice ?? 0,
     },
     variants: !!variants
       ? normalizeProductVariants(<CatalogProductVariant[]>variants)
       : [],
     options: !!variants
       ? groupProductOptionsByAttributeLabel(<CatalogProductVariant[]>variants)
-      : []
+      : [],
   }
 }
 
@@ -230,7 +232,7 @@ export function normalizeCart(cart: ReactionCart): Cart | null {
     email: cart?.email ?? undefined,
     createdAt: cart.createdAt,
     currency: {
-      code: cart.checkout?.summary?.total?.currency.code ?? ''
+      code: cart.checkout?.summary?.total?.currency.code ?? '',
     },
     taxesIncluded: false,
     lineItems:
@@ -245,7 +247,7 @@ export function normalizeCart(cart: ReactionCart): Cart | null {
     fulfillmentGroups:
       cart.checkout?.fulfillmentGroups.map((fg) =>
         normalizeFulfillmentGroup(<ReactionFulfillmentGroup>fg)
-      ) ?? []
+      ) ?? [],
   }
 }
 
@@ -258,18 +260,18 @@ function normalizeFulfillmentGroup(
       fulfillmentGroup?.availableFulfillmentOptions.map((fo) =>
         normalizeFulfillmentOption(<ReactionFulfillmentOption>fo)
       ) ?? [],
-    selectedFulfillmentOption: fulfillmentGroup.selectedFulfillmentOption ?
-      normalizeFulfillmentOption(fulfillmentGroup.selectedFulfillmentOption) :
-      undefined,
+    selectedFulfillmentOption: fulfillmentGroup.selectedFulfillmentOption
+      ? normalizeFulfillmentOption(fulfillmentGroup.selectedFulfillmentOption)
+      : undefined,
     ...(fulfillmentGroup.data?.shippingAddress && {
       data: {
         shippingAddress: normalizeAddress(
           fulfillmentGroup.data.shippingAddress
-        )
-      }
+        ),
+      },
     }),
     shopId: fulfillmentGroup.shop._id,
-    type: fulfillmentGroup.type
+    type: fulfillmentGroup.type,
   }
 }
 
@@ -279,18 +281,18 @@ function normalizeFulfillmentOption(
   return <FulfillmentOption>{
     fulfillmentMethod: {
       id: fo.fulfillmentMethod?._id ?? '',
-      name: fo.fulfillmentMethod?.displayName ?? ''
+      name: fo.fulfillmentMethod?.displayName ?? '',
     },
     ...(!!fo.handlingPrice && {
       handlingPrice: {
         amount: fo.handlingPrice.amount,
-        displayAmount: fo.handlingPrice.displayAmount
-      }
+        displayAmount: fo.handlingPrice.displayAmount,
+      },
     }),
     price: {
       amount: fo.price.amount,
-      displayAmount: fo.price.displayAmount
-    }
+      displayAmount: fo.price.displayAmount,
+    },
   }
 }
 
@@ -304,7 +306,7 @@ function normalizeAddress(address: Address): ShippingAddress {
     sureName: address.lastName,
     phone: address.phone,
     postal: address.postal,
-    region: address.region
+    region: address.region,
   }
 }
 
@@ -325,7 +327,8 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
     optionTitle,
     variantTitle,
     quantity,
-    addedAt
+    addedAt,
+    productSlug,
   } = <CartItem>cartItem
 
   return {
@@ -339,21 +342,21 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
       sku: String(productConfiguration?.productVariantId),
       name: String(optionTitle || variantTitle),
       image: {
-        url: imageURLs?.thumbnail ?? '/product-img-placeholder.svg'
+        url: imageURLs?.thumbnail ?? '/product-img-placeholder.svg',
       },
       requiresShipping: true,
       price: priceWhenAdded?.amount,
-      listPrice: compareAtPrice?.amount ?? 0
+      listPrice: compareAtPrice?.amount ?? 0,
     },
     addedAt,
-    path: '',
+    path: productSlug ?? '',
     discounts: [],
     options: [
       {
         name: '',
-        value: String(optionTitle || variantTitle)
-      }
-    ]
+        value: String(optionTitle || variantTitle),
+      },
+    ],
   }
 }
 
@@ -365,7 +368,7 @@ export function normalizeCustomer(viewer: Account): Customer | null {
   return <Customer>{
     firstName: viewer.firstName ?? '',
     lastName: viewer.lastName ?? '',
-    email: viewer.primaryEmailAddress
+    email: viewer.primaryEmailAddress,
   }
 }
 
@@ -381,7 +384,7 @@ export function normalizePages(shop: Shop): Page[] {
         id: navigationItem._id,
         url: navigationItem.data?.url ?? '/',
         name: navigationItem.data?.contentForLanguage ?? 'en',
-        body: ''
+        body: '',
       }
     }) ?? []
   )
@@ -393,7 +396,7 @@ export function normalizeContentfulPages(pages: IPage[]): Page[] {
       id: page.sys.id,
       name: page.fields.seo?.fields.displayTitle,
       // Relative URL on the storefront for this page.
-      url: `/${page.fields.slug}`
+      url: `/${page.fields.slug}`,
     }
   })
 }
@@ -405,7 +408,7 @@ export function normalizeContentfulPage(page: IPage): Page {
     // Relative URL on the storefront for this page.
     url: `/${page.fields.slug}`,
     // HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
-    body: page.fields.body
+    body: page.fields.body,
   }
 }
 
@@ -414,7 +417,7 @@ export function normalizeCategory(tag: TagEdge): Category {
     id: tag.node?._id,
     name: tag.node?.displayTitle ?? tag.node?.name ?? '',
     slug: tag.node?.slug ?? '',
-    path: '/' + tag.node?.slug
+    path: '/' + tag.node?.slug,
   }
 }
 

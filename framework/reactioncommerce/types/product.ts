@@ -4,6 +4,7 @@ export type Product = Core.Product & {
   vendor: string
   images: ProductImage[]
   variants: ProductVariant[]
+  price: ProductPrice
 }
 
 export type ProductImage = Core.ProductImage & {
@@ -17,6 +18,11 @@ export type ProductOption = Core.ProductOption
 
 export type ProductVariant = Core.ProductVariant & {
   price: number
+}
+
+export type ProductPrice = Core.ProductPrice & {
+  minPrice: number
+  maxPrice: number
 }
 
 export type SearchProductsBody = Core.SearchProductsBody & {
