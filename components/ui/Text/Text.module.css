@@ -13,3 +13,7 @@
 .sectionHeading {
   @apply pt-8 pb-2 font-semibold leading-7 tracking-wider uppercase border-b border-accents-2 mb-3;
 }
+
+.bannerHeading {
+  @apply pt-1 pb-4 text-4xl leading-10 font-bold;
+}

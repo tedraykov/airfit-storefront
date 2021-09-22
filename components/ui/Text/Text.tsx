@@ -15,7 +15,12 @@ interface TextProps {
   onClick?: () => any
 }
 
-type Variant = 'heading' | 'body' | 'pageHeading' | 'sectionHeading'
+type Variant =
+  | 'heading'
+  | 'body'
+  | 'pageHeading'
+  | 'sectionHeading'
+  | 'bannerHeading'
 
 const Text: FunctionComponent<TextProps> = ({
   style,
@@ -31,6 +36,7 @@ const Text: FunctionComponent<TextProps> = ({
     body: 'div',
     heading: 'h1',
     pageHeading: 'h1',
+    bannerHeading: 'h1',
     sectionHeading: 'h2',
   }
 
@@ -55,6 +61,7 @@ const Text: FunctionComponent<TextProps> = ({
           [s.heading]: variant === 'heading',
           [s.pageHeading]: variant === 'pageHeading',
           [s.sectionHeading]: variant === 'sectionHeading',
+          [s.bannerHeading]: variant === 'bannerHeading',
         },
         className
       )}

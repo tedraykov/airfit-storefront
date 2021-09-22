@@ -1,0 +1,29 @@
+.root {
+  @apply flex relative overflow-hidden;
+  background: linear-gradient(45deg, var(--accents-9), var(--accents-7));
+  min-height: 24rem;
+}
+
+.root:after {
+  @apply absolute opacity-40 inset-0 bg-repeat-space w-full h-full block;
+  background-image: url('/bg-products.svg');
+  content: '';
+}
+
+.landingBannerBgText {
+  @apply absolute text-accents-0 font-bold;
+  font-size: 8rem;
+  line-height: 100%;
+  top: 80px;
+  left: -40px;
+  opacity: 0.03;
+}
+
+.landingBannerImg {
+  transform: rotate(-165deg);
+  position: absolute;
+  width: 300px;
+  right: -60px;
+  top: 20px;
+  z-index: 1;
+}

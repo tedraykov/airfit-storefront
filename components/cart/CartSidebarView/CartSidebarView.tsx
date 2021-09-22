@@ -11,7 +11,7 @@ import usePrice from '@framework/product/use-price'
 import SidebarLayout from '@components/common/SidebarLayout'
 
 const CartSidebarView: FC = () => {
-  const { closeSidebar, setSidebarView } = useUI()
+  const { closeSidebar } = useUI()
   const { data, isLoading, isEmpty } = useCart()
 
   const { price: subTotal } = usePrice(
@@ -27,7 +27,6 @@ const CartSidebarView: FC = () => {
     }
   )
   const handleClose = () => closeSidebar()
-  const goToCheckout = () => setSidebarView('CHECKOUT_VIEW')
 
   const error = null
   const success = null
@@ -35,7 +34,7 @@ const CartSidebarView: FC = () => {
   return (
     <SidebarLayout
       className={cn({
-        [s.empty]: error || success || isLoading || isEmpty,
+        [s.empty]: isLoading || isEmpty,
       })}
       handleClose={handleClose}
     >

@@ -4,6 +4,7 @@ import { ProductCard } from '@components/product'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import commerce from '@lib/api/commerce'
+import Banner from '@components/ui/Banner/Banner'
 
 export async function getStaticProps({
   preview,
@@ -40,6 +41,7 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
+      <Banner />
       <Grid>
         {products.slice(0, 3).map((product, i) => (
           <ProductCard

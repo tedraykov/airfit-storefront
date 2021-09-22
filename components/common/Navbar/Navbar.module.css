@@ -28,3 +28,7 @@
 .logo {
   @apply cursor-pointer;
 }
+
+.mobileSearch {
+  @apply flex lg:hidden overflow-hidden;
+}
