@@ -79,12 +79,7 @@ const LoginView: FC<Props> = () => {
         <Input type="email" placeholder="Email" onChange={setEmail} />
         <Input type="password" placeholder="Password" onChange={setPassword} />
 
-        <Button
-          variant="slim"
-          type="submit"
-          loading={loading}
-          disabled={disabled}
-        >
+        <Button size="slim" type="submit" loading={loading} disabled={disabled}>
           Log In
         </Button>
         <div className="pt-1 text-center text-sm">

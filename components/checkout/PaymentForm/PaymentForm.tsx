@@ -4,7 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Radio,
-} from '@material-ui/core'
+} from '@mui/material'
 import s from '@components/checkout/PaymentForm/PaymentForm.module.scss'
 import { Text } from '@components/ui'
 

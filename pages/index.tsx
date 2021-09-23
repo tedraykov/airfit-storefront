@@ -1,10 +1,10 @@
 import { Layout } from '@components/common'
-import { Grid, Hero } from '@components/ui'
-import { ProductCard } from '@components/product'
+import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
+import CategoriesView from '@components/landingPage/CategoriesView'
 
 export async function getStaticProps({
   preview,
@@ -13,7 +13,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const productsPromise = commerce.getAllProducts({
-    variables: { first: 6 },
+    variables: { first: 3 },
     config,
     preview,
     // Saleor provider only
@@ -32,28 +32,18 @@ export async function getStaticProps({
       brands,
       pages,
     },
-    revalidate: 60,
+    revalidate: 144,
   }
 }
 
 export default function Home({
   products,
+  categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <Banner />
-      <Grid>
-        {products.slice(0, 3).map((product, i) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            imgProps={{
-              width: i === 0 ? 1080 : 540,
-              height: i === 0 ? 1080 : 540,
-            }}
-          />
-        ))}
-      </Grid>
+      <CategoriesView products={products} categories={categories} />
       <Hero
         headline="Release Details: The Yeezy BOOST 350 V2 ‘Natural'"
         description="

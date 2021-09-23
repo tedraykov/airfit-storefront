@@ -1,29 +1,53 @@
 .root {
-  @apply bg-secondary text-accents-1 cursor-pointer inline-flex px-10 rounded-sm leading-6  transition ease-in-out duration-150 shadow-sm font-semibold text-center justify-center uppercase py-4 border border-transparent items-center;
-}
-
-.root:hover {
-  @apply bg-accents-0 text-primary border border-secondary;
+  @apply cursor-pointer inline-flex rounded-sm leading-6 transition ease-in-out duration-150 font-semibold text-center justify-center uppercase border border-transparent items-center;
 }
 
 .root:focus {
   @apply shadow-outline-normal outline-none;
 }
 
-.root[data-active] {
-  @apply bg-gray-600;
+/* Variant */
+.text {
+  @apply bg-primary text-primary border-none;
 }
 
-.loading {
-  @apply bg-accents-1 text-accents-3 border-accents-2 cursor-not-allowed;
+.contained {
+  @apply bg-secondary text-accents-1 shadow-sm;
+}
+
+.contained:hover {
+  @apply bg-accents-0 text-primary border border-secondary;
+}
+
+/* Size */
+.normal {
+  @apply px-10 py-4;
 }
 
 .slim {
   @apply px-4 py-2 transform-none normal-case;
 }
 
+.icon {
+@apply px-2 py-2;
+}
+
+.icon:hover {
+  @apply text-accents-6;
+}
+
+/* Color */
 .secondary {
-  @apply bg-primary text-primary border-accents-4
+  @apply bg-primary text-primary border-accents-4;
+}
+
+/* Other */
+.round {
+  @apply rounded-full;
+}
+
+.loading {
+  @apply bg-accents-1 text-accents-3 border-accents-2 cursor-not-allowed;
 }
 
 .disabled,

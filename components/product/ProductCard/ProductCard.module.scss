@@ -87,11 +87,9 @@
   }
 
   & .productTitle {
-    @apply pt-2;
     font-size: 1rem;
 
     & span {
-      @apply leading-extra-loose;
     }
   }
 
@@ -101,31 +99,22 @@
 }
 
 .productTitle {
-  @apply my-1 max-w-full w-full;
+  @apply max-w-full w-full;
 
-  & span {
-    @apply py-3 px-3
+  span {
+    @apply p-2.5
     bg-primary font-bold
-    text-primary text-xl tracking-wide leading-loose
-    md:py-4 md:px-6 md:text-2xl md:leading-extra-loose
-    lg:text-xl lg:leading-extra-loose
-    xl:text-2xl xl:leading-extra-loose;
-
+    text-primary tracking-wide;
+    line-height: 2.25rem;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
 }
 
 .productPrice {
-  @apply py-3 px-3
-  bg-primary font-semibold inline
-  text-primary text-base leading-extra-loose tracking-wide
-  md:px-6 md:leading-extra-loose
-  lg:py-4 lg:px-6;
-}
-
-.wishlistButton {
-  @apply w-10 h-10 flex ml-auto items-center justify-center bg-primary text-primary font-semibold  text-xs leading-6 cursor-pointer;
+  @apply py-2.5 px-2.5  mt-1
+  bg-primary font-semibold
+  text-primary leading-extra-loose tracking-wide;
 }
 
 .imageContainer {

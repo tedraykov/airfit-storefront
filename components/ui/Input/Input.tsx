@@ -2,8 +2,8 @@ import cn from 'classnames'
 import s from './Input.module.css'
 import React, { InputHTMLAttributes, useState } from 'react'
 import { Path, UseFormRegister, FieldError } from 'react-hook-form'
-import Error from '@material-ui/icons/Error'
-import Tooltip from '@material-ui/core/Tooltip'
+import Error from '@mui/icons-material/Error'
+import Tooltip from '@mui/material/Tooltip'
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string

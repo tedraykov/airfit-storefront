@@ -4,8 +4,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Radio,
-} from '@material-ui/core'
-import LocationSearchingIcon from '@material-ui/icons/LocationSearching'
+} from '@mui/material'
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching'
 import { Input, Button } from '@components/ui'
 import s from './ShippingAddressForm.module.scss'
 import cn from 'classnames'
@@ -169,7 +169,7 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
                 error={errors.address}
               />
               <Button
-                variant="slim"
+                size="slim"
                 color="secondary"
                 onClick={handleFindLocation}
               >

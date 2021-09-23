@@ -4,7 +4,6 @@ import { OperationContext } from '@commerce/api/operations'
 import { Category } from '@commerce/types/site'
 import getCategories from '../utils/get-categories'
 import getVendors from '../utils/get-vendors'
-import { normalizeCategory } from '@framework/utils'
 
 export type GetSiteInfoResult<
   T extends { categories: any[]; brands: any[] } = {
@@ -28,12 +27,11 @@ export default function getSiteInfoOperation({
   } = {}): Promise<GetSiteInfoResult> {
     const config = commerce.getConfig(cfg)
 
-    const tags = await getCategories(config)
+    const categories = await getCategories(config)
     const brands = await getVendors(config)
 
-    const categories = tags.map(normalizeCategory)
     return {
-      categories: categories ?? [],
+      categories,
       brands,
     }
   }

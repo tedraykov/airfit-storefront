@@ -8,22 +8,12 @@ interface SwatchProps {
   active?: boolean
   children?: any
   className?: string
-  variant?: 'size' | 'color' | string
   color?: string
   label?: string | null
 }
 
-const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = React.memo(
-  ({
-    active,
-    className,
-    color = '',
-    label = null,
-    variant = 'size',
-    ...props
-  }) => {
-    variant = variant?.toLowerCase()
-
+const Swatch: React.FC<Omit<ButtonProps, 'size'> & SwatchProps> = React.memo(
+  ({ active, className, color = '', label = null, ...props }) => {
     if (label) {
       label = label?.toLowerCase()
     }
@@ -33,7 +23,6 @@ const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = React.memo(
       {
         [s.color]: color,
         [s.active]: active,
-        [s.size]: variant === 'size',
         [s.dark]: color ? isDark(color) : false,
         [s.textLabel]: !color && label && label.length > 3,
       },
@@ -43,6 +32,8 @@ const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = React.memo(
     return (
       <Button
         aria-label="Variant Swatch"
+        color="secondary"
+        round
         className={swatchClassName}
         {...(label && color && { title: label })}
         style={color ? { backgroundColor: color } : {}}
@@ -53,7 +44,7 @@ const Swatch: React.FC<Omit<ButtonProps, 'variant'> & SwatchProps> = React.memo(
             <Check />
           </span>
         )}
-        {!color ? label : null}
+        {label}
       </Button>
     )
   }

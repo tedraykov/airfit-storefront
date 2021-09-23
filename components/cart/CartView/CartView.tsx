@@ -4,7 +4,7 @@ import { Button, Text } from '@components/ui'
 import { Cart, LineItem } from '@framework/types/cart'
 import { CartItem } from '@components/cart'
 import usePrice from '@commerce/product/use-price'
-import Close from '@material-ui/icons/Close'
+import Close from '@mui/icons-material/Close'
 
 interface CartViewProps {
   isLoading: boolean

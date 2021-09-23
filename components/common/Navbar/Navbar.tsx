@@ -2,12 +2,11 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
-import { Container, Logo } from '@components/ui'
+import { Button, Container, Logo } from '@components/ui'
 import { Searchbar, UserNav } from '@components/common'
 import Search from '@components/icons/Search'
-import IconButton from '@material-ui/core/IconButton'
 import cn from 'classnames'
-import { Collapse } from '@material-ui/core'
+import { Collapse } from '@mui/material'
 
 interface Link {
   href: string
@@ -48,11 +47,14 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
 
           <div className="flex items-center justify-end flex-1">
             <div className="mr-3 lg:hidden">
-              <IconButton
+              <Button
+                variant="text"
+                size="icon"
+                className="mr-2"
                 onClick={() => setShowMobileSearch(!showMobileSearch)}
               >
                 <Search className="h-5 w-5" />
-              </IconButton>
+              </Button>
             </div>
             <UserNav />
           </div>

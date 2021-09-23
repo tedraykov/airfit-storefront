@@ -8,12 +8,12 @@ interface Props {}
 const ForgotPassword: FC<Props> = () => {
   // Form State
   const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [loading] = useState(false)
+  const [message] = useState('')
   const [dirty, setDirty] = useState(false)
   const [disabled, setDisabled] = useState(false)
 
-  const { setModalView, closeModal } = useUI()
+  const { setModalView } = useUI()
 
   const handleResetPassword = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
@@ -51,7 +51,7 @@ const ForgotPassword: FC<Props> = () => {
         <Input placeholder="Email" onChange={setEmail} type="email" />
         <div className="pt-2 w-full flex flex-col">
           <Button
-            variant="slim"
+            size="slim"
             type="submit"
             loading={loading}
             disabled={disabled}

@@ -1,0 +1,25 @@
+.categoriesList {
+  @apply flex space-x-3 overflow-y-auto overflow-x-scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.categoriesList::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.rightListGradient, .leftListGradient {
+  @apply h-full absolute top-0;
+}
+
+.rightListGradient {
+  right: 0;
+  width: 4rem;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+}
+
+.leftListGradient {
+  left: 0;
+  width: 4rem;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+}

@@ -8,12 +8,15 @@ import React, {
 import mergeRefs from 'react-merge-refs'
 import s from './Button.module.css'
 import { LoadingDots } from '@components/ui'
+import { ButtonUnstyled } from '@mui/material'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   className?: string
-  variant?: 'flat' | 'slim'
-  color?: 'primary' | 'secondary' | string
+  variant?: 'text' | 'contained'
+  size?: 'normal' | 'slim' | 'icon'
+  color?: 'primary' | 'secondary'
+  round?: boolean
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
   Component?: string | JSXElementConstructor<any>
@@ -25,8 +28,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const {
     className,
-    variant = 'flat',
+    variant = 'contained',
+    size = 'normal',
     color,
+    round = false,
     children,
     active,
     width,
@@ -41,16 +46,25 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
   const rootClassName = cn(
     s.root,
     {
-      [s.slim]: variant === 'slim',
+      // Variants
+      [s.contained]: variant === 'contained',
+      [s.text]: variant === 'text',
+      // Sizes
+      [s.normal]: size === 'normal',
+      [s.slim]: size === 'slim',
+      [s.icon]: size === 'icon',
+      // Colors
+      [s.secondary]: color === 'secondary',
+      // Other
       [s.loading]: loading,
       [s.disabled]: disabled,
-      [s.secondary]: color === 'secondary',
+      [s.round]: round,
     },
     className
   )
 
   return (
-    <Component
+    <ButtonUnstyled
       aria-pressed={active}
       data-variant={variant}
       ref={mergeRefs([ref, buttonRef])}
@@ -62,13 +76,13 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       }}
       {...rest}
     >
-      {children}
+      {!loading && children}
       {loading && (
-        <i className="pl-2 m-0 flex">
+        <i className="pl-2 h-6 m-0 flex">
           <LoadingDots />
         </i>
       )}
-    </Component>
+    </ButtonUnstyled>
   )
 })
 

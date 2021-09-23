@@ -1,8 +1,7 @@
 .swatch {
   box-sizing: border-box;
   composes: root from 'components/ui/Button/Button.module.css';
-  @apply h-10 w-10 bg-primary text-primary rounded-full mr-3 inline-flex
-  items-center justify-center cursor-pointer transition duration-150 ease-in-out
+  @apply mr-3 inline-flex items-center justify-center cursor-pointer
   p-0 shadow-none border-accents-3 border box-border select-none;
   margin-right: calc(0.75rem - 1px);
   overflow: hidden;
@@ -21,19 +20,6 @@
 
 .swatch > span {
   @apply absolute;
-}
-
-.color {
-  @apply text-black transition duration-150 ease-in-out;
-}
-
-.color :hover {
-  @apply text-black;
-}
-
-.color.dark,
-.color.dark:hover {
-  color: white !important;
 }
 
 .active {

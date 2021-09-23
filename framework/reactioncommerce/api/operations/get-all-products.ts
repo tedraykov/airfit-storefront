@@ -23,7 +23,6 @@ export default function getAllProductsOperation({
     config?: ReactionCommerceConfig
     preview?: boolean
   } = {}): Promise<{ products: Product[] | any[] }> {
-    console.log('Getting all products')
     const config = commerce.getConfig(cfg)
     const { data } = await config.fetch(query, {
       variables: {

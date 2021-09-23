@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 const Search: FC<{ className?: string }> = ({ ...props }) => {
   return (
-    <svg fill="var(--primary-color)" viewBox="0 0 20 20" {...props}>
+    <svg fill="currentColor" viewBox="0 0 20 20" {...props}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
