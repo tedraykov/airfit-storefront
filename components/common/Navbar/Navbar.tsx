@@ -2,13 +2,15 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
-import { Button, Container, Logo } from '@components/ui'
+import { Button, Container, Logo, useUI } from '@components/ui'
 import { Searchbar, UserNav } from '@components/common'
 import Search from '@components/icons/Search'
 import cn from 'classnames'
-import { Collapse } from '@mui/material'
+import { Collapse, Drawer } from '@mui/material'
+import DrawerIcon from '@components/icons/Drawer'
+import MobileDrawer from '@components/common/NavDrawer'
 
-interface Link {
+export interface Link {
   href: string
   label: string
 }
@@ -19,6 +21,11 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ links }) => {
   const [showMobileSearch, setShowMobileSearch] = useState(false)
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
+
+  const toggleDrawer = () => {
+    setMobileDrawerOpen((prev) => !prev)
+  }
 
   return (
     <NavbarRoot>
@@ -57,6 +64,11 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
               </Button>
             </div>
             <UserNav />
+            <div className="lg:hidden">
+              <Button variant="text" size="icon" onClick={toggleDrawer}>
+                <DrawerIcon className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
         <Collapse in={showMobileSearch}>
@@ -65,6 +77,11 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
           </div>
         </Collapse>
       </Container>
+      <MobileDrawer
+        open={mobileDrawerOpen}
+        links={links}
+        onClose={() => setMobileDrawerOpen(false)}
+      />
     </NavbarRoot>
   )
 }

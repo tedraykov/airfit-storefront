@@ -50,6 +50,10 @@
   @apply bg-accents-1 text-accents-3 border-accents-2 cursor-not-allowed;
 }
 
+.active {
+  @apply bg-accents-1 border-secondary;
+}
+
 .disabled,
 .disabled:hover {
   @apply text-accents-4 border-accents-2 bg-accents-1 cursor-not-allowed;

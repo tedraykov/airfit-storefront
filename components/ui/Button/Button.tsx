@@ -13,9 +13,9 @@ import { ButtonUnstyled } from '@mui/material'
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   className?: string
-  variant?: 'text' | 'contained'
+  variant?: 'text' | 'contained' | string
   size?: 'normal' | 'slim' | 'icon'
-  color?: 'primary' | 'secondary'
+  color?: 'primary' | 'secondary' | string
   round?: boolean
   active?: boolean
   type?: 'submit' | 'reset' | 'button'
@@ -59,6 +59,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       [s.loading]: loading,
       [s.disabled]: disabled,
       [s.round]: round,
+      [s.active]: active,
     },
     className
   )

@@ -5,7 +5,7 @@ import { CheckoutView } from '@components/checkout/CheckoutView/CheckoutView'
 import useCart from '@framework/cart/use-cart'
 import { StrippedLayout } from '@components/common/Layout/Layout'
 import { useRouter } from 'next/router'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export async function getStaticProps({
   preview,

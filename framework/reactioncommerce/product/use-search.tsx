@@ -8,6 +8,7 @@ import {
   normalizeProduct,
 } from '../utils'
 import { SearchProductsHook } from '@framework/types/product'
+import { getShopId } from '@framework/utils/get-shop-id'
 
 export default useSearch as UseSearch<typeof handler>
 
@@ -16,7 +17,7 @@ export const handler: SWRHook<SearchProductsHook> = {
     query: catalogItemsQuery,
   },
   async fetcher({ input, options, fetch }) {
-    const { shopId } = input
+    const shopId = getShopId()
 
     const data = await fetch({
       query: options.query,

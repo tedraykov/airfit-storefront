@@ -31,6 +31,10 @@
   min-height: 1.25rem;
 }
 
+.avatar {
+  @apply hidden lg:block;
+}
+
 .avatarButton {
   @apply inline-flex justify-center rounded-full;
 }

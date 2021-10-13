@@ -4,6 +4,7 @@ import s from './Swatch.module.scss'
 import { Check } from '@components/icons'
 import Button, { ButtonProps } from '@components/ui/Button'
 import { isDark } from '@lib/colors'
+
 interface SwatchProps {
   active?: boolean
   children?: any
@@ -13,7 +14,7 @@ interface SwatchProps {
 }
 
 const Swatch: React.FC<Omit<ButtonProps, 'size'> & SwatchProps> = React.memo(
-  ({ active, className, color = '', label = null, ...props }) => {
+  ({ active, className, color, label = null, ...props }) => {
     if (label) {
       label = label?.toLowerCase()
     }

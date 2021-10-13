@@ -38,3 +38,10 @@ export async function getContentfulPage(id: string) {
   }
   return await contentfulClient().getEntry(id, query)
 }
+
+export async function getContentfulHero(id: string) {
+  const query = {
+    content_type: 'hero',
+  }
+  return await contentfulClient().getEntry(id, query)
+}

@@ -37,7 +37,6 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     }
   } else if (accountCartIsPresent(cookies, config)) {
     const accountId = await getViewerId(cookies, config)
-
     const rawAccountCart = await getAccountCart(accountId, cookies, config)
 
     normalizedCart = normalizeCart(rawAccountCart)

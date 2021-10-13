@@ -20,19 +20,9 @@ export async function getStaticProps({
 }
 
 export default function Cart() {
-  const error = null
-  const success = null
   const { data, isLoading, isEmpty } = useCart()
 
-  return (
-    <CartView
-      isEmpty={isEmpty}
-      isLoading={isLoading}
-      error={error}
-      success={success}
-      data={data}
-    />
-  )
+  return <CartView isEmpty={isEmpty} isLoading={isLoading} data={data} />
 }
 
 Cart.Layout = Layout

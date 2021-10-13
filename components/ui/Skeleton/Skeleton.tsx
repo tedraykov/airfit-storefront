@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import cn from 'classnames'
 import px from '@lib/to-pixels'
-import s from './Skeleton.module.css'
+import s from './Skeleton.module.scss'
 
 interface Props {
   width?: string | number

@@ -2021,6 +2021,16 @@
   dependencies:
     react-merge-refs "^1.1.0"
 
+"@layer0/rum@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@layer0/rum/-/rum-2.1.3.tgz#8a40e1e143c5e61ef3097742d2a9da8a2d947fd2"
+  integrity sha512-36sntN8/5lFVRksfX7Du341d3d9AwR2FpZWOBkkzBOtTlK9Svwn7n52VrVZbtKkBpCLrxD6hZJhJSWV2kL0/VQ==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    path-to-regexp "^6.2.0"
+    ua-parser-js "^0.7.24"
+    web-vitals "^1.1.0"
+
 "@manifoldco/swagger-to-ts@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@manifoldco/swagger-to-ts/-/swagger-to-ts-2.1.0.tgz#b52a429e5b4ab3627571d3e9ae7399cf5cd4c454"
@@ -4937,6 +4947,11 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
+
+easy-bem@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/easy-bem/-/easy-bem-1.1.1.tgz#1bfcc10425498090bcfddc0f9c000aba91399e03"
+  integrity sha512-GJRqdiy2h+EXy6a8E6R+ubmqUM08BK0FWNq41k24fup6045biQ8NXxoXimiwegMQvFFV3t1emADdGNL1TlS61A==
 
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"
@@ -9409,10 +9424,24 @@ react-event-listener@^0.6.0:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-facebook-pixel@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-facebook-pixel/-/react-facebook-pixel-1.0.4.tgz#4760b60dc0451e345649d9710152b4b5419cf989"
+  integrity sha512-givZY8MS0v/mdbRzvcvouBo/j0TtDiu/93f4gIjJXwDDgwlf6bYUiQvb2qcqjluOOD/hIKUQHNYLNsSOnoEklg==
+
 react-hook-form@^7.13.0:
   version "7.13.0"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.13.0.tgz#af451e4771af2ddcb4ccb2f6a11eeb191c66bbdc"
   integrity sha512-ofjzl78xNTRmBHFZ/gOn65HDiqM/LHxbVMlaFoemyMQIDFTR4aG4h2CpCG/N0TbW5IQbh21hBYUvvmqK0ByEhg==
+
+react-indiana-drag-scroll@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-indiana-drag-scroll/-/react-indiana-drag-scroll-2.0.1.tgz#8785488a9e9c789b0e1c092e60d03f05a789d428"
+  integrity sha512-xZQXfFf9pHLOL6/AvTFiGZCB4Vu8wO8DjEaO+xRVkSki2bEZSFfS8eeKG0OkTzcYVrXzc5aHAD1Mfl3EG+EFMA==
+  dependencies:
+    classnames "^2.2.6"
+    debounce "^1.2.0"
+    easy-bem "^1.1.1"
 
 react-is@17.0.2, react-is@^17.0.2:
   version "17.0.2"
@@ -11136,7 +11165,7 @@ typescript@^4.0.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.2.tgz#399ab18aac45802d6f2498de5054fcbbe716a805"
   integrity sha512-zZ4hShnmnoVnAHpVHWpTcxdv7dWP60S2FsydQLV8V5PbS3FifjWFFRiHSWpDJahly88PRyV5teTSLoq4eG7mKw==
 
-ua-parser-js@^0.7.18:
+ua-parser-js@^0.7.18, ua-parser-js@^0.7.24:
   version "0.7.28"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
   integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
@@ -11426,6 +11455,11 @@ wcwidth@^1.0.1:
   integrity sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=
   dependencies:
     defaults "^1.0.3"
+
+web-vitals@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-1.1.2.tgz#06535308168986096239aa84716e68b4c6ae6d1c"
+  integrity sha512-PFMKIY+bRSXlMxVAQ+m2aw9c/ioUYfDgrYot0YUa+/xa0sakubWhSDyxAKwzymvXVdF4CZI71g06W+mqhzu6ig==
 
 webidl-conversions@^4.0.2:
   version "4.0.2"

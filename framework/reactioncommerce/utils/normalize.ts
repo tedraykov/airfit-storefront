@@ -18,7 +18,7 @@ import {
   Address,
 } from '../schema'
 
-import { IPage } from '@lib/contentful/schema'
+import { IHero, IPage } from '@lib/contentful/schema'
 import {
   Cart,
   FulfillmentGroup,
@@ -29,7 +29,7 @@ import {
 import { Product, ProductVariant } from '@framework/types/product'
 import { ProductOptionValues } from '@commerce/types/product'
 import { Category } from '@commerce/types/site'
-import { Page } from '@framework/types/page'
+import { Hero, Page } from '@framework/types/page'
 
 const normalizeProductImages = (
   images: ImageInfo[],
@@ -120,7 +120,6 @@ function groupProductOptionsByAttributeLabel(
           }
         )
       }
-
       return groupedOptions
     },
     []
@@ -192,8 +191,8 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     media,
     pricing,
     variants,
+    tags,
   } = <CatalogProduct>product
-
   return {
     id: productId ?? _id,
     name: title ?? '',
@@ -218,6 +217,7 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     options: !!variants
       ? groupProductOptionsByAttributeLabel(<CatalogProductVariant[]>variants)
       : [],
+    tags: tags?.edges?.map((tag) => <string>tag!.node!.slug) ?? [],
   }
 }
 
@@ -409,6 +409,13 @@ export function normalizeContentfulPage(page: IPage): Page {
     url: `/${page.fields.slug}`,
     // HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
     body: page.fields.body,
+  }
+}
+
+export function normalizeContentfulHero(hero: IHero): Hero {
+  return <Hero>{
+    headline: hero.fields.headline,
+    description: hero.fields.description,
   }
 }
 

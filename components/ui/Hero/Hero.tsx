@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 import { Container } from '@components/ui'
-import { ArrowRight } from '@components/icons'
 import s from './Hero.module.css'
-import Link from 'next/link'
+
 interface Props {
   className?: string
   headline: string
@@ -21,12 +20,6 @@ const Hero: FC<Props> = ({ headline, description }) => {
             <p className="mt-5 text-xl leading-7 text-accent-2 text-white">
               {description}
             </p>
-            <Link href="/">
-              <a className="text-white pt-3 font-bold hover:underline flex flex-row cursor-pointer w-max-content">
-                Read it here
-                <ArrowRight width="20" heigh="20" className="ml-1" />
-              </a>
-            </Link>
           </div>
         </div>
       </Container>

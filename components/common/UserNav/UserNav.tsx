@@ -19,14 +19,20 @@ const countItem = (count: number, item: LineItem) => count + item.quantity
 const UserNav: FC<Props> = ({ className }) => {
   const { data } = useCart()
   const { data: customer } = useCustomer()
-  const { toggleSidebar, closeSidebarIfPresent, openModal } = useUI()
+  const { toggleSidebar, closeSidebarIfPresent, openModal, setSidebarView } =
+    useUI()
   const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
+
+  const toggleCart = () => {
+    setSidebarView('CART_VIEW')
+    toggleSidebar()
+  }
 
   return (
     <nav className={cn(s.root, className)}>
       <div className={s.mainContainer}>
         <ul className={s.list}>
-          <li className={s.item} onClick={toggleSidebar}>
+          <li className={s.item} onClick={toggleCart}>
             <Bag />
             {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
           </li>
@@ -39,7 +45,7 @@ const UserNav: FC<Props> = ({ className }) => {
               </Link>
             </li>
           )}
-          <li className={s.item}>
+          <li className={cn(s.item, s.avatar)}>
             {customer ? (
               <DropdownMenu />
             ) : (

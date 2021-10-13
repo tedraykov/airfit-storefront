@@ -1,15 +1,3 @@
 .root {
-  @apply h-full flex flex-col;
-}
-
-.root.empty {
-  @apply bg-secondary text-secondary;
-}
-
-.root.success {
-  @apply bg-green text-white;
-}
-
-.root.error {
-  @apply bg-red text-white;
+  @apply h-screen flex flex-col max-w-md;
 }

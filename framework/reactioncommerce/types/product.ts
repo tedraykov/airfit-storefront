@@ -5,6 +5,7 @@ export type Product = Core.Product & {
   images: ProductImage[]
   variants: ProductVariant[]
   price: ProductPrice
+  tags: string[]
 }
 
 export type ProductImage = Core.ProductImage & {
@@ -35,3 +36,5 @@ export type ProductTypes = Core.ProductTypes & {
 }
 
 export type SearchProductsHook = Core.SearchProductsHook<ProductTypes>
+
+export type ProductsSchema = Core.ProductsSchema<ProductTypes>

@@ -92,17 +92,18 @@ const CartItem = ({
       })}
       {...rest}
     >
-      <div className="w-16 h-16 bg-violet relative overflow-hidden cursor-pointer">
+      <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-md bg-violet relative overflow-hidden cursor-pointer">
         <Link href={`/product/${item.path}`}>
-          <Image
-            onClick={() => closeSidebarIfPresent()}
-            className={s.productImage}
-            width={150}
-            height={150}
-            src={item.variant.image!.url}
-            alt={item.variant.image!.altText}
-            unoptimized
-          />
+          <div>
+            <Image
+              onClick={() => closeSidebarIfPresent()}
+              className={s.productImage}
+              layout="fill"
+              src={item.variant.image!.url}
+              alt={item.variant.image!.altText}
+              unoptimized
+            />
+          </div>
         </Link>
       </div>
       <div className="flex-1 flex flex-col text-base">

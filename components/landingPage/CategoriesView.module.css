@@ -1,7 +1,5 @@
 .categoriesList {
-  @apply flex space-x-3 overflow-y-auto overflow-x-scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  @apply flex flex-nowrap space-x-3;
 }
 
 .categoriesList::-webkit-scrollbar {
@@ -10,6 +8,7 @@
 
 .rightListGradient, .leftListGradient {
   @apply h-full absolute top-0;
+  pointer-events: none;
 }
 
 .rightListGradient {

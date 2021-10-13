@@ -35,6 +35,7 @@ import getSiteInfo from './operations/get-site-info'
 import getAllProductPaths from './operations/get-all-product-paths'
 import getAllProducts from './operations/get-all-products'
 import getProduct from './operations/get-product'
+import getHero from '@framework/api/operations/get-hero'
 
 export interface ReactionCommerceConfig extends CommerceAPIConfig {
   shopId: string
@@ -65,6 +66,7 @@ const operations = {
   login,
   getAllPages,
   getPage,
+  getHero,
   getSiteInfo,
   getAllProductPaths,
   getAllProducts,
