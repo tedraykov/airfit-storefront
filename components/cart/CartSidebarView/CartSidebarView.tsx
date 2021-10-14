@@ -7,7 +7,7 @@ import useCart from '@framework/cart/use-cart'
 import usePrice from '@framework/product/use-price'
 import SidebarLayout from '@components/common/SidebarLayout'
 import EmptyCart from '@components/cart/EmptyCart'
-import { Fade } from '@mui/material'
+import Fade from '@mui/material/Fade'
 import { LineItem } from '@framework/types/cart'
 import CartSummary from '@components/cart/CartSummary'
 

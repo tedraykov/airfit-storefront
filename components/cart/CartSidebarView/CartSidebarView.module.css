@@ -1,3 +1,5 @@
 .root {
-  @apply h-screen flex flex-col max-w-md;
+  @apply h-screen flex flex-col;
+  width: 30rem;
+  max-width: 90vw;
 }

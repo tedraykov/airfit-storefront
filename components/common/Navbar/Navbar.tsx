@@ -2,11 +2,11 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import s from './Navbar.module.css'
 import NavbarRoot from './NavbarRoot'
-import { Button, Container, Logo, useUI } from '@components/ui'
+import { Button, Container, Logo } from '@components/ui'
 import { Searchbar, UserNav } from '@components/common'
 import Search from '@components/icons/Search'
 import cn from 'classnames'
-import { Collapse, Drawer } from '@mui/material'
+import Collapse from '@mui/material/Collapse'
 import DrawerIcon from '@components/icons/Drawer'
 import MobileDrawer from '@components/common/NavDrawer'
 
@@ -48,12 +48,12 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
               ))}
             </nav>
           </div>
-          <div className="justify-center flex-1 hidden lg:flex">
+          <div className="justify-center flex-1 hidden xl:flex">
             <Searchbar />
           </div>
 
           <div className="flex items-center justify-end flex-1">
-            <div className="mr-3 lg:hidden">
+            <div className="mr-3 xl:hidden">
               <Button
                 variant="text"
                 size="icon"

@@ -6,7 +6,7 @@ import usePrice from '@commerce/product/use-price'
 import Close from '@mui/icons-material/Close'
 import EmptyCart from '@components/cart/EmptyCart'
 import CartSummary from '@components/cart/CartSummary'
-import { Fade } from '@mui/material'
+import Fade from '@mui/material/Fade'
 
 interface CartViewProps {
   isLoading: boolean

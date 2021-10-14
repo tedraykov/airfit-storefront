@@ -8,7 +8,7 @@ import React, {
 import mergeRefs from 'react-merge-refs'
 import s from './Button.module.css'
 import { LoadingDots } from '@components/ui'
-import { ButtonUnstyled } from '@mui/material'
+import ButtonUnstyled from '@mui/core/ButtonUnstyled'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string

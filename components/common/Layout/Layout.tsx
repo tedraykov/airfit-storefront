@@ -13,7 +13,7 @@ import LoginView from '@components/auth/LoginView'
 import { CommerceProvider } from '@framework'
 import { Category } from '@commerce/types/site'
 import { Page } from '@framework/types/page'
-import { Drawer } from '@mui/material'
+import Drawer from '@mui/material/Drawer'
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">

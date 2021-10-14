@@ -17,7 +17,6 @@ export const handler: SWRHook<GetCartHook> = {
     url: '/api/cart',
   },
   async fetcher({ options, fetch }) {
-    console.log('cart API fetcher', options)
     return await fetch(options)
   },
   useHook:

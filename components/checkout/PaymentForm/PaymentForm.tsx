@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Radio,
-} from '@mui/material'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import Radio from '@mui/material/Radio'
 import s from '@components/checkout/PaymentForm/PaymentForm.module.scss'
 import { Text } from '@components/ui'
 

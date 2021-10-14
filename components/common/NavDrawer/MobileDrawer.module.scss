@@ -1,7 +1,8 @@
 .layout {
-  max-width: 100vw;
+  width: 30rem;
+  max-width: 90vw;
 }
 
 .categoryItem {
-  @apply px-40 py-4 justify-center text-lg;
+  @apply w-full py-4 justify-center text-lg;
 }
