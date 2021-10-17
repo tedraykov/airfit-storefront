@@ -13,7 +13,7 @@ import {
   SelectedOptions,
 } from '../helpers'
 import { createMedia } from '@artsy/fresnel'
-import { DesktopGallery } from '@components/product/DesktopGallery/DesktopGallery'
+import DesktopGallery from '@components/product/DesktopGallery'
 import { ProductVariant } from '@framework/types/product'
 
 interface Props {
@@ -21,6 +21,15 @@ interface Props {
   product: Product
   className?: string
 }
+
+const { MediaContextProvider, Media } = createMedia({
+  breakpoints: {
+    sm: 0,
+    md: 768,
+    lg: 1024,
+    xl: 1192,
+  },
+})
 
 const ProductView: FC<Props> = ({ product }) => {
   const addItem = useAddItem()
@@ -64,15 +73,6 @@ const ProductView: FC<Props> = ({ product }) => {
       setLoading(false)
     }
   }
-
-  const { MediaContextProvider, Media } = createMedia({
-    breakpoints: {
-      sm: 0,
-      md: 768,
-      lg: 1024,
-      xl: 1192,
-    },
-  })
 
   return (
     <Container className="max-w-none w-full" clean>
@@ -149,16 +149,17 @@ const ProductOptions: React.FC<ProductOptionsProps> = React.memo(
     return (
       <div>
         {options.map((opt) => (
-          <div className="pb-4" key={opt.displayName}>
+          <div key={opt.displayName}>
             <h2 className="uppercase font-medium text-sm tracking-wide">
               {opt.displayName}
             </h2>
-            <div className="flex flex-row py-4">
+            <div className="flex flex-row flex-wrap sm:flex-nowrap">
               {opt.values.map((v, i: number) => {
                 const active = selectedOptions[opt.displayName.toLowerCase()]
                 return (
                   <Swatch
                     key={`${opt.id}-${i}`}
+                    className="mb-4"
                     active={v.label.toLowerCase() === active}
                     variant={opt.displayName}
                     color={v.hexColors ? v.hexColors[0] : ''}

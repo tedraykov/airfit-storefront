@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import s from './CartSidebarView.module.css'
 import CartItem from '../CartItem'
 import { Button, Text } from '@components/ui'
@@ -10,6 +10,7 @@ import EmptyCart from '@components/cart/EmptyCart'
 import Fade from '@mui/material/Fade'
 import { LineItem } from '@framework/types/cart'
 import CartSummary from '@components/cart/CartSummary'
+import Link from 'next/link'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar } = useUI()
@@ -57,11 +58,9 @@ const CartSidebarView: FC = () => {
             <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
               <CartSummary subTotal={subTotal} total={total} shipping={0} />
               <div className="flex flex-row justify-end">
-                <div className="w-full md:w-md">
-                  <Button href="/checkout" Component="a" width="100%">
-                    Завършване на поръчката
-                  </Button>
-                </div>
+                <Link href="/checkout" passHref>
+                  <Button width="100%">Завършви поръчката</Button>
+                </Link>
               </div>
             </div>
           </div>

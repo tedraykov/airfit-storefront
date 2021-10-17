@@ -8,7 +8,7 @@ interface Props {
   images: ProductImage[]
 }
 
-export const DesktopGallery: FC<Props> = memo(({ images }) => {
+export const DesktopGallery: FC<Props> = ({ images }) => {
   return (
     <div className={s.root}>
       <Gallery>
@@ -35,4 +35,6 @@ export const DesktopGallery: FC<Props> = memo(({ images }) => {
       </Gallery>
     </div>
   )
-})
+}
+
+export default memo(DesktopGallery)

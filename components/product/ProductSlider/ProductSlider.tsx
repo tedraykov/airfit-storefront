@@ -5,7 +5,7 @@ import cn from 'classnames'
 import s from './ProductSlider.module.css'
 import Image from 'next/image'
 import { ProductImage } from '@framework/types/product'
-import { ProductGallery } from '@components/product/ProductGallery/ProductGallery'
+import ProductGallery from '@components/product/ProductGallery'
 
 interface Props {
   images: ProductImage[]

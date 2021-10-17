@@ -15,7 +15,7 @@ interface Props {
   onClose: (idx: number) => void
 }
 
-export const ProductGallery: FC<Props> = ({
+const ProductGallery: FC<Props> = ({
   images,
   selectedImageIndex = 0,
   isOpen,
@@ -54,3 +54,5 @@ export const ProductGallery: FC<Props> = ({
     </>
   )
 }
+
+export default ProductGallery
