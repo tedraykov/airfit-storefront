@@ -48,7 +48,7 @@ const getCart: CartEndpoint['handlers']['getCart'] = async ({
     setDummyCartCookie(res, config)
   }
 
-  return res.status(200).json({ data: normalizedCart })
+  return res.status(200).json({ data: normalizedCart ?? null })
 }
 
 export default getCart

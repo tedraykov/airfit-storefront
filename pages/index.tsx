@@ -4,6 +4,7 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
+import { ProductsList, Slideshow } from '@components/landingPage'
 
 export async function getStaticProps({
   preview,
@@ -43,13 +44,13 @@ export async function getStaticProps({
 
 export default function Home({
   products,
-  categories,
   hero,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <Banner />
-      {/*<Slideshow/>*/}
+      <ProductsList products={products} />
+      <Slideshow products={products} />
       <Hero
         headline={hero?.headline ?? ''}
         description={hero?.description ?? ''}

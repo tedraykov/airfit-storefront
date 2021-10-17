@@ -23,7 +23,6 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
   body: { item },
   config,
 }) => {
-  console.log('Adding item endpoint called')
   let cartId = cookies[config.cartIdCookie]
 
   if (!cartId) {
@@ -37,12 +36,10 @@ const addItem: CartEndpoint['handlers']['addItem'] = async ({
   if (!item.quantity) item.quantity = 1
 
   if (cartId === config.dummyEmptyCartId) {
-    console.log('Creating new cart')
     return createNewCart(item, res, config)
   }
 
   if (cartNeedsToBeReconciled(cookies, config)) {
-    console.log('Reconcile add item')
     return reconcileAnonymousCart(res, cookies, config)
   }
 

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import useCart from '@framework/cart/use-cart'
@@ -17,11 +17,15 @@ interface Props {
 const countItem = (count: number, item: LineItem) => count + item.quantity
 
 const UserNav: FC<Props> = ({ className }) => {
-  const { data } = useCart()
+  const { data, isLoading } = useCart()
   const { data: customer } = useCustomer()
   const { toggleSidebar, closeSidebarIfPresent, openModal, setSidebarView } =
     useUI()
   const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
+
+  useEffect(() => {
+    console.log(`isLoading ${isLoading}`)
+  }, [isLoading])
 
   const toggleCart = () => {
     setSidebarView('CART_VIEW')

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Container } from '@components/ui'
+import Container from '@mui/material/Container'
 import s from './Hero.module.css'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const Hero: FC<Props> = ({ headline, description }) => {
   return (
     <div className="bg-black">
-      <Container>
+      <Container maxWidth="xl">
         <div className={s.root}>
           <h1 className="text-4xl leading-10 font-extrabold text-white sm:text-5xl sm:leading-none sm:tracking-tight lg:text-6xl">
             {headline}

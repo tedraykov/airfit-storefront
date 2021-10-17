@@ -1,5 +1,9 @@
 import React, { FC, useCallback, useMemo } from 'react'
-import { StyledEngineProvider } from '@mui/material/styles'
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles'
 
 export interface State {
   displaySidebar: boolean
@@ -209,8 +213,28 @@ export const useUI = () => {
   return context
 }
 
+let theme = createTheme({
+  shape: {
+    borderRadius: 12,
+  },
+})
+
+theme = createTheme(theme, {
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: theme.shape.borderRadius,
+        },
+      },
+    },
+  },
+})
+
 export const ManagedUIContext: FC = ({ children }) => (
   <UIProvider>
-    <StyledEngineProvider injectFirst>{children}</StyledEngineProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
   </UIProvider>
 )

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import s from '@components/product/ProductSlider/ProductSlider.module.css'
 import Image from 'next/image'
@@ -8,7 +8,7 @@ interface Props {
   images: ProductImage[]
 }
 
-export const DesktopGallery: FC<Props> = ({ images }) => {
+export const DesktopGallery: FC<Props> = memo(({ images }) => {
   return (
     <div className={s.root}>
       <Gallery>
@@ -35,4 +35,4 @@ export const DesktopGallery: FC<Props> = ({ images }) => {
       </Gallery>
     </div>
   )
-}
+})

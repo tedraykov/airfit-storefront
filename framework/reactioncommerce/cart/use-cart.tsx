@@ -17,7 +17,7 @@ export const handler: SWRHook<GetCartHook> = {
     url: '/api/cart',
   },
   async fetcher({ options, fetch }) {
-    return await fetch(options)
+    return fetch(options)
   },
   useHook:
     ({ useData }) =>
@@ -25,7 +25,6 @@ export const handler: SWRHook<GetCartHook> = {
       const response = useData({
         swrOptions: { revalidateOnFocus: true, ...input?.swrOptions },
       })
-
       const fetcher = useFetcher()
 
       if (response.data && input?.isCheckout) {

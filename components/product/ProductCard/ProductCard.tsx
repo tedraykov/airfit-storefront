@@ -5,6 +5,7 @@ import s from './ProductCard.module.scss'
 import Image, { ImageProps } from 'next/image'
 import usePrice from '@commerce/product/use-price'
 import { Product } from '@framework/types/product'
+import Card from '@mui/material/Card'
 
 interface Props {
   className?: string
@@ -50,7 +51,7 @@ const SimpleProductCard: FC<{ product: Product; price: string }> = ({
   price,
 }) => {
   return (
-    <>
+    <Card elevation={0} className="relative">
       <div className={s.squareBg} />
       <div className="flex flex-col items-start w-full pr-10 z-20 absolute">
         <h3 className={s.productTitle}>
@@ -73,7 +74,7 @@ const SimpleProductCard: FC<{ product: Product; price: string }> = ({
           />
         )}
       </div>
-    </>
+    </Card>
   )
 }
 
