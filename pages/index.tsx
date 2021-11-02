@@ -50,7 +50,7 @@ export default function Home({
     <>
       <Banner />
       <ProductsList products={products} />
-      <Slideshow products={products} />
+      {/*<Slideshow products={products} />*/}
       <Hero
         headline={hero?.headline ?? ''}
         description={hero?.description ?? ''}

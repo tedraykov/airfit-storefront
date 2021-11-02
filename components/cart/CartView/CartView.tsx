@@ -66,7 +66,7 @@ export const CartView: FC<CartViewProps> = ({
         </div>
         <div className="lg:col-span-4 lg:border-l border-accents-2">
           <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
-            <CartSummary subTotal={subTotal} total={total} shipping={0} />
+            <CartSummary cart={data} />
             {checkoutButton && (
               <div className="flex flex-row justify-end">
                 <div className="w-full md:w-md">

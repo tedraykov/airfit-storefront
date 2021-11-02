@@ -32,11 +32,7 @@ export default function Checkout() {
     }
   }, [data])
 
-  return isLoading ? (
-    <CircularProgress disableShrink />
-  ) : (
-    <CheckoutView cart={data} isEmpty={isEmpty} isLoading={isLoading} />
-  )
+  return <CheckoutView cart={data} isEmpty={isEmpty} isLoading={isLoading} />
 }
 
 Checkout.Layout = StrippedLayout

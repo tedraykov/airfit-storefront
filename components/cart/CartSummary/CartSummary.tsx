@@ -1,12 +1,27 @@
-import { FC } from 'react'
+import { FC, memo, useState } from 'react'
+import { Cart } from '@framework/types/cart'
+import usePrice from '@commerce/product/use-price'
 
 interface CartSummaryProps {
-  subTotal: string
-  shipping: number
-  total: string
+  cart: Cart | null | undefined
 }
 
-const CartSummary: FC<CartSummaryProps> = ({ subTotal, shipping, total }) => {
+const CartSummary: FC<CartSummaryProps> = ({ cart }) => {
+  const { price: subTotal } = usePrice(
+    cart && {
+      amount: Number(cart.subtotalPrice),
+      currencyCode: cart.currency.code,
+    }
+  )
+  const { price: total } = usePrice(
+    cart && {
+      amount: Number(cart.totalPrice),
+      currencyCode: cart.currency.code,
+    }
+  )
+
+  const [shipping] = useState(0)
+
   return (
     <div>
       <ul className="py-3">
@@ -28,4 +43,4 @@ const CartSummary: FC<CartSummaryProps> = ({ subTotal, shipping, total }) => {
     </div>
   )
 }
-export default CartSummary
+export default memo(CartSummary)

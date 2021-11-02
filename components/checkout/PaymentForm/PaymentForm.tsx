@@ -23,7 +23,7 @@ const paymentTypeTitles = {
   [PaymentType.REVOLUT]: 'Revolut',
 }
 
-export const PaymentForm: FC<PaymentFormProps> = ({
+const PaymentForm: FC<PaymentFormProps> = ({
   availablePaymentMethods,
   setPaymentMethod,
 }) => {
@@ -132,3 +132,5 @@ export const PaymentForm: FC<PaymentFormProps> = ({
     </div>
   )
 }
+
+export default PaymentForm

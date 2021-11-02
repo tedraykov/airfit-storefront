@@ -1,13 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Button, Container, Input, Logo, Text } from '@components/ui'
-import SwipeableViews from 'react-swipeable-views'
-import { ShippingAddressForm } from '@components/checkout/ShippingAddressForm/ShippingAddressForm'
-import { PaymentForm } from '@components/checkout/PaymentForm/PaymentForm'
-import Drawer from '@mui/material/Drawer'
-import MobileStepper from '@mui/material/MobileStepper'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import s from './CheckoutView.module.scss'
-import { CartView } from '@components/cart/CartView/CartView'
 import { PaymentInput } from '@framework/schema'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -21,6 +14,12 @@ import {
   OrderInput,
 } from '@framework/types/order'
 import { CheckoutFinalize } from '@components/checkout/CheckoutFinalize/CheckoutFinalize'
+import CartSummary from '@components/cart/CartSummary'
+import { Theme, useMediaQuery } from '@mui/material'
+import MobileCheckout from '@components/checkout/MobileCheckout'
+import { CheckoutStep } from '@hooks/useCheckout'
+import ShippingAddressStep from '@components/checkout/ShippingAddressStep'
+import DesktopCheckout from '@components/checkout/DesktopCheckout'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
@@ -60,6 +59,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   const [readyToFinalize, setReadyToFinalize] = useState(false)
   const [cartOpened, setCartOpened] = useState(false)
   const [continueButtonLoading, setContinueButtonLoading] = useState(false)
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const {
     register: userDataRegister,
@@ -102,18 +102,6 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     }
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
-
-  const handleOpenCart = () => {
-    setCartOpened(true)
-  }
-
-  const handleCloseCart = () => {
-    setCartOpened(false)
   }
 
   useEffect(() => {
@@ -204,159 +192,42 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     setOrder(order)
   }
 
-  return (
-    <Container className={s.root}>
-      <div className={s.header}>
-        <div className={s.logo}>
-          <Link href="/">
-            <Logo reversedColor={true} />
-          </Link>
-        </div>
-        <div className={s.gradientLine} />
-      </div>
-      <SwipeableViews
-        className="flex-1"
-        index={activeStep}
-        disabled={true}
-        animateHeight={true}
-      >
-        <div className="flex flex-1 flex-col space-y-4">
-          <Text variant="pageHeading">🧑‍🚀 Данни за клиента</Text>
-          <UserDataForm register={userDataRegister} errors={userDataErrors} />
-        </div>
-        <div>
-          <Text variant="pageHeading">📦 Адрес за доставка</Text>
-          <ShippingAddressForm
-            register={shippingAddressRegister}
-            errors={shippingAddressErrors}
-            setValue={shippingAddressSetValue}
-          />
-        </div>
-        <div>
-          <Text variant="pageHeading">💵 Метод за плащане</Text>
-          <PaymentForm
-            availablePaymentMethods={availablePayments}
-            setPaymentMethod={setPayment}
-          />
-        </div>
-        <div>
-          <CheckoutFinalize order={order} />
-        </div>
-      </SwipeableViews>
-      <section className="my-6">
-        <div className="border-t border-accents-2">
-          <ul className="py-3">
-            <li className="flex justify-between py-1">
-              <span>Доставка</span>
-              <span className="font-bold tracking-wide">БЕЗПЛАТНА</span>
-            </li>
-          </ul>
-          <div className="flex justify-between border-t border-accents-2 py-3 font-bold mb-2">
-            <span>Общо</span>
-            <span>
-              {cart ? `${cart.totalPrice} ${cart.currency.code}` : '0.00 лв.'}
-            </span>
-          </div>
-        </div>
-        <Button
-          className="w-full justify-between mb-12"
-          size="slim"
-          color="secondary"
-          onClick={handleOpenCart}
-        >
-          <span className="flex-1 font-light">🛒 Преглед на количката</span>
-          <ExpandLessIcon />
-        </Button>
-      </section>
-      <MobileStepper
-        variant="progress"
-        steps={4}
-        position="bottom"
-        elevation={10}
-        activeStep={activeStep}
-        nextButton={
-          <Button
-            className="ml-4 mr-2"
-            size="slim"
-            loading={continueButtonLoading}
-            onClick={handleNext}
-            disabled={activeStep === 3 || !canContinueNextStep(activeStep)}
-          >
-            {!readyToFinalize ? 'Продължи' : 'Завърши'}
-          </Button>
-        }
-        backButton={
-          <Button
-            className="ml-2 mr-4"
-            size="slim"
-            onClick={handleBack}
-            disabled={activeStep === 0}
-          >
-            Назад
-          </Button>
-        }
-      />
+  const checkoutSteps: CheckoutStep[] = [
+    {
+      StepComponent: ShippingAddressStep,
+    },
+  ]
 
-      <Drawer
-        anchor="bottom"
-        open={cartOpened}
-        onClose={handleCloseCart}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-      >
-        <div className={s.cartDrawerContent}>
-          <CartView
-            data={cart}
-            isEmpty={isEmpty}
-            isLoading={isLoading}
-            checkoutButton={false}
-            onClose={handleCloseCart}
-          />
-        </div>
-      </Drawer>
-    </Container>
+  return (
+    <div className={s.root}>
+      <CheckoutHeader />
+      {isMobile ? (
+        <MobileCheckout
+          cart={cart!}
+          isLoading={isLoading}
+          isEmpty={isEmpty}
+          steps={checkoutSteps}
+        />
+      ) : (
+        <DesktopCheckout
+          cart={cart!}
+          steps={checkoutSteps}
+          isLoading={isLoading}
+        />
+      )}
+    </div>
   )
 }
 
-interface UserDataFormProps {
-  register: UseFormRegister<UserDataFieldValues>
-  errors: FieldErrors<UserDataFieldValues>
-}
-
-const UserDataForm: FC<UserDataFormProps> = ({ register, errors }) => {
+const CheckoutHeader: FC = () => {
   return (
-    <>
-      <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
-        <Input
-          register={register}
-          label="firstName"
-          error={errors.firstName}
-          type="text"
-          placeholder="Име"
-        />
-        <Input
-          register={register}
-          label="sureName"
-          error={errors.sureName}
-          type="text"
-          placeholder="Фамилия"
-        />
+    <header className={s.header}>
+      <div className={s.logo}>
+        <Link href="/">
+          <Logo reversedColor={true} />
+        </Link>
       </div>
-      <Input
-        register={register}
-        type="tel"
-        label="phone"
-        error={errors.phone}
-        placeholder="Телефонен номер"
-      />
-      <Input
-        register={register}
-        type="email"
-        label="email"
-        error={errors.email}
-        placeholder="Емейл"
-      />
-    </>
+      <div className={s.gradientLine} />
+    </header>
   )
 }

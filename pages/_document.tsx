@@ -9,6 +9,10 @@ class MyDocument extends Document {
           <meta name="theme-color" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <meta
+            name="verify-paysera"
+            content="c91a7faa696312cb0f167e6f92dcb682"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600;700&display=swap"
             rel="stylesheet"

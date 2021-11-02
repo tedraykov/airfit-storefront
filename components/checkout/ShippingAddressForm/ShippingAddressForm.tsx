@@ -68,7 +68,7 @@ const getShippingAddress = (
   }
 }
 
-export const ShippingAddressForm: FC<ShippingAddressProps> = ({
+const ShippingAddressForm: FC<ShippingAddressProps> = ({
   className,
   register,
   errors,
@@ -157,6 +157,12 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
         </AccordionSummary>
         <AccordionDetails>
           <div className="flex flex-1 flex-col space-y-3">
+            <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
+              <Input label="firstName" type="text" placeholder="Име" />
+              <Input label="sureName" type="text" placeholder="Фамилия" />
+            </div>
+            <Input type="tel" label="phone" placeholder="Телефонен номер" />
+            <Input type="email" label="email" placeholder="Емейл" />
             <div className="flex space-x-3">
               <Input
                 type="text"
@@ -236,3 +242,5 @@ export const ShippingAddressForm: FC<ShippingAddressProps> = ({
     </div>
   )
 }
+
+export default ShippingAddressForm

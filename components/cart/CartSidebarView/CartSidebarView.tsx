@@ -15,19 +15,6 @@ import Link from 'next/link'
 const CartSidebarView: FC = () => {
   const { closeSidebar } = useUI()
   const { data, isLoading, isEmpty } = useCart()
-
-  const { price: subTotal } = usePrice(
-    data && {
-      amount: Number(data.subtotalPrice),
-      currencyCode: data.currency.code,
-    }
-  )
-  const { price: total } = usePrice(
-    data && {
-      amount: Number(data.totalPrice),
-      currencyCode: data.currency.code,
-    }
-  )
   const handleClose = () => closeSidebar()
 
   return (
@@ -56,7 +43,7 @@ const CartSidebarView: FC = () => {
               </Fade>
             </div>
             <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
-              <CartSummary subTotal={subTotal} total={total} shipping={0} />
+              <CartSummary cart={data} />
               <div className="flex flex-row justify-end">
                 <Link href="/checkout" passHref>
                   <Button width="100%">Завършви поръчката</Button>
