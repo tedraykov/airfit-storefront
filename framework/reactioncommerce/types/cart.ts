@@ -33,7 +33,7 @@ export type ShippingAddress = {
 
 export type FulfillmentGroup = {
   id: string
-  data: {
+  data?: {
     shippingAddress: ShippingAddress
   }
   availableFulfillmentOptions: FulfillmentOption[]

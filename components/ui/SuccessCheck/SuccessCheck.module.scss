@@ -9,7 +9,7 @@
     position: relative;
     border-radius: 50%;
     box-sizing: content-box;
-    border: 4px solid #4CAF50;
+    border: 4px solid #4caf50;
 
     &::before {
       top: 3px;
@@ -28,17 +28,18 @@
       animation: rotateCircle 4.25s ease-in;
     }
 
-    &::before, &::after {
+    &::before,
+    &::after {
       content: '';
       height: 100px;
       position: absolute;
-      background: #FFFFFF;
+      background: #ffffff;
       transform: rotate(-45deg);
     }
 
     .iconLine {
       height: 5px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       display: block;
       border-radius: 2px;
       position: absolute;
@@ -70,7 +71,7 @@
       border-radius: 50%;
       position: absolute;
       box-sizing: content-box;
-      border: 4px solid rgba(76, 175, 80, .5);
+      border: 4px solid rgba(76, 175, 80, 0.5);
     }
 
     .iconFix {
@@ -81,7 +82,7 @@
       height: 85px;
       position: absolute;
       transform: rotate(-45deg);
-      background-color: #FFFFFF;
+      background-color: #ffffff;
     }
   }
 }

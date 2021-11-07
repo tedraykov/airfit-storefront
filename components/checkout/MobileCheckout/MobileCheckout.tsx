@@ -1,14 +1,16 @@
 import React, { FC, useState } from 'react'
-import MobileStepper from '@mui/material/MobileStepper'
-import { Button } from '@components/ui'
-import Drawer from '@mui/material/Drawer'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import s from '@components/checkout/CheckoutView/CheckoutView.module.scss'
-import { CartView } from '@components/cart/CartView/CartView'
-import { Cart } from '@framework/types/cart'
 import SwipeableViews from 'react-swipeable-views'
+import Drawer from '@mui/material/Drawer'
+import MobileStepper from '@mui/material/MobileStepper'
+import Typography from '@mui/material/Typography'
+
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { CartView } from '@components/cart/CartView/CartView'
+import { Button, Container } from '@components/ui'
 import CartSummary from '@components/cart/CartSummary'
-import useCheckout, { CheckoutStep } from '@hooks/useCheckout'
+import { Cart } from '@framework/types/cart'
+import useStepper, { Step } from '@hooks/useStepper'
+import s from './MobileCheckout.module.scss'
 
 const useCartDrawer = () => {
   const [cartDrawerOpened, setCartDrawerOpened] = useState(false)
@@ -32,7 +34,7 @@ type MobileCheckoutProps = {
   cart: Cart
   isLoading: boolean
   isEmpty: boolean
-  steps: CheckoutStep[]
+  steps: Step[]
 }
 
 const MobileCheckout: FC<MobileCheckoutProps> = ({
@@ -49,19 +51,25 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
     isActiveStepLoading,
     canContinueToNextStep,
     renderStepComponent,
-  } = useCheckout(steps)
+  } = useStepper(steps)
   const { cartDrawerOpened, handleOpenCartDrawer, handleCloseCartDrawer } =
     useCartDrawer()
 
   return (
-    <>
+    <Container className="animated fadeIn">
       <SwipeableViews
-        className="flex-1"
         index={activeStep}
         disabled={true}
-        animateHeight={true}
+        className={s.swipeableViews}
       >
-        {steps.map((_, index) => renderStepComponent(index, { key: index }))}
+        {steps.map((step, index) => (
+          <div key={index} className="h-auto">
+            <Typography variant="h5" className="font-bold mb-4">
+              {step.icon} {step.label}
+            </Typography>
+            {renderStepComponent(index)}
+          </div>
+        ))}
       </SwipeableViews>
       <section className="my-6">
         <CartSummary cart={cart} />
@@ -77,7 +85,7 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
       </section>
       <MobileStepper
         variant="progress"
-        steps={4}
+        steps={3}
         position="bottom"
         elevation={10}
         activeStep={activeStep}
@@ -87,9 +95,9 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
             size="slim"
             loading={isActiveStepLoading}
             onClick={handleNext}
-            disabled={canContinueToNextStep()}
+            disabled={!canContinueToNextStep()}
           >
-            {!isLastStep ? 'Продължи' : 'Завърши'}
+            {!isLastStep() ? 'Продължи' : 'Завърши'}
           </Button>
         }
         backButton={
@@ -122,7 +130,7 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
           />
         </div>
       </Drawer>
-    </>
+    </Container>
   )
 }
 

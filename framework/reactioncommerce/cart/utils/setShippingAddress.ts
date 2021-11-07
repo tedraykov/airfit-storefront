@@ -47,7 +47,7 @@ export const setShippingAddress =
           phone: address.phone,
           postal: address.postal,
           region: address.region,
-          isCommercial: false
+          isCommercial: false,
         },
       },
     })

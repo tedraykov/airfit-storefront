@@ -1,8 +1,8 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import cn from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
-import s from './CartItem.module.css'
+import s from './CartItem.module.scss'
 import { Trash, Plus, Minus } from '@components/icons'
 import { useUI } from '@components/ui/context'
 import usePrice from '@framework/product/use-price'
@@ -17,13 +17,17 @@ type ItemOption = {
   valueId: number
 }
 
-const CartItem = ({
-  item,
-  currencyCode,
-  ...rest
-}: {
+interface CartItemProps {
   item: LineItem
   currencyCode: string
+  variant?: 'normal' | 'slim'
+}
+
+const CartItem: FC<CartItemProps> = ({
+  item,
+  currencyCode,
+  variant = 'normal',
+  ...rest
 }) => {
   const { closeSidebarIfPresent } = useUI()
   const { price } = usePrice({
@@ -85,13 +89,12 @@ const CartItem = ({
     }
   }, [item.quantity])
 
+  const rootClassName = cn(s.root, {
+    [s.slim]: variant === 'slim',
+    ['opacity-75 pointer-events-none']: removing,
+  })
   return (
-    <li
-      className={cn('flex flex-row space-x-8 py-8', {
-        'opacity-75 pointer-events-none': removing,
-      })}
-      {...rest}
-    >
+    <li className={rootClassName} {...rest}>
       <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-md bg-violet relative overflow-hidden cursor-pointer">
         <Link href={`/product/${item.path}`}>
           <div>
@@ -108,10 +111,7 @@ const CartItem = ({
       </div>
       <div className="flex-1 flex flex-col text-base">
         <Link href={`/product/${item.path}`}>
-          <span
-            className="font-bold text-lg cursor-pointer leading-6"
-            onClick={() => closeSidebarIfPresent()}
-          >
+          <span className={s.title} onClick={() => closeSidebarIfPresent()}>
             {item.name}
           </span>
         </Link>
@@ -148,7 +148,7 @@ const CartItem = ({
           </button>
         </div>
       </div>
-      <div className="flex flex-col justify-between space-y-2 text-base">
+      <div className={s.price}>
         <span>{price}</span>
         <button
           className="flex justify-end outline-none"

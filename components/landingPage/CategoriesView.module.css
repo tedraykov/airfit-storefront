@@ -6,7 +6,8 @@
   @apply hidden;
 }
 
-.rightListGradient, .leftListGradient {
+.rightListGradient,
+.leftListGradient {
   @apply h-full absolute top-0;
   pointer-events: none;
 }
@@ -14,11 +15,11 @@
 .rightListGradient {
   right: 0;
   width: 4rem;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }
 
 .leftListGradient {
   left: 0;
   width: 4rem;
-  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }

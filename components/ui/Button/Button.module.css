@@ -29,7 +29,7 @@
 }
 
 .icon {
-@apply px-2 py-2;
+  @apply px-2 py-2;
 }
 
 .icon:hover {

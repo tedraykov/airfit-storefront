@@ -1,5 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 import React from 'react'
+import { mediaStyles } from '@components/common/MediaQueries'
 
 class MyDocument extends Document {
   render() {
@@ -12,6 +13,10 @@ class MyDocument extends Document {
           <meta
             name="verify-paysera"
             content="c91a7faa696312cb0f167e6f92dcb682"
+          />
+          <style
+            type="text/css"
+            dangerouslySetInnerHTML={{ __html: mediaStyles }}
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600;700&display=swap"

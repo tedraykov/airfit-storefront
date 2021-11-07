@@ -1,7 +1,8 @@
 .section {
-  background-color: #5A102239;
+  background-color: #5a102239;
   color: white;
-  font-family: 'Ubuntu', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Ubuntu', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -27,6 +27,8 @@ export const cartCommon = `
           city
           company
           country
+          firstName
+          lastName
           fullName
           isBillingDefault
           isCommercial

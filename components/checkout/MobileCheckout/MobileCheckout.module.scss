@@ -1,0 +1,11 @@
+.swipeableViews {
+  & div[aria-hidden='false'] {
+    height: 100%;
+  }
+}
+
+.swipeableViews {
+  & div[aria-hidden='true'] {
+    height: 0;
+  }
+}

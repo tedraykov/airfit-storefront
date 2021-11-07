@@ -1,0 +1,6 @@
+.card {
+  @apply shadow-md border-accents-3 border;
+  //background: rgba(255, 172, 94, 0.05);  /* fallback for old browsers */
+  //background: -webkit-linear-gradient(60deg, rgba(74, 191, 199, 0.05), rgba(200, 121, 209, 0.05), rgba(255, 172, 94, 0.05));  /* Chrome 10-25, Safari 5.1-6 */
+  //background: linear-gradient(60deg, rgba(74, 191, 199, 0.05), rgba(200, 121, 209, 0.05), rgba(255, 172, 94, 0.05)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}

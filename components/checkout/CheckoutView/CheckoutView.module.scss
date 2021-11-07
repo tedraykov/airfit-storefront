@@ -6,16 +6,16 @@
 .gradientLine {
   @apply w-full;
   height: 4px;
-  background: linear-gradient(90deg, #E2792D 0%, #FBFF34 54.69%, #23BDFF 100%);
+  background: linear-gradient(90deg, #e2792d 0%, #fbff34 54.69%, #23bdff 100%);
 }
 
 .header {
-  @apply mb-4 md:mb-0;
+  @apply mb-4;
 }
 
 .logo {
   @apply flex justify-center p-6 bg-secondary;
-  background-image: url("/bg-products.svg");
+  background-image: url('/bg-products.svg');
 }
 
 .cartDrawerContent {

@@ -6,10 +6,10 @@ export const SuccessCheck: FC = () => {
   return (
     <div className={s.successCheckmark}>
       <div className={s.checkIcon}>
-        <span className={cn(s.iconLine, s.lineTip)}/>
-        <span className={cn(s.iconLine, s.lineLong)}/>
-        <div className={s.iconCircle}/>
-        <div className={s.iconFix}/>
+        <span className={cn(s.iconLine, s.lineTip)} />
+        <span className={cn(s.iconLine, s.lineLong)} />
+        <div className={s.iconCircle} />
+        <div className={s.iconFix} />
       </div>
     </div>
   )

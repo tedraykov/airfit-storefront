@@ -12,24 +12,15 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
-import { createMedia } from '@artsy/fresnel'
 import DesktopGallery from '@components/product/DesktopGallery'
 import { ProductVariant } from '@framework/types/product'
+import { Media, MediaContextProvider } from '@components/common/MediaQueries'
 
 interface Props {
   children?: any
   product: Product
   className?: string
 }
-
-const { MediaContextProvider, Media } = createMedia({
-  breakpoints: {
-    sm: 0,
-    md: 768,
-    lg: 1024,
-    xl: 1192,
-  },
-})
 
 const ProductView: FC<Props> = ({ product }) => {
   const addItem = useAddItem()

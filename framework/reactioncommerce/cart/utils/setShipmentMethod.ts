@@ -6,25 +6,23 @@ import { Cart } from '@framework/types/cart'
 import { Cart as ReactionCart } from '@framework/schema'
 import { normalizeCart } from '@framework/utils'
 
-export const setShipmentMethod = (
-  fetcher: Fetcher,
-  response: ResponseState<Cart | undefined | null>
-) =>
+export const setShipmentMethod =
+  (fetcher: Fetcher, response: ResponseState<Cart | undefined | null>) =>
   async (
     fulfillmentGroupId: string,
     fulfillmentMethodId: string
   ): Promise<Cart> => {
     const {
-      selectFulfillmentOptionForGroup: { cart: cartWithOptionsSelected }
+      selectFulfillmentOptionForGroup: { cart: cartWithOptionsSelected },
     } = await fetcher({
       query: selectFulfillmentOptionForGroup,
       variables: {
         input: <SelectFulfillmentOptionForGroupInput>{
           cartId: response.data?.id,
           fulfillmentGroupId,
-          fulfillmentMethodId
-        }
-      }
+          fulfillmentMethodId,
+        },
+      },
     })
     const normalizedCart = normalizeCart(
       cartWithOptionsSelected as ReactionCart
@@ -33,7 +31,7 @@ export const setShipmentMethod = (
     await response.mutate(
       {
         ...response.data!,
-        ...normalizedCart
+        ...normalizedCart,
       },
       false
     )
