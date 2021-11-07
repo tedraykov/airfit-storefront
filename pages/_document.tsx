@@ -14,7 +14,7 @@ class MyDocument extends Document {
           {isProd() && (
             <meta
               name="verify-paysera"
-              content="c91a7faa696312cb0f167e6f92dcb682"
+              content="b2b92766c5fcbbbe8438e8ce92d9375b"
             />
           )}
           <style
