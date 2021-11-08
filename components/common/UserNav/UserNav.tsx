@@ -23,10 +23,6 @@ const UserNav: FC<Props> = ({ className }) => {
     useUI()
   const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
 
-  useEffect(() => {
-    console.log(`isLoading ${isLoading}`)
-  }, [isLoading])
-
   const toggleCart = () => {
     setSidebarView('CART_VIEW')
     toggleSidebar()

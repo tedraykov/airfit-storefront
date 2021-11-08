@@ -18,7 +18,7 @@ import {
   Address,
 } from '../schema'
 
-import { IHero, IPage } from '@lib/contentful/schema'
+import { IFeaturedProduct, IHero, IPage } from '@lib/contentful/schema'
 import {
   Cart,
   FulfillmentGroup,
@@ -29,7 +29,7 @@ import {
 import { Product, ProductVariant } from '@framework/types/product'
 import { ProductOptionValues } from '@commerce/types/product'
 import { Category } from '@commerce/types/site'
-import { Hero, Page } from '@framework/types/page'
+import { FeaturedProduct, Hero, Page } from '@framework/types/page'
 
 const normalizeProductImages = (
   images: ImageInfo[],
@@ -417,6 +417,23 @@ export function normalizeContentfulHero(hero: IHero): Hero {
     headline: hero.fields.headline,
     description: hero.fields.description,
   }
+}
+
+export function normalizeContentfulFeaturedProduct(
+  featuredProducts: IFeaturedProduct[]
+): FeaturedProduct[] {
+  return featuredProducts.map((featuredProduct) => {
+    return <FeaturedProduct>{
+      title: featuredProduct.fields.title,
+      subTitle: featuredProduct.fields.subTitle ?? '',
+      description: featuredProduct.fields.shortDecription,
+      productImage: featuredProduct.fields.productImage.fields.file.url,
+      buttonText: featuredProduct.fields.buttonText ?? '',
+      productUrl: featuredProduct.fields.productUrl,
+      backgroundColor: featuredProduct.fields.backgroundColor,
+      useReversedText: featuredProduct.fields.useReversedText,
+    }
+  })
 }
 
 export function normalizeCategory(tag: TagEdge): Category {

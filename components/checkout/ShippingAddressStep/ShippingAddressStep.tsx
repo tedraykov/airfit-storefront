@@ -83,6 +83,7 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
         <Accordion
           className="shadow-sm"
           elevation={0}
+          disabled
           expanded={deliveryType === DeliveryType.COURIER_OFFICE}
           onChange={handleChangeDeliveryType(DeliveryType.COURIER_OFFICE)}
         >

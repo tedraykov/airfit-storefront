@@ -19,6 +19,7 @@ export const OPERATIONS = [
   'getAllPages',
   'getPage',
   'getHero',
+  'getFeaturedProducts',
   'getSiteInfo',
   'getCustomerWishlist',
   'getAllProductPaths',
@@ -81,6 +82,14 @@ export type Operations<P extends APIProvider> = {
   }
 
   getHero: {
+    <T extends { data: any; variables: any }>(opts: {
+      variables: T['variables']
+      config?: P['config']
+      preview?: boolean
+    }): Promise<T['data']>
+  }
+
+  getFeaturedProducts: {
     <T extends { data: any; variables: any }>(opts: {
       variables: T['variables']
       config?: P['config']

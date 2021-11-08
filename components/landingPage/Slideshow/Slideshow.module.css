@@ -1,34 +1,46 @@
 .section {
-  background-color: #5a102239;
-  color: white;
-  font-family: 'Ubuntu', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.h3andp {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 15px 20px;
-  width: 100%;
-}
-.h4andp {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  padding: 15px;
-}
-.h4 {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.button {
-  @apply bg-transparent border-primary border-2 text-secondary mb-8;
+  @apply flex flex-col items-center text-primary py-6 lg:py-8;
 }
 
-/*.productImage {*/
-/*  height: 100%;*/
-/*}*/
+.reversedText {
+  @apply text-secondary;
+}
+
+.content {
+  @apply flex flex-col sm:flex-row w-full md:justify-center max-w-6xl;
+}
+
+.button {
+  @apply my-4;
+}
+
+.productImage {
+  @apply relative shadow-lg overflow-hidden mr-6 rounded-r-2xl;
+  height: fit-content;
+}
+
+.textContent {
+  @apply px-6 mt-4 max-w-md;
+}
+
+@screen sm {
+  .productImage {
+    min-width: 300px;
+  }
+}
+
+@screen md {
+  .content {
+    @apply items-end;
+  }
+  .productImage {
+    @apply rounded-2xl mx-6;
+    min-width: 400px;
+  }
+}
+
+@screen lg {
+  .productImage {
+    min-width: 500px;
+  }
+}

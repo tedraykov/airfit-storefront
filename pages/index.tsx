@@ -5,6 +5,7 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
 import { ProductsList, Slideshow } from '@components/landingPage'
+import { getContentfulFeaturedProducts } from '@lib/contentful/contentful'
 
 export async function getStaticProps({
   preview,
@@ -24,8 +25,10 @@ export async function getStaticProps({
 
   const landingPageHeroId = '5zUKnt2GRtt2NvpOgnNuO0'
   const heroPromise = commerce.getHero({ variables: { id: landingPageHeroId } })
+  const featuredProductsPromise = commerce.getFeaturedProducts()
 
   const { products } = await productsPromise
+  const { featuredProducts } = await featuredProductsPromise
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
   const { hero } = await heroPromise
@@ -33,6 +36,7 @@ export async function getStaticProps({
   return {
     props: {
       products,
+      featuredProducts,
       categories,
       brands,
       pages,
@@ -44,13 +48,14 @@ export async function getStaticProps({
 
 export default function Home({
   products,
+  featuredProducts,
   hero,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <Banner />
       <ProductsList products={products} />
-      {/*<Slideshow products={products} />*/}
+      <Slideshow products={featuredProducts} />
       <Hero
         headline={hero?.headline ?? ''}
         description={hero?.description ?? ''}

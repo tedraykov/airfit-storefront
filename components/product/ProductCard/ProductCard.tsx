@@ -33,25 +33,28 @@ const ProductCard: FC<Props> = ({
 
   return (
     <Link href={`/product/${product.slug}`} {...props}>
-      <a
-        className={cn(s.root, { [s.simple]: variant === 'simple' }, className)}
-      >
+      <a className={cn(s.root, { [s.simple]: variant === 'simple' })}>
         {variant === 'slim' ? (
           <SlimProductCard product={product} />
         ) : (
-          <SimpleProductCard product={product} price={price} />
+          <SimpleProductCard
+            product={product}
+            price={price}
+            className={className}
+          />
         )}
       </a>
     </Link>
   )
 }
 
-const SimpleProductCard: FC<{ product: Product; price: string }> = ({
-  product,
-  price,
-}) => {
+const SimpleProductCard: FC<{
+  product: Product
+  price: string
+  className?: string
+}> = ({ product, price, className }) => {
   return (
-    <Card elevation={0} className="relative">
+    <Card elevation={0} className={cn('relative', className)}>
       <div className={s.squareBg} />
       <div className="flex flex-col items-start w-full pr-10 z-20 absolute">
         <h3 className={s.productTitle}>

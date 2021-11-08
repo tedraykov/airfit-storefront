@@ -1,5 +1,5 @@
 import { createClient } from 'contentful'
-import { IPageFields } from '@lib/contentful/schema'
+import { IFeaturedProductFields, IPageFields } from '@lib/contentful/schema'
 
 const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID
 const CONTENTFUL_DELIVERY_API_ACCESS_TOKEN =
@@ -44,4 +44,15 @@ export async function getContentfulHero(id: string) {
     content_type: 'hero',
   }
   return await contentfulClient().getEntry(id, query)
+}
+
+export async function getContentfulFeaturedProducts() {
+  const query = {
+    content_type: 'featuredProduct',
+  }
+
+  const entries = await contentfulClient().getEntries<IFeaturedProductFields>(
+    query
+  )
+  return entries.items
 }

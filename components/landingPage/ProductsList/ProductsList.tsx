@@ -12,14 +12,20 @@ const ProductsList: FC<{ products: Product[] }> = memo(({ products }) => {
   const router = useRouter()
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" className="md:px-12">
       <Grid container justifyContent="center" pb={3}>
-        <Grid item container rowSpacing={3} columnSpacing={3} py={3}>
+        <Grid
+          item
+          container
+          rowSpacing={{ xs: 3, sm: 4 }}
+          columnSpacing={{ xs: 3, sm: 4 }}
+          py={{ xs: 3, sm: 4 }}
+        >
           {products.slice(0, numberOfProducts).map((product: Product) => (
-            <Grid item xs={12} md={6} key={product.path}>
+            <Grid item xs={12} sm={6} lg={4} key={product.path}>
               <ProductCard
                 variant="simple"
-                className="animated fadeIn"
+                className="animated fadeIn shadow-lg"
                 product={product}
                 imgProps={{
                   width: 480,

@@ -9,3 +9,14 @@ export type Hero = {
   headline: string
   description: string
 }
+
+export type FeaturedProduct = {
+  title: string
+  subTitle?: string
+  description: string
+  productImage: string
+  buttonText?: string
+  productUrl: string
+  backgroundColor: string
+  useReversedText: boolean
+}
