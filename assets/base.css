@@ -112,6 +112,15 @@ a {
   animation-name: fadeIn;
 }
 
+.pswp img {
+  max-width: none;
+  object-fit: contain;
+}
+
+.pswp__img--placeholder--blank{
+  display: none !important;
+}
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;
