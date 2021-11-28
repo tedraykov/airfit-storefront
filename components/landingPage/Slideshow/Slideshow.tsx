@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FeaturedProduct } from '@framework/types/page'
 import Typography from '@mui/material/Typography'
-import { Box } from '@mui/material'
+import { Box, Fade } from '@mui/material'
 import cn from 'classnames'
 import { generateGradient } from '@lib/colors'
 import { useSwipeable } from 'react-swipeable'
@@ -16,31 +16,31 @@ interface SlideshowProps {
 
 const Slideshow: FC<SlideshowProps> = ({ products }) => {
   if (!products) return null
-  const [activeProduct, setActiveProduct] = useState<FeaturedProduct>(
-    products[0]
-  )
+  const [activeProduct, setActiveProduct] = useState<FeaturedProduct>({
+    ...products[0],
+  })
+
   const [activeProductIndex, setActiveProductIndex] = useState(
     activeProduct && 0
   )
-  const router = useRouter()
 
   const handleSwipeLeft = () => {
     if (activeProductIndex === 0) {
-      setActiveProduct(products[products.length - 1])
+      setActiveProduct({ ...products[products.length - 1] })
       setActiveProductIndex(products.length - 1)
       return
     }
-    setActiveProduct(products[activeProductIndex - 1])
+    setActiveProduct({ ...products[activeProductIndex - 1] })
     setActiveProductIndex(activeProductIndex - 1)
   }
 
   const handleSwipeRight = () => {
     if (activeProductIndex === products.length - 1) {
-      setActiveProduct(products[0])
+      setActiveProduct({ ...products[0] })
       setActiveProductIndex(0)
       return
     }
-    setActiveProduct(products[activeProductIndex + 1])
+    setActiveProduct({ ...products[activeProductIndex + 1] })
     setActiveProductIndex(activeProductIndex + 1)
   }
 
@@ -61,40 +61,77 @@ const Slideshow: FC<SlideshowProps> = ({ products }) => {
       {...handlers}
     >
       <div className="flex justify-between w-full px-4 pb-6 max-w-6xl">
-        <Typography variant="h6" fontWeight="bold">
+        <Typography variant="h5" fontWeight="bold">
           Вникни в AIRFIT
         </Typography>
-        <p>
-          {activeProductIndex + 1} / {products.length}
-        </p>
-      </div>
-      <div className={s.content}>
-        <div className={s.productImage}>
-          <Image
-            layout="responsive"
-            width={300}
-            height={300}
-            src={`https:${activeProduct.productImage}`}
-            alt={activeProduct.title}
-          />
-        </div>
-        <div className={s.textContent}>
-          <Typography variant="h5" lineHeight="2">
-            {activeProduct.title}
-          </Typography>
-          <p>{activeProduct.description}</p>
+        <div className="flex items-center text-xl">
           <Button
-            onClick={() => router.push(activeProduct.productUrl)}
+            variant="text"
+            size="icon"
             color="secondary"
-            size="slim"
-            round
-            className={s.button}
+            onClick={handleSwipeLeft}
           >
-            {activeProduct.buttonText}
+            &lt;
+          </Button>
+          <p>
+            {activeProductIndex + 1} / {products.length}
+          </p>
+          <Button
+            size="icon"
+            variant="text"
+            color="secondary"
+            onClick={handleSwipeRight}
+          >
+            &gt;
           </Button>
         </div>
       </div>
+      <Slide product={activeProduct} />
     </Box>
+  )
+}
+
+const Slide = ({ product }: { product: FeaturedProduct }) => {
+  const router = useRouter()
+
+  return (
+    <div key={product.productUrl} className={cn(s.content)}>
+      <Fade in timeout={{ enter: 500 }}>
+        <div className={s.productImage}>
+          <Image
+            layout="responsive"
+            width={500}
+            height={500}
+            src={`https:${product.productImage}`}
+            alt={product.title}
+            placeholder={'blur'}
+            blurDataURL={`https:${product.productImage}?h=10`}
+          />
+        </div>
+      </Fade>
+      <div className={s.textContent}>
+        <Fade in timeout={{ enter: 500 }}>
+          <Typography variant="h5" fontWeight="bold" mb={2}>
+            {product.title}
+          </Typography>
+        </Fade>
+        <Fade in timeout={{ enter: 500 }} style={{ transitionDelay: '100ms' }}>
+          <Typography className="xl:text-lg">{product.description}</Typography>
+        </Fade>
+        <Fade in timeout={{ enter: 500 }} style={{ transitionDelay: '200ms' }}>
+          <Button
+            onClick={() => router.push(product.productUrl)}
+            variant="outlined"
+            size="slim"
+            color="secondary"
+            round
+            className={s.button}
+          >
+            {product.buttonText}
+          </Button>
+        </Fade>
+      </div>
+    </div>
   )
 }
 

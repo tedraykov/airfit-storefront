@@ -55,9 +55,8 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
           <div className="flex items-center justify-end flex-1">
             <div className="mr-3 xl:hidden">
               <Button
-                variant="text"
+                variant="transparent"
                 size="icon"
-                className="mr-2"
                 onClick={() => setShowMobileSearch(!showMobileSearch)}
               >
                 <Search className="h-5 w-5" />
@@ -65,7 +64,7 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
             </div>
             <UserNav />
             <div className="lg:hidden">
-              <Button variant="text" size="icon" onClick={toggleDrawer}>
+              <Button variant="transparent" size="icon" onClick={toggleDrawer}>
                 <DrawerIcon className="h-5 w-5" />
               </Button>
             </div>

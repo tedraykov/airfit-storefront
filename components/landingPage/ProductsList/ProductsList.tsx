@@ -16,30 +16,27 @@ const ProductsList: FC<{ products: Product[] }> = memo(({ products }) => {
       <Grid container justifyContent="center" pb={3}>
         <Grid
           item
-          container
-          rowSpacing={{ xs: 3, sm: 4 }}
-          columnSpacing={{ xs: 3, sm: 4 }}
           py={{ xs: 3, sm: 4 }}
+          className="w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
           {products.slice(0, numberOfProducts).map((product: Product) => (
-            <Grid item xs={12} sm={6} lg={4} key={product.path}>
-              <ProductCard
-                variant="simple"
-                className="animated fadeIn shadow-lg"
-                product={product}
-                imgProps={{
-                  width: 480,
-                  height: 480,
-                }}
-              />
-            </Grid>
+            <ProductCard
+              key={product.path}
+              variant="simple"
+              className="animated fadeIn shadow-lg"
+              product={product}
+              imgProps={{
+                width: 480,
+                height: 480,
+              }}
+            />
           ))}
         </Grid>
         <Grid item>
           <Button
             size="slim"
             round
-            color="secondary"
+            variant="outlined"
             onClick={() => router.push('search')}
           >
             Разгледай останалите...

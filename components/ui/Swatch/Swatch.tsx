@@ -33,7 +33,7 @@ const Swatch: React.FC<Omit<ButtonProps, 'size'> & SwatchProps> = React.memo(
     return (
       <Button
         aria-label="Variant Swatch"
-        color="secondary"
+        variant="outlined"
         round
         className={swatchClassName}
         {...(label && color && { title: label })}

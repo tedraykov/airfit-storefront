@@ -73,7 +73,7 @@ const SimpleProductCard: FC<{
             unoptimized={true}
             layout="responsive"
             placeholder={'blur'}
-            blurDataURL={product.images[0]?.thumbnail || placeholderImg}
+            blurDataURL={placeholderImg}
           />
         )}
       </div>

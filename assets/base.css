@@ -1,5 +1,6 @@
 :root {
   --primary: #ffffff;
+  --primary-transparent: rgba(255, 255, 255, 0.8);
   --primary-2: #f1f3f5;
   --secondary: #000000;
   --secondary-2: #111;
@@ -15,6 +16,7 @@
   --cyan: #22b8cf;
   --green: #37b679;
   --red: #da3c3c;
+  --orange: #E2792D;
   --red-light: #e6acac;
   --pink-light: #ff5996;
   --pink: #e64980;

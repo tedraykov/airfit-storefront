@@ -13,7 +13,7 @@ import ButtonUnstyled from '@mui/core/ButtonUnstyled'
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   className?: string
-  variant?: 'text' | 'contained' | string
+  variant?: 'text' | 'contained' | 'outlined' | string
   size?: 'normal' | 'slim' | 'icon'
   color?: 'primary' | 'secondary' | string
   round?: boolean
@@ -49,6 +49,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       // Variants
       [s.contained]: variant === 'contained',
       [s.text]: variant === 'text',
+      [s.outlined]: variant === 'outlined',
       // Sizes
       [s.normal]: size === 'normal',
       [s.slim]: size === 'slim',

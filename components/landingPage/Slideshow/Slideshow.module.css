@@ -1,5 +1,15 @@
 .section {
-  @apply flex flex-col items-center text-primary py-6 lg:py-8;
+  @apply flex flex-col items-center text-primary py-6 lg:py-8 relative;
+}
+
+.section:before {
+  @apply w-full h-full bg-repeat-space absolute;
+  content: '';
+  top: 0;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+  background-image: url('/bg-products.svg');
+  pointer-events: none;
 }
 
 .reversedText {
@@ -15,8 +25,9 @@
 }
 
 .productImage {
-  @apply relative shadow-lg overflow-hidden mr-6 rounded-r-2xl;
+  @apply relative shadow-lg overflow-hidden mr-6 rounded-r-2xl bg-accents-2;
   height: fit-content;
+  max-width: 500px;
 }
 
 .textContent {

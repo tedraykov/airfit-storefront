@@ -8,11 +8,23 @@
 
 /* Variant */
 .text {
-  @apply bg-primary text-primary border-none;
+  @apply text-primary bg-transparent border-none;
+}
+
+.outlined {
+  @apply border border-accents-4;
 }
 
 .contained {
-  @apply bg-secondary text-accents-1 shadow-sm;
+  @apply bg-secondary text-accents-1;
+}
+
+.text:hover, .outlined:hover {
+  @apply bg-hover;
+}
+
+.outlined:hover {
+  @apply border-secondary;
 }
 
 .contained:hover {
@@ -33,12 +45,20 @@
 }
 
 .icon:hover {
-  @apply text-accents-6;
+  @apply text-accents-7;
 }
 
 /* Color */
 .secondary {
-  @apply bg-primary text-primary border-accents-4;
+  @apply text-secondary border-primary;
+}
+
+.secondary:hover {
+  @apply border-primary;
+}
+
+.icon.secondary:hover {
+  @apply text-accents-1;
 }
 
 /* Other */

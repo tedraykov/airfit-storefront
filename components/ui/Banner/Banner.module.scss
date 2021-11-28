@@ -1,7 +1,20 @@
 .root {
   @apply flex relative overflow-hidden;
-  background: linear-gradient(45deg, var(--accents-9), var(--accents-7));
+  background: linear-gradient(45deg, var(--secondary), var(--accents-8));
   min-height: 24rem;
+}
+
+@screen md {
+  .root {
+    min-height: 36rem ;
+  }
+}
+
+.root:before {
+  @apply absolute w-full h-full bg-cover block;
+  content: '';
+  opacity: 20%;
+  background-image: url('/banner.webp');
 }
 
 .root:after {

@@ -15,6 +15,7 @@ export type FeaturedProduct = {
   subTitle?: string
   description: string
   productImage: string
+  productImageThumbnail: string
   buttonText?: string
   productUrl: string
   backgroundColor: string

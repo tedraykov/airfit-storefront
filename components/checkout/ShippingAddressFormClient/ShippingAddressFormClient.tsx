@@ -167,7 +167,7 @@ const ShippingAddressFormClient = forwardRef<
         name="email"
         control={control}
         defaultValue={(email && email) || ''}
-        label="Емейл"
+        label="Имейл"
       />
       <div className="flex space-x-3">
         <ControlledTextField

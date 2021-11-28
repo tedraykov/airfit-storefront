@@ -24,6 +24,7 @@ module.exports = {
       },
       colors: {
         primary: 'var(--primary)',
+        'primary-transparent': 'var(--primary-transparent)',
         'primary-2': 'var(--primary-2)',
         secondary: 'var(--secondary)',
         'secondary-2': 'var(--secondary-2)',
@@ -48,6 +49,7 @@ module.exports = {
         blue: 'var(--blue)',
         green: 'var(--green)',
         red: 'var(--red)',
+        orange: 'var(--orange)',
       },
       textColor: {
         base: 'var(--text-base)',

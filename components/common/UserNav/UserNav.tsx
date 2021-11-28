@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import useCart from '@framework/cart/use-cart'
@@ -9,6 +9,7 @@ import { useUI } from '@components/ui/context'
 import DropdownMenu from './DropdownMenu'
 import s from './UserNav.module.scss'
 import { LineItem } from '@framework/types/cart'
+import { Button } from '@components/ui'
 
 interface Props {
   className?: string
@@ -17,7 +18,7 @@ interface Props {
 const countItem = (count: number, item: LineItem) => count + item.quantity
 
 const UserNav: FC<Props> = ({ className }) => {
-  const { data, isLoading } = useCart()
+  const { data } = useCart()
   const { data: customer } = useCustomer()
   const { toggleSidebar, closeSidebarIfPresent, openModal, setSidebarView } =
     useUI()
@@ -32,10 +33,16 @@ const UserNav: FC<Props> = ({ className }) => {
     <nav className={cn(s.root, className)}>
       <div className={s.mainContainer}>
         <ul className={s.list}>
-          <li className={s.item} onClick={toggleCart}>
+          <Button
+            variant="text"
+            size="icon"
+            color="transparent"
+            className={s.item}
+            onClick={toggleCart}
+          >
             <Bag />
             {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
-          </li>
+          </Button>
           {process.env.COMMERCE_WISHLIST_ENABLED && (
             <li className={s.item}>
               <Link href="/wishlist">

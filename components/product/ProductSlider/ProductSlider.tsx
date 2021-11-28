@@ -95,7 +95,7 @@ const ProductSlider: FC<Props> = ({ images }) => {
           )}
           style={{ opacity: isMounted ? 1 : 0 }}
         >
-          {images.map(({ url, medium, alt, thumbnail }, i) => (
+          {images.map(({ url, large, alt, thumbnail }, i) => (
             <div
               onClick={() => {
                 openGallery(i)
@@ -105,9 +105,8 @@ const ProductSlider: FC<Props> = ({ images }) => {
             >
               <Image
                 className={s.img}
-                src={medium!}
+                src={large!}
                 alt={alt || 'Product Image'}
-                sizes="(max-width: 500px) 500px, (max-width: 640px) 640px"
                 layout={'fill'}
                 priority={i === 0}
                 unoptimized={true}

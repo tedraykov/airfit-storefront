@@ -1,5 +1,6 @@
 .root {
-  @apply sticky top-0 bg-primary z-40 transition-all duration-150;
+  @apply fixed w-full top-0 z-40 bg-primary-transparent transition-all duration-150;
+  backdrop-filter: saturate(200%) blur(20px);
 }
 
 .nav {
@@ -13,7 +14,7 @@
 .link {
   @apply inline-flex items-center leading-6
   transition ease-in-out duration-75 cursor-pointer
-  text-accents-5;
+  text-accents-7;
 }
 
 .link:hover {
