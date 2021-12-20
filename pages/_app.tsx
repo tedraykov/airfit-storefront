@@ -9,7 +9,7 @@ import { ManagedUIContext } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { Metrics } from '@layer0/rum'
 import { isProd } from '@config/environment'
-import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+import { FacebookPixel, pageView } from '@lib/facebookPixel'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -22,21 +22,17 @@ if (isProd()) {
 export default function MyApp({ Component, pageProps }: AppProps) {
   const Layout = (Component as any).Layout || Noop
   const router = useRouter()
-  const { acceptedCookies } = useAcceptCookies()
 
   useEffect(() => {
-    if (isProd() && acceptedCookies) {
-      import('react-facebook-pixel')
-        .then((x) => x.default)
-        .then((ReactPixel) => {
-          ReactPixel.init('398867188563519') // facebookPixelId
-          ReactPixel.pageView()
+    pageView()
 
-          router.events.on('routeChangeComplete', () => {
-            ReactPixel.pageView()
-            ReactPixel.track('ViewContent')
-          })
-        })
+    const handleRouteChange = () => {
+      pageView()
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
 
@@ -46,6 +42,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <FacebookPixel />
       <Head>
         <title>Airfit | Спортно оборудване за дома</title>
       </Head>

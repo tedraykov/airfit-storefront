@@ -1,14 +1,18 @@
-const getTagsQuery = /* GraphQL */ `
-  query getTags($first: ConnectionLimitInt!, $shopId: ID!) {
-    tags(first: $first, shopId: $shopId) {
-      edges {
-        node {
-          _id
-          displayTitle
-          slug
+const getCategoriesQuery = /* GraphQL */ `
+  query getCategoriesQuery($id: ID!) {
+    shop(id: $id) {
+      defaultNavigationTree(language: "en") {
+        items {
+          navigationItem {
+            _id
+            data {
+              contentForLanguage
+              url
+            }
+          }
         }
       }
     }
   }
 `
-export default getTagsQuery
+export default getCategoriesQuery

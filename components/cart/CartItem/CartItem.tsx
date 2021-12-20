@@ -30,7 +30,8 @@ const CartItem: FC<CartItemProps> = ({
   ...rest
 }) => {
   const { closeSidebarIfPresent } = useUI()
-  const { price } = usePrice({
+  // @ts-ignore
+  const { price, basePrice } = usePrice({
     amount: item.variant.price * item.quantity,
     baseAmount: item.variant.listPrice * item.quantity,
     currencyCode,
@@ -42,7 +43,6 @@ const CartItem: FC<CartItemProps> = ({
   const [removing, setRemoving] = useState(false)
 
   const updateQuantity = async (val: number) => {
-    console.log('updateQuantity', val)
     await updateItem({ quantity: val })
   }
 
@@ -149,7 +149,12 @@ const CartItem: FC<CartItemProps> = ({
         </div>
       </div>
       <div className={s.price}>
-        <span>{price}</span>
+        <span className="flex flex-col">
+          {basePrice && (
+            <span className="line-through text-accents-7">{basePrice}</span>
+          )}
+          <span>{price}</span>
+        </span>
         <button
           className="flex justify-end outline-none"
           onClick={handleRemove}

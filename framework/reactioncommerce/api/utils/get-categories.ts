@@ -1,14 +1,16 @@
 import { ReactionCommerceConfig } from '../'
-import getTagsQuery from '../../utils/queries/get-all-collections-query'
+import getCategoriesQuery from '@framework/utils/queries/get-all-collections-query'
 import { normalizeCategory } from '@framework/utils'
 import { Category } from '@commerce/types/site'
+import getTagsQuery from '@framework/utils/queries/get-tags-query'
+import { NavigationTreeItem } from '@framework/schema'
 
 const getCategories = async (
   config: ReactionCommerceConfig
 ): Promise<Category[]> => {
   const {
     data: {
-      tags: { edges: tags },
+      tags: { nodes: tags },
     },
   } = await config.fetch(getTagsQuery, {
     variables: {
@@ -16,7 +18,20 @@ const getCategories = async (
       shopId: config.shopId,
     },
   })
-  return tags.map(normalizeCategory)
+
+  const {
+    data: {
+      shop: {
+        defaultNavigationTree: { items },
+      },
+    },
+  } = await config.fetch(getCategoriesQuery, {
+    variables: {
+      id: config.shopId,
+    },
+  })
+
+  return items.map((item: NavigationTreeItem) => normalizeCategory(item, tags))
 }
 
 export default getCategories

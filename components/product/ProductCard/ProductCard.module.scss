@@ -22,24 +22,28 @@
 
     &:nth-child(4n + 1) .productTitle > span,
     &:nth-child(4n + 1) .productPrice,
+    &:nth-child(4n + 1) .productDiscount,
     &:nth-child(4n + 1) .wishlistButton {
       @apply bg-violet-light text-white;
     }
 
     &:nth-child(4n + 2) .productTitle > span,
     &:nth-child(4n + 2) .productPrice,
+    &:nth-child(4n + 2) .productDiscount,
     &:nth-child(4n + 2) .wishlistButton {
       @apply bg-orange text-white;
     }
 
     &:nth-child(4n + 3) .productTitle > span,
     &:nth-child(4n + 3) .productPrice,
+    &:nth-child(4n + 3) .productDiscount,
     &:nth-child(4n + 3) .wishlistButton {
       @apply bg-pink-light text-white;
     }
 
     &:nth-child(4n + 4) .productTitle > span,
     &:nth-child(4n + 4) .productPrice,
+    &:nth-child(4n + 4) .productDiscount,
     &:nth-child(4n + 4) .wishlistButton {
       @apply bg-cyan text-white;
     }
@@ -49,6 +53,7 @@
 .squareBg,
 .productTitle > span,
 .productPrice,
+.productDiscount,
 .wishlistButton {
   @apply transition-colors ease-in-out duration-500;
 }
@@ -98,6 +103,11 @@
   @apply py-2.5 px-2.5  mt-1
   bg-primary font-semibold
   text-primary leading-extra-loose tracking-wide;
+}
+
+.productDiscount {
+  @apply absolute text-lg font-bold rounded-tl-xl
+  bottom-0 right-0 text-red bg-primary p-2;
 }
 
 .imageContainer {

@@ -63,13 +63,11 @@ const ProductSlider: FC<Props> = ({ images }) => {
   }, [])
 
   function openGallery(i: number) {
-    console.log('Opening gallery from image')
     setSelectedImageIndex(i)
     setIsGalleryOpen(true)
   }
 
   function closeGallery(idx: number) {
-    console.log('Closing')
     setIsGalleryOpen(false)
     slider.moveToSlideRelative(idx)
   }

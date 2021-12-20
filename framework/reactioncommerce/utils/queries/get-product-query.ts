@@ -73,6 +73,7 @@ const getProductQuery = /* GraphQL */ `
           pricing {
             compareAtPrice {
               displayAmount
+              amount
             }
             price
             currency {

@@ -5,7 +5,6 @@ import type {
 } from 'next'
 import { useRouter } from 'next/router'
 import { Layout } from '@components/common'
-import { ProductView } from '@components/product'
 
 import getAllProductPaths from '@framework/product/get-all-product-paths'
 import commerce from '@lib/api/commerce'

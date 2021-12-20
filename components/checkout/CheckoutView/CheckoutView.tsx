@@ -1,5 +1,5 @@
-import React, { FC, useMemo } from 'react'
-import { Logo } from '@components/ui'
+import React, { FC, useEffect, useMemo } from 'react'
+import { LoadingDots, Logo } from '@components/ui'
 import s from './CheckoutView.module.scss'
 import Link from '@components/ui/Link'
 import { Cart } from '@framework/types/cart'
@@ -10,10 +10,9 @@ import DesktopCheckout from '@components/checkout/DesktopCheckout'
 import PaymentStep from '@components/checkout/PaymentStep/PaymentStep'
 import { useCheckout } from '@hooks/useCheckout'
 import { Media, MediaContextProvider } from '@components/common/MediaQueries'
-import { CircularProgress } from '@mui/material'
 import FinalizeStep from '@components/checkout/FinalizeStep'
-import { Text } from '@components/ui'
-import { SuccessCheck } from '@components/ui/SuccessCheck/SuccessCheck'
+import { track } from '@lib/facebookPixel'
+import { useRouter } from 'next/router'
 
 interface CheckoutViewProps {
   cart: Cart | null | undefined
@@ -37,6 +36,16 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
     order,
     paymentMethod,
   } = useCheckout({ cart })
+  const router = useRouter()
+
+  useEffect(() => {
+    track('InitiateCheckout')
+  }, [])
+
+  useEffect(() => {
+    if (!order) return
+    router.push(`/checkout/thank-you?order=${order.referenceId}`)
+  }, [order])
 
   const getCheckoutSteps = useMemo((): Step[] => {
     if (!cart || !availablePaymentMethods) return []
@@ -82,14 +91,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
       <CheckoutHeader />
       {isLoading || !availablePaymentMethods ? (
         <div className="flex flex-1 justify-center items-center">
-          <CircularProgress size="2rem" />
-        </div>
-      ) : order ? (
-        <div className="flex flex-col items-center">
-          <Text variant="pageHeading" className="mt-10 mb-4">
-            Вашата поръчка беше приета успешно!
-          </Text>
-          <SuccessCheck />
+          <LoadingDots />
         </div>
       ) : (
         <MediaContextProvider>
@@ -114,7 +116,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   )
 }
 
-const CheckoutHeader: FC = () => {
+export const CheckoutHeader: FC = () => {
   return (
     <header className={s.header}>
       <div className={s.logo}>

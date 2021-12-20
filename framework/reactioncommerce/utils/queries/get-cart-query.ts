@@ -162,6 +162,9 @@ const cartItemConnectionFragment = `
           code
         }
       }
+      compareAtPrice {
+        amount
+      }
       productSlug
       productType
       quantity

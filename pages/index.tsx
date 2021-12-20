@@ -5,7 +5,8 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
 import { ProductsList, Slideshow } from '@components/landingPage'
-import { getContentfulFeaturedProducts } from '@lib/contentful/contentful'
+// @ts-ignore
+import MessengerCustomerChat from 'react-messenger-customer-chat'
 
 export async function getStaticProps({
   preview,
@@ -60,6 +61,7 @@ export default function Home({
         headline={hero?.headline ?? ''}
         description={hero?.description ?? ''}
       />
+      <MessengerCustomerChat pageId="106359058343709" appId="596200088456927" />
     </>
   )
 }

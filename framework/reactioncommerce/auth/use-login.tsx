@@ -36,9 +36,6 @@ export const handler: MutationHook<LoginHook> = {
     const accessToken = authenticate?.tokens?.accessToken
     const refreshToken = authenticate?.tokens?.refreshToken
 
-    console.log('accessToken', accessToken)
-    console.log('refreshToken', refreshToken)
-
     if (accessToken && refreshToken) {
       setCustomerToken(accessToken)
       setRefreshToken(refreshToken, { expires: 7 })

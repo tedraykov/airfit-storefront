@@ -4,7 +4,7 @@ import {
   Order,
   OrderInput,
 } from '@framework/types/order'
-import { Address, PaymentInput } from '@framework/schema'
+import { PaymentInput } from '@framework/schema'
 import { useEffect, useState } from 'react'
 import { ShippingAddressFieldValues } from '@components/checkout/ShippingAddressFormClient/ShippingAddressFormClient'
 import paymentMethods from '@utils/paymentMethods'

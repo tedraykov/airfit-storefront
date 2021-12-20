@@ -77,6 +77,9 @@ const SimpleProductCard: FC<{
           />
         )}
       </div>
+      {product.price.maxDiscount !== '0%' && (
+        <div className={s.productDiscount}>до -{product.price.maxDiscount}</div>
+      )}
     </Card>
   )
 }

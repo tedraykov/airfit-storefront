@@ -2014,10 +2014,10 @@
     workbox-routing "^5.1.2"
     workbox-strategies "^5.1.2"
 
-"@layer0/react@^3.16.0":
-  version "3.16.0"
-  resolved "https://registry.yarnpkg.com/@layer0/react/-/react-3.16.0.tgz#f3692bff80bca29dcdb30e80d17c673a238e9797"
-  integrity sha512-UgtFaCAYxmh7p5od9M5vOERf/VsRxLb/YHLgYZKchsvjPJNjhoX1ZunvUeL6RB0bd1M53a4hc4uxtu0CLb0HgA==
+"@layer0/react@^4.7.1":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@layer0/react/-/react-4.7.1.tgz#2363d22cbe6c21b1b028f3cb12afe98475549132"
+  integrity sha512-9hFIDV3n2gmtcJGmd1UX7FrvPdelHg7J65x0XEOUjDUOtnNTpLXv1EQk/zU21hUZ4TNpP3jEFM8L90GwZxGzfA==
   dependencies:
     react-merge-refs "^1.1.0"
 
@@ -9457,6 +9457,13 @@ react-merge-refs@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.1.0.tgz#73d88b892c6c68cbb7a66e0800faa374f4c38b06"
   integrity sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==
+
+react-messenger-customer-chat@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-messenger-customer-chat/-/react-messenger-customer-chat-0.8.0.tgz#c0696af9f71d5804a1b1149ae67d672802dee15d"
+  integrity sha512-7HItF+2nElXCBLi1q5eccgE9X4P86BmjmzF5nBcok+hJNWVjdKJTdWxl9VZTQnjkp3GHB7WwTwN2l3d/RKmFuQ==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-photoswipe-gallery@^1.3.6:
   version "1.3.6"

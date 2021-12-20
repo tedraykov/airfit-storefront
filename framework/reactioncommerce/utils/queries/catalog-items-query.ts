@@ -38,6 +38,14 @@ edges {
             original
           }
         }
+        variants {
+          pricing {
+            compareAtPrice {
+              amount
+            }
+            price
+          }
+        }
       }
     }
   }

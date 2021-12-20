@@ -15,6 +15,7 @@ import {
 import DesktopGallery from '@components/product/DesktopGallery'
 import { ProductVariant } from '@framework/types/product'
 import { Media, MediaContextProvider } from '@components/common/MediaQueries'
+import { track } from '@lib/facebookPixel'
 
 interface Props {
   children?: any
@@ -28,9 +29,10 @@ const ProductView: FC<Props> = ({ product }) => {
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
   const [variant, setVariant] = useState<ProductVariant>(product.variants[0])
 
-  const { price } = usePrice({
+  // @ts-ignore
+  const { price, basePrice, discount } = usePrice({
     amount: variant.price,
-    baseAmount: product.price.retailPrice,
+    baseAmount: variant.listPrice,
     currencyCode: product.price.currencyCode!,
   })
 
@@ -59,6 +61,7 @@ const ProductView: FC<Props> = ({ product }) => {
         },
       })
       openSidebar()
+      track('AddToCart')
       setLoading(false)
     } catch (err) {
       setLoading(false)
@@ -86,12 +89,6 @@ const ProductView: FC<Props> = ({ product }) => {
       />
       <div className={cn(s.root, 'fit')}>
         <div className={cn(s.productDisplay, 'fit')}>
-          <div className={s.nameBoxContainer}>
-            <div className={s.nameBox}>
-              <h1 className={s.name}>{product.name}</h1>
-              <div className={s.price}>{price}</div>
-            </div>
-          </div>
           <MediaContextProvider>
             <Media lessThan="lg" className={s.sliderContainer}>
               <ProductSlider key={product.id} images={product.images} />
@@ -102,6 +99,22 @@ const ProductView: FC<Props> = ({ product }) => {
           </MediaContextProvider>
         </div>
         <div className={s.sidebar}>
+          <h1 className={s.productTitle}>
+            <span>{product.name}</span>
+          </h1>
+          <div className="flex pt-6">
+            {basePrice && (
+              <span className="text-xl line-through text-accents-8 pr-2">
+                {basePrice}
+              </span>
+            )}
+            <div className="font-bold inline-block tracking-wide text-xl">
+              {price}
+            </div>
+          </div>
+          {discount && (
+            <span className="text-red text-lg py-3">{discount} намаление</span>
+          )}
           <section>
             <ProductOptions
               options={product.options}
@@ -141,7 +154,7 @@ const ProductOptions: React.FC<ProductOptionsProps> = React.memo(
       <div>
         {options.map((opt) => (
           <div key={opt.displayName}>
-            <h2 className="uppercase font-medium text-sm tracking-wide">
+            <h2 className="uppercase font-medium text-sm tracking-wide leading-loose">
               {opt.displayName}
             </h2>
             <div className="flex flex-row flex-wrap sm:flex-nowrap">

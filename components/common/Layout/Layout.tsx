@@ -23,6 +23,7 @@ const Loading = () => (
 
 const dynamicProps = {
   loading: () => <Loading />,
+  ssr: false,
 }
 
 const SignUpView = dynamic(

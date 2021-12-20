@@ -12,10 +12,11 @@ import {
   ImageInfo,
   CartItem,
   Shop,
-  TagEdge,
   FulfillmentGroup as ReactionFulfillmentGroup,
   FulfillmentOption as ReactionFulfillmentOption,
   Address,
+  NavigationTreeItem,
+  Tag,
 } from '../schema'
 
 import { IFeaturedProduct, IHero, IPage } from '@lib/contentful/schema'
@@ -193,6 +194,7 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
     variants,
     tags,
   } = <CatalogProduct>product
+  // @ts-ignore
   return {
     id: productId ?? _id,
     name: title ?? '',
@@ -210,13 +212,18 @@ export function normalizeProduct(productNode: CatalogItemProduct): Product {
       currencyCode: pricing[0]?.currency.code,
       minPrice: pricing[0]?.minPrice ?? 0,
       maxPrice: pricing[0]?.maxPrice ?? 0,
+      maxDiscount:
+        (variants && normalizeMaxDiscount(<CatalogProductVariant[]>variants)) ||
+        '0%',
     },
-    variants: !!variants
-      ? normalizeProductVariants(<CatalogProductVariant[]>variants)
-      : [],
-    options: !!variants
-      ? groupProductOptionsByAttributeLabel(<CatalogProductVariant[]>variants)
-      : [],
+    variants:
+      !!variants && !!variants[0]?._id
+        ? normalizeProductVariants(<CatalogProductVariant[]>variants)
+        : [],
+    options:
+      !!variants && !!variants[0]?._id
+        ? groupProductOptionsByAttributeLabel(<CatalogProductVariant[]>variants)
+        : [],
     tags: tags?.edges?.map((tag) => <string>tag!.node!.slug) ?? [],
   }
 }
@@ -323,7 +330,7 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
     imageURLs,
     title,
     productConfiguration,
-    priceWhenAdded,
+    price,
     optionTitle,
     variantTitle,
     quantity,
@@ -345,7 +352,7 @@ function normalizeLineItem(cartItemEdge: CartItemEdge): LineItem {
         url: imageURLs?.thumbnail ?? '/product-img-placeholder.svg',
       },
       requiresShipping: true,
-      price: priceWhenAdded?.amount,
+      price: price?.amount,
       listPrice: compareAtPrice?.amount ?? 0,
     },
     addedAt,
@@ -436,13 +443,36 @@ export function normalizeContentfulFeaturedProduct(
   })
 }
 
-export function normalizeCategory(tag: TagEdge): Category {
+export function normalizeCategory(
+  item: NavigationTreeItem,
+  tags: Tag[]
+): Category {
+  const itemSlug = item.navigationItem.data?.url?.replace('/', '') ?? ''
+
   return <Category>{
-    id: tag.node?._id,
-    name: tag.node?.displayTitle ?? tag.node?.name ?? '',
-    slug: tag.node?.slug ?? '',
-    path: '/' + tag.node?.slug,
+    id: tags?.find((tag) => tag.slug === itemSlug)?._id ?? '',
+    name: item.navigationItem.data?.contentForLanguage ?? '',
+    slug: itemSlug,
+    path: item.navigationItem.data?.url,
   }
+}
+
+function normalizeMaxDiscount(variants: CatalogProductVariant[]): string {
+  let maxDiscount = 0
+
+  variants.forEach((variant) =>
+    variant.pricing.forEach((currencyPricing) => {
+      if (!currencyPricing) return 0
+      const { compareAtPrice, price } = currencyPricing
+      if (!compareAtPrice || !price) return 0
+      maxDiscount = Math.max(
+        (compareAtPrice.amount - price) / compareAtPrice.amount,
+        maxDiscount
+      )
+    })
+  )
+
+  return maxDiscount.toLocaleString(undefined, { style: 'percent' })
 }
 
 function flatVariantOptions(variant: CatalogProductVariant): ProductVariant[] {

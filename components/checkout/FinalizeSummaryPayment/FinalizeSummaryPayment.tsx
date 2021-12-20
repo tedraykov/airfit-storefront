@@ -10,8 +10,6 @@ interface FinalizeSummaryPaymentProps {
 const FinalizeSummaryPayment: FC<FinalizeSummaryPaymentProps> = ({
   paymentMethod,
 }) => {
-  console.log(paymentMethod)
-
   return (
     <Card>
       <CardContent>{paymentMethod?.displayName}</CardContent>

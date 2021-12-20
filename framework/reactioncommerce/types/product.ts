@@ -19,11 +19,13 @@ export type ProductOption = Core.ProductOption
 
 export type ProductVariant = Core.ProductVariant & {
   price: number
+  listPrice: number
 }
 
 export type ProductPrice = Core.ProductPrice & {
   minPrice: number
   maxPrice: number
+  maxDiscount: string
 }
 
 export type SearchProductsBody = Core.SearchProductsBody & {

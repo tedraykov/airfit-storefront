@@ -10,6 +10,8 @@ import { Container, Skeleton } from '@components/ui'
 
 import useSearch from '@framework/product/use-search'
 
+import { filterQuery, getCategoryPath, useSearchMeta } from '@lib/search'
+import { SearchPropsType } from '@lib/search-props'
 import getSlug from '@lib/get-slug'
 import rangeMap from '@lib/range-map'
 
@@ -19,9 +21,6 @@ const SORT = {
   'price-asc': 'Цена: ниска към висока',
   'price-desc': 'Цена: висока към ниска',
 }
-
-import { filterQuery, getCategoryPath, useSearchMeta } from '@lib/search'
-import { SearchPropsType } from '@lib/search-props'
 
 export default function Search({ categories, brands }: SearchPropsType) {
   const [activeFilter, setActiveFilter] = useState('')
