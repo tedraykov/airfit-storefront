@@ -5,9 +5,6 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
 import { ProductsList, Slideshow } from '@components/landingPage'
-// @ts-ignore
-import MessengerCustomerChat from 'react-messenger-customer-chat'
-import { FacebookChat } from '@components/common/FacebookChat'
 
 export async function getStaticProps({
   preview,
@@ -62,7 +59,6 @@ export default function Home({
         headline={hero?.headline ?? ''}
         description={hero?.description ?? ''}
       />
-      <FacebookChat />
     </>
   )
 }
