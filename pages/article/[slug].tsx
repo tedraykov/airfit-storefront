@@ -1,12 +1,6 @@
-import type {
-  GetStaticPathsContext,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-} from 'next'
+import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { useRouter } from 'next/router'
 import { Layout } from '@components/common'
-
-import getAllProductPaths from '@framework/product/get-all-product-paths'
 import commerce from '@lib/api/commerce'
 import getSlug from '@lib/get-slug'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -50,22 +44,18 @@ export async function getStaticProps({
       page,
       categories,
     },
-    revalidate: 200,
+    revalidate: 60 * 60 * 12,
   }
 }
 
-export async function getStaticPaths({ locales }: GetStaticPathsContext) {
-  const { products } = await getAllProductPaths()
+export async function getStaticPaths() {
+  const config = commerce.getConfig()
+  const { pages } = await commerce.getAllPages({ config })
 
   return {
-    paths: locales
-      ? locales.reduce<string[]>((arr, locale) => {
-          products.forEach((product) => {
-            arr.push(`/${locale}/product${product.node.path}`)
-          })
-          return arr
-        }, [])
-      : products.map((product) => `/product${product.node.path}`),
+    paths: pages.map(({ slug }) => ({
+      params: { slug },
+    })),
     fallback: 'blocking',
   }
 }

@@ -20,7 +20,7 @@ const getAllProductPaths = async (options?: {
   config?: ReactionCommerceConfig
   preview?: boolean
 }): Promise<ReturnType> => {
-  let { config, variables = { first: 250 } } = options ?? {}
+  let { config, variables } = options ?? {}
   config = commerce.getConfig(config)
 
   const products = await fetchAllProducts({

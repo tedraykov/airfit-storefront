@@ -404,6 +404,7 @@ export function normalizeContentfulPages(pages: IPage[]): Page[] {
       name: page.fields.seo?.fields.displayTitle,
       // Relative URL on the storefront for this page.
       url: `/${page.fields.slug}`,
+      slug: page.fields.slug,
     }
   })
 }

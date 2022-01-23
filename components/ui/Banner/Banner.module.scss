@@ -1,5 +1,5 @@
 .root {
-  @apply flex relative overflow-hidden;
+  @apply flex justify-center relative overflow-hidden;
   background: linear-gradient(45deg, var(--secondary), var(--accents-8));
   min-height: 24rem;
 }
@@ -10,13 +10,13 @@
   }
 }
 
-.root:before {
-  @apply absolute w-full h-full bg-cover block;
-  content: '';
-  opacity: 20%;
-  background-image: url('/banner.webp');
+.content {
+  @apply flex flex-col flex-1 justify-end
+  md:justify-center md:px-12 md:max-w-screen-md
+  lg:max-w-screen-lg
+  xl:max-w-screen-xl
+  2xl:max-w-screen-2xl;
 }
-
 .root:after {
   @apply absolute opacity-40 inset-0 bg-repeat-space w-full h-full block;
   background-image: url('/bg-products.svg');
@@ -30,13 +30,4 @@
   top: 80px;
   left: -40px;
   opacity: 0.03;
-}
-
-.landingBannerImg {
-  transform: rotate(-165deg);
-  position: absolute;
-  width: 300px;
-  right: -60px;
-  top: 20px;
-  z-index: 1;
 }

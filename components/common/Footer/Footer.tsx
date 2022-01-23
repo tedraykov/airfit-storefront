@@ -29,7 +29,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
   return (
     <footer className={rootClassName}>
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accents-2 py-12 text-primary bg-primary transition-colors duration-150">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accents-2 py-12 text-primary transition-colors duration-150">
           <div className="col-span-1 lg:col-span-2">
             <Link href="/">
               <a className={s.logo} aria-label="Logo">
@@ -51,10 +51,8 @@ const Footer: FC<Props> = ({ className, pages }) => {
             </div>
           </div>
         </div>
-        <div className="pt-6 pb-10 flex flex-col md:flex-row justify-between items-center space-y-4 text-accent-6 text-sm">
-          <div>
-            <span>&copy; 2021 "Алт Требъл" ЕООД. Всички права запазени</span>
-          </div>
+        <div className="pt-6 pb-10 flex flex-col md:flex-row justify-center items-center space-y-4 text-accent-6 text-sm">
+          <span>&copy; 2021 "Алт Требъл" ЕООД. Всички права запазени</span>
         </div>
       </Container>
     </footer>

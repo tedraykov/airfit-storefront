@@ -1,3 +1,25 @@
 .logo {
   @apply cursor-pointer;
 }
+
+.root {
+  @apply relative bg-accents-1;
+}
+
+.root::before {
+  @apply w-full h-full bg-repeat-space absolute;
+  content: '';
+  top: 6px;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.0) 20%, rgba(0, 0, 0, 0.5));
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.0) 20%, rgba(0, 0, 0, 0.5));
+  background-image: url('/bg-products.svg');
+  filter: invert(100%);
+  pointer-events: none;
+  background-size: 36px;
+}
+
+@screen md {
+  .root::before {
+    background-size: 48px;
+  }
+}

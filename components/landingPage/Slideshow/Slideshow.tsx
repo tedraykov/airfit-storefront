@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import s from './Slideshow.module.css'
+import s from './Slideshow.module.scss'
 import { Button } from '@components/ui'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -7,7 +7,6 @@ import { FeaturedProduct } from '@framework/types/page'
 import Typography from '@mui/material/Typography'
 import { Box, Fade } from '@mui/material'
 import cn from 'classnames'
-import { generateGradient } from '@lib/colors'
 import { useSwipeable } from 'react-swipeable'
 
 interface SlideshowProps {
@@ -57,7 +56,7 @@ const Slideshow: FC<SlideshowProps> = ({ products }) => {
       className={cn(s.section, {
         [s.reversedText]: activeProduct.useReversedText,
       })}
-      style={{ background: generateGradient(activeProduct.backgroundColor) }}
+      style={{ background: activeProduct.backgroundColor }}
       {...handlers}
     >
       <div className="flex justify-between w-full px-4 pb-6 max-w-6xl">

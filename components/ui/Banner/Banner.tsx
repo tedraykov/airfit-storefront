@@ -1,7 +1,8 @@
 import { FC } from 'react'
+import Image from 'next/image'
 import cn from 'classnames'
 import s from './Banner.module.scss'
-import Container from '@mui/material/Container'
+import banner from '/public/banner.webp'
 
 interface BannerProps {
   className?: string
@@ -12,27 +13,25 @@ const Banner: FC<BannerProps> = ({ className }) => {
 
   return (
     <div className={rootClassName}>
-      <LandingBanner />
+      <div className={s.content}>
+        <header className="w-52 sm:w-full sm:max-w-sm mb-20 md:mb-0 px-6 z-20">
+          <p className="text-accents-0 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
+            Спортно оборудване за дома
+          </p>
+        </header>
+        <span className={s.landingBannerBgText}>
+          Спортно <br />
+          оборудване за дома
+        </span>
+      </div>
+      <Image
+        className="absolute opacity-20"
+        src={banner}
+        placeholder="blur"
+        layout="fill"
+        objectFit="cover"
+      />
     </div>
-  )
-}
-
-const LandingBanner: FC = () => {
-  return (
-    <Container
-      maxWidth="xl"
-      className="flex flex-col flex-1 justify-end md:justify-center md:px-12"
-    >
-      <header className="w-52 sm:w-full sm:max-w-sm mb-20 md:mb-0 px-6 z-20">
-        <p className="text-accents-0 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
-          Спортно оборудване за дома
-        </p>
-      </header>
-      <span className={s.landingBannerBgText}>
-        Спортно <br />
-        оборудване за дома
-      </span>
-    </Container>
   )
 }
 
