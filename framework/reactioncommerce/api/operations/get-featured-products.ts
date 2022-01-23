@@ -12,9 +12,6 @@ export type GetFeaturedProductsResult<
 export default function getFeaturedProductsOperation() {
   async function getFeaturedProducts(): Promise<GetFeaturedProductsResult> {
     const contentfulFeaturedProducts = await getContentfulFeaturedProducts()
-    if (!contentfulFeaturedProducts) {
-      return {}
-    }
     return {
       featuredProducts: normalizeContentfulFeaturedProduct(
         contentfulFeaturedProducts as IFeaturedProduct[]

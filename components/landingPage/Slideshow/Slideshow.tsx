@@ -10,15 +10,13 @@ import cn from 'classnames'
 import { useSwipeable } from 'react-swipeable'
 
 interface SlideshowProps {
-  products: FeaturedProduct[] | undefined
+  products: FeaturedProduct[]
 }
 
 const Slideshow: FC<SlideshowProps> = ({ products }) => {
-  if (!products) return null
   const [activeProduct, setActiveProduct] = useState<FeaturedProduct>({
     ...products[0],
   })
-
   const [activeProductIndex, setActiveProductIndex] = useState(
     activeProduct && 0
   )

@@ -46,15 +46,17 @@ export const handler: MutationHook<LoginHook> = {
   useHook:
     ({ fetch }) =>
     () => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { revalidate } = useCustomer()
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useCallback(
         async function login(input) {
           const data = await fetch({ input })
           await revalidate()
           return data
         },
-        [fetch, revalidate]
+        [revalidate]
       )
     },
 }

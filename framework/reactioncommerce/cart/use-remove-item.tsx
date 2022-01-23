@@ -44,8 +44,10 @@ export const handler = {
   useHook:
     ({ fetch }: MutationHookContext<RemoveItemHook>) =>
     <T extends LineItem | undefined = undefined>() => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate } = useCart()
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useCallback(
         async (input) => {
           const itemId = input?.id
@@ -60,7 +62,7 @@ export const handler = {
           await mutate(data, false)
           return data
         },
-        [fetch, mutate]
+        [mutate]
       )
     },
 }

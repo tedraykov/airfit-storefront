@@ -104,4 +104,6 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
   }
 )
 
+ShippingAddressStep.displayName = 'ShippingAddressStep'
+
 export default ShippingAddressStep

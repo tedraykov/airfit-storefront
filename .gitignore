@@ -36,3 +36,5 @@ yarn-error.log*
 .vercel
 # Layer0 generated build directory
 .layer0
+# Layer0 generated build directory
+.layer0

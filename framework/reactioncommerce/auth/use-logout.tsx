@@ -24,9 +24,12 @@ export const handler: MutationHook<LogoutHook> = {
   useHook:
     ({ fetch }) =>
     () => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate } = useCustomer()
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate: cartMutate } = useCart()
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useCallback(
         async function logout() {
           const data = await fetch()
@@ -34,7 +37,7 @@ export const handler: MutationHook<LogoutHook> = {
           await cartMutate(null, false)
           return data
         },
-        [fetch, mutate, cartMutate]
+        [mutate, cartMutate]
       )
     },
 }

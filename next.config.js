@@ -3,7 +3,6 @@ const {
   withCommerceConfig,
   getProviderName,
 } = require('./framework/commerce/config')
-const { withLayer0, withServiceWorker } = require('@layer0/next/config')
 
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
@@ -55,11 +54,6 @@ module.exports = withCommerceConfig({
       },
     ].filter((x) => x)
   },
-  ...withLayer0(
-    withServiceWorker({
-      layer0SourceMaps: false,
-    })
-  ),
 })
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments

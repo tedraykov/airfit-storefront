@@ -126,7 +126,7 @@ const ShippingAddressFormClient = forwardRef<
 
       setLocation(getShippingAddress(geocoderResponse) ?? undefined)
     })()
-  }, [locationMarker])
+  }, [geocoder, locationMarker, setLocation])
 
   useEffect(() => {
     if (!location) return
@@ -221,5 +221,7 @@ const ShippingAddressFormClient = forwardRef<
     </div>
   )
 })
+
+ShippingAddressFormClient.displayName = 'ShippingAddressFormClient'
 
 export default ShippingAddressFormClient

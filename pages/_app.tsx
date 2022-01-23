@@ -7,17 +7,9 @@ import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import { useRouter } from 'next/router'
-import { Metrics } from '@layer0/rum'
-import { isProd } from '@config/environment'
 import { FacebookPixel, pageView } from '@lib/facebookPixel'
 
 const Noop: FC = ({ children }) => <>{children}</>
-
-if (isProd()) {
-  new Metrics({
-    token: '259de392-2930-4776-8cff-4f6f5debb6d3',
-  }).collect()
-}
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const Layout = (Component as any).Layout || Noop

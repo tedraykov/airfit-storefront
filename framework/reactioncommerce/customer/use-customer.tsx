@@ -18,6 +18,7 @@ export const handler: SWRHook<CustomerHook> = {
   useHook:
     ({ useData }) =>
     (input) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useData({
         swrOptions: {
           revalidateOnFocus: false,

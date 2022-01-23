@@ -22,9 +22,11 @@ export const handler: SWRHook<GetCartHook> = {
   useHook:
     ({ useData }) =>
     (input) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const response = useData({
         swrOptions: { revalidateOnFocus: true, ...input?.swrOptions },
       })
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const fetcher = useFetcher()
 
       if (response.data && input?.isCheckout) {
@@ -37,6 +39,7 @@ export const handler: SWRHook<GetCartHook> = {
         }
       }
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useMemo(
         () =>
           Object.create(response, {

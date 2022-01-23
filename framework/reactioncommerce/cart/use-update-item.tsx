@@ -77,8 +77,10 @@ export const handler = {
       } = {}
     ) => {
       const { item } = ctx
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate } = useCart() as any
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useCallback(
         debounce(async (input: UpdateItemInput<T>) => {
           const itemId = input.id ?? item?.id

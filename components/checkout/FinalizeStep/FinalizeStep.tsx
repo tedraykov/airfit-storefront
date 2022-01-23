@@ -1,8 +1,6 @@
 import { forwardRef, useImperativeHandle } from 'react'
 import * as yup from 'yup'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
-import FinalizeSummaryPayment from '@components/checkout/FinalizeSummaryPayment'
-import FinalizeSummaryShipping from '@components/checkout/FinalizeSummaryShipping/FinalizeSummaryShipping'
 import { PaymentMethod } from '@utils/paymentMethods'
 import { ShippingAddress } from '@framework/types/cart'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -76,5 +74,7 @@ export const FinalizeStep = forwardRef<Submittable, CheckoutFinalizeProps>(
     )
   }
 )
+
+FinalizeStep.displayName = 'FinalizeStep'
 
 export default FinalizeStep

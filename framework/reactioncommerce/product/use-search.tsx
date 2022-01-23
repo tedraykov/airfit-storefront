@@ -42,6 +42,7 @@ export const handler: SWRHook<SearchProductsHook> = {
   useHook:
     ({ useData }) =>
     (input = {}) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useData({
         input: [
           ['search', input.search],

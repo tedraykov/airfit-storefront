@@ -35,7 +35,7 @@ export async function getStaticProps({
   return {
     props: {
       products,
-      featuredProducts,
+      featuredProducts: featuredProducts || [],
       categories,
       brands,
       pages,

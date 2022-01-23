@@ -47,4 +47,6 @@ const ProductsList: FC<{ products: Product[] }> = memo(({ products }) => {
   )
 })
 
+ProductsList.displayName = 'ProductsList'
+
 export default ProductsList

@@ -24,6 +24,7 @@ export const track = (name: StandardEvents, options = {}) => {
 export const FacebookPixel: FC = () => {
   return (
     <Script
+      id="fb-pixel"
       strategy="afterInteractive"
       dangerouslySetInnerHTML={{
         __html: `

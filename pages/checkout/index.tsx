@@ -12,7 +12,7 @@ export default function Checkout() {
     if (!data && !isLoading) {
       router.push('/')
     }
-  }, [data])
+  }, [data, isLoading, router])
 
   return <CheckoutView cart={data} isEmpty={isEmpty} isLoading={isLoading} />
 }

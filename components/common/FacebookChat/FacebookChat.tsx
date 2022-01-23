@@ -8,6 +8,7 @@ const FacebookChat = () => {
       <div id="fb-customer-chat" className="fb-customerchat" />
 
       <Script
+        id="chatbox-fb"
         dangerouslySetInnerHTML={{
           __html: `
             var chatbox = document.getElementById('fb-customer-chat');
@@ -18,6 +19,7 @@ const FacebookChat = () => {
       />
 
       <Script
+        id="fb-messenger-init"
         dangerouslySetInnerHTML={{
           __html: `
             window.fbAsyncInit = function() {

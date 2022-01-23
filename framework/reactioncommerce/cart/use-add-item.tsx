@@ -32,15 +32,17 @@ export const handler: MutationHook<AddItemHook> = {
   useHook:
     ({ fetch }) =>
     () => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { mutate } = useCart()
 
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useCallback(
         async function addItem(input) {
           const data = await fetch({ input })
           await mutate(data, false)
           return data
         },
-        [fetch, mutate]
+        [mutate]
       )
     },
 }

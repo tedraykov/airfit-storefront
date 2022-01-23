@@ -188,4 +188,6 @@ const ProductOptions: React.FC<ProductOptionsProps> = React.memo(
   }
 )
 
+ProductOptions.displayName = 'ProductOptions'
+
 export default ProductView
