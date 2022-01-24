@@ -8,6 +8,7 @@ import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { FacebookPixel, pageView } from '@lib/facebookPixel'
+import { GoogleAnalytics } from '@lib/google'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -35,6 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <FacebookPixel />
+      <GoogleAnalytics />
       <Head>
         <title>Airfit | Спортно оборудване за дома</title>
       </Head>
