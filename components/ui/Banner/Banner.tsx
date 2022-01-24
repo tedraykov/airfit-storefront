@@ -26,6 +26,8 @@ const Banner: FC<BannerProps> = ({ className }) => {
       </div>
       <Image
         className="absolute opacity-20"
+        alt="Banner image"
+        priority
         src={banner}
         placeholder="blur"
         layout="fill"

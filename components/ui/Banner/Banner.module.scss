@@ -1,5 +1,6 @@
 .root {
-  @apply flex justify-center relative overflow-hidden;
+  @apply flex justify-center relative overflow-hidden rounded-2xl
+  mx-6 my-2 shadow-lg;
   background: linear-gradient(45deg, var(--secondary), var(--accents-8));
   min-height: 24rem;
 }

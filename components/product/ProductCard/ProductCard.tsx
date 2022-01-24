@@ -67,9 +67,9 @@ const SimpleProductCard: FC<{
           <Image
             alt={product.name || 'Product Image'}
             className={s.productImage}
-            src={product.images[0]?.large || placeholderImg}
-            height={640}
-            width={640}
+            src={product.images[0]?.medium || placeholderImg}
+            height={480}
+            width={480}
             unoptimized={true}
             layout="responsive"
             placeholder={'blur'}
