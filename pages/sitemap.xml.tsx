@@ -14,7 +14,7 @@ function productsSitemapFragment(
     .map(({ node }) => {
       return `
        <url>
-           <loc>${req.headers.host}/product${node.path}</loc>
+           <loc>https://${req.headers.host}/product${node.path}</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
        </url>
      `
@@ -27,7 +27,7 @@ function pagesSitemapFragment(req: IncomingMessage, pages: Page[]) {
     .map((page) => {
       return `
       <url>
-          <loc>${req.headers.host}/article${page?.url || ''}</loc>
+          <loc>https://${req.headers.host}/article${page?.url || ''}</loc>
           <lastmod>${new Date().toISOString()}</lastmod>
       </url>
     `
@@ -38,7 +38,7 @@ function pagesSitemapFragment(req: IncomingMessage, pages: Page[]) {
 function homeSitemapFragment(req: IncomingMessage) {
   return `
     <url>
-        <loc>${req.headers.host}</loc>
+        <loc>https://${req.headers.host}</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
     </url>
   `

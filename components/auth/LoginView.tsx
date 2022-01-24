@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback } from 'react'
+import React, { FC, useEffect, useState, useCallback } from 'react'
 import { Logo, Button, Input } from '@components/ui'
 import useLogin from '@framework/auth/use-login'
 import { useUI } from '@components/ui/context'
@@ -36,6 +36,7 @@ const LoginView: FC<Props> = () => {
       setLoading(false)
       closeModal()
     } catch ({ errors }) {
+      // @ts-ignore
       setMessage(errors[0].message)
       setLoading(false)
       setDisabled(false)

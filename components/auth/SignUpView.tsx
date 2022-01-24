@@ -41,6 +41,7 @@ const SignUpView: FC<Props> = () => {
       setLoading(false)
       closeModal()
     } catch ({ errors }) {
+      // @ts-ignore
       setMessage(errors[0].message)
       setLoading(false)
     }
