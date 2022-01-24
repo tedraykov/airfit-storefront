@@ -2,9 +2,11 @@ import { FC } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import getSlug from '@lib/get-slug'
-import { Logo, Container } from '@components/ui'
+import { Logo } from '@components/ui'
 import s from './Footer.module.scss'
 import { Page } from '@framework/types/page'
+import Instagram from '@mui/icons-material/Instagram'
+import Facebook from '@mui/icons-material/Facebook'
 
 interface Props {
   className?: string
@@ -28,7 +30,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
 
   return (
     <footer className={rootClassName}>
-      <Container>
+      <div className="mx-auto px-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accents-2 py-12 text-primary transition-colors duration-150">
           <div className="col-span-1 lg:col-span-2">
             <Link href="/">
@@ -51,10 +53,24 @@ const Footer: FC<Props> = ({ className, pages }) => {
             </div>
           </div>
         </div>
-        <div className="pt-6 pb-10 flex flex-col md:flex-row justify-center items-center space-y-4 text-accent-6 text-sm">
-          <span>&copy; 2021 "Алт Требъл" ЕООД. Всички права запазени</span>
+        <div className="pt-6 pb-10 flex flex-col-reverse items-center md:flex-row justify-between text-accent-6 text-sm">
+          <span className="text-center">
+            &copy; 2021 "Алт Требъл" ЕООД. Всички права запазени
+          </span>
+          <div className="flex space-x-4 pb-4">
+            <Link href="https://www.instagram.com/airfitbg" passHref={true}>
+              <a>
+                <Instagram className="text-4xl md:text-3xl" />
+              </a>
+            </Link>
+            <Link href="https://www.facebook.com/airfitbg" passHref={true}>
+              <a>
+                <Facebook className="text-4xl md:text-3xl" />
+              </a>
+            </Link>
+          </div>
         </div>
-      </Container>
+      </div>
     </footer>
   )
 }

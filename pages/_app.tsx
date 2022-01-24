@@ -8,7 +8,7 @@ import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { FacebookPixel, pageView } from '@lib/facebookPixel'
-import { GoogleAnalytics } from '@lib/google'
+import * as ga from '@lib/googleAnalytics'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -19,8 +19,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     pageView()
 
-    const handleRouteChange = () => {
+    const handleRouteChange = (url: string) => {
       pageView()
+      ga.pageview(url)
     }
 
     router.events.on('routeChangeComplete', handleRouteChange)
@@ -36,7 +37,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <FacebookPixel />
-      <GoogleAnalytics />
       <Head>
         <title>Airfit | Спортно оборудване за дома</title>
       </Head>

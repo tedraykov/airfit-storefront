@@ -2,6 +2,8 @@ import Document, { Head, Html, Main, NextScript } from 'next/document'
 import React from 'react'
 import { mediaStyles } from '@components/common/MediaQueries'
 import { isProd } from '@config/environment'
+// eslint-disable-next-line @next/next/no-script-in-document
+import Script from 'next/script'
 
 class MyDocument extends Document {
   render() {
@@ -24,6 +26,25 @@ class MyDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600;700&display=swap"
             rel="stylesheet"
+          />
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <Script
+            id="ga-import"
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+          />
+          <Script
+            id="ga-init"
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
           />
         </Head>
         <body className="loading">

@@ -1,5 +1,5 @@
 .root {
-  @apply relative grid items-start grid-cols-1 overflow-x-hidden;
+  @apply relative grid items-start grid-cols-1 overflow-x-hidden pb-6;
 
   @screen md {
     @apply overflow-visible;
