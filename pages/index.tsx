@@ -1,3 +1,4 @@
+import Script from 'next/script'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
@@ -52,6 +53,12 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
+      <Script
+        id="klaviyo-signup"
+        async
+        type="text/javascript"
+        src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=ReJ3p8"
+      />
       <Banner />
       <ProductsList products={products} />
       <Slideshow products={featuredProducts} />
