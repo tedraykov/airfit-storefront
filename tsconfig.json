@@ -18,16 +18,19 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"],
-      "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
+      "@hooks/*": ["hooks/*"],
+      "@config/*": ["config/*"],
+      "@context/*": ["context/*"],
+      "@lib/*": ["lib/*"],
+      "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/reactioncommerce"],
-      "@framework/*": ["framework/reactioncommerce/*"]
+      "@framework/*": ["framework/reactioncommerce/*"],
+      "@theme/*": ["theme/*"],
+      "@graphql/*": ["graphql/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],

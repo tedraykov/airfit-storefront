@@ -36,6 +36,10 @@ export const cartCommon = `
           phone
           postal
           region
+          metafields {
+            key
+            value
+          }
         }
       }
       availableFulfillmentOptions {
@@ -80,10 +84,15 @@ export const cartCommon = `
         phone
         postal
         region
+        metafields {
+          key
+          value
+        }
       }
     }
     summary {
       fulfillmentTotal {
+        amount
         displayAmount
       }
       itemTotal {
@@ -91,6 +100,10 @@ export const cartCommon = `
         displayAmount
       }
       surchargeTotal {
+        amount
+        displayAmount
+      }
+      discountTotal {
         amount
         displayAmount
       }

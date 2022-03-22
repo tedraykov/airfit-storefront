@@ -1,9 +1,4 @@
-import {
-  ForwardRefExoticComponent,
-  PureComponent,
-  useRef,
-  useState,
-} from 'react'
+import { ForwardRefExoticComponent, useRef, useState } from 'react'
 
 export interface Submittable {
   submit: () => any
@@ -64,9 +59,13 @@ const useStepper = (steps: Step[]) => {
   const handleStepSubmit = async ({ data, error }: StepSubmitData) => {
     if (error) return setIsActiveStepLoading(false)
     const { onSubmit } = steps[activeStep]
-    await onSubmit(data)
-    setIsActiveStepLoading(false)
-    navigateToStep(activeStep + 1)
+    try {
+      await onSubmit(data)
+      navigateToStep(activeStep + 1)
+    } catch (e) {
+    } finally {
+      setIsActiveStepLoading(false)
+    }
   }
 
   const renderStepComponent = (stepIndex: number, extraProps?: any) => {

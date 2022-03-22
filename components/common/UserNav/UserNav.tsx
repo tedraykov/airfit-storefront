@@ -1,28 +1,26 @@
 import { FC } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
-import useCart from '@framework/cart/use-cart'
 import useCustomer from '@framework/customer/use-customer'
 import { Avatar } from '@components/common'
 import { Heart, Bag } from '@components/icons'
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import DropdownMenu from './DropdownMenu'
 import s from './UserNav.module.scss'
-import { LineItem } from '@framework/types/cart'
 import { Button } from '@components/ui'
+import useCart from '@hooks/cart/useCart'
+import CircularProgress from '@mui/material/CircularProgress'
 
 interface Props {
   className?: string
 }
 
-const countItem = (count: number, item: LineItem) => count + item.quantity
-
 const UserNav: FC<Props> = ({ className }) => {
-  const { data } = useCart()
+  const { cart, loading } = useCart()
   const { data: customer } = useCustomer()
   const { toggleSidebar, closeSidebarIfPresent, openModal, setSidebarView } =
     useUI()
-  const itemsCount = data?.lineItems?.reduce(countItem, 0) ?? 0
+  const itemsCount = cart?.totalItemQuantity ?? 0
 
   const toggleCart = () => {
     setSidebarView('CART_VIEW')
@@ -41,7 +39,18 @@ const UserNav: FC<Props> = ({ className }) => {
             onClick={toggleCart}
           >
             <Bag />
-            {itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>}
+            {loading ? (
+              <span className={s.bagCount}>
+                <CircularProgress
+                  disableShrink
+                  color="inherit"
+                  size={10}
+                  thickness={6}
+                />
+              </span>
+            ) : (
+              itemsCount > 0 && <span className={s.bagCount}>{itemsCount}</span>
+            )}
           </Button>
           {process.env.COMMERCE_WISHLIST_ENABLED && (
             <li className={s.item}>

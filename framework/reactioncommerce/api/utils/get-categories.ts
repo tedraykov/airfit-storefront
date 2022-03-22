@@ -19,17 +19,17 @@ const getCategories = async (
     },
   })
 
-  const {
-    data: {
-      shop: {
-        defaultNavigationTree: { items },
-      },
-    },
-  } = await config.fetch(getCategoriesQuery, {
+  const { data } = await config.fetch(getCategoriesQuery, {
     variables: {
       id: config.shopId,
     },
   })
+
+  const {
+    shop: {
+      defaultNavigationTree: { items },
+    },
+  } = data
 
   return items.map((item: NavigationTreeItem) => normalizeCategory(item, tags))
 }

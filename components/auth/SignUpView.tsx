@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useCallback } from 'react'
 import { validate } from 'email-validator'
 import { Info } from '@components/icons'
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import { Logo, Button, Input } from '@components/ui'
 import useSignup from '@framework/auth/use-signup'
 

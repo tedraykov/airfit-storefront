@@ -11,6 +11,7 @@ type ControlledTextFieldProps = TextFieldProps & {
   defaultValue: string
   label: string
   control: Control<any>
+  rules?: Object
 }
 
 const ControlledTextField: FC<ControlledTextFieldProps> = ({
@@ -18,6 +19,7 @@ const ControlledTextField: FC<ControlledTextFieldProps> = ({
   defaultValue,
   label,
   control,
+  rules,
   ...rest
 }) => {
   return (
@@ -25,6 +27,7 @@ const ControlledTextField: FC<ControlledTextFieldProps> = ({
       name={name}
       control={control}
       defaultValue={defaultValue}
+      rules={rules}
       render={({ field, fieldState: { error, invalid } }) => {
         return (
           <TextField

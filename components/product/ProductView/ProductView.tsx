@@ -3,10 +3,9 @@ import { NextSeo } from 'next-seo'
 import React, { FC, useEffect, useState } from 'react'
 import s from './ProductView.module.scss'
 import { Swatch, ProductSlider } from '@components/product'
-import { Button, Container, Text, useUI } from '@components/ui'
+import { Button, Container, Text } from '@components/ui'
 import type { Product, ProductOption } from '@framework/types/product'
 import usePrice from '@framework/product/use-price'
-import { useAddItem } from '@framework/cart'
 import {
   getVariant,
   selectDefaultOptionFromProduct,
@@ -16,6 +15,8 @@ import DesktopGallery from '@components/product/DesktopGallery'
 import { ProductVariant } from '@framework/types/product'
 import { Media, MediaContextProvider } from '@components/common/MediaQueries'
 import { track } from '@lib/facebookPixel'
+import useUI from '@hooks/useUI'
+import useCart from '@hooks/cart/useCart'
 
 interface Props {
   children?: any
@@ -24,10 +25,11 @@ interface Props {
 }
 
 const ProductView: FC<Props> = ({ product }) => {
-  const addItem = useAddItem()
+  const { addItem } = useCart()
 
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
   const [variant, setVariant] = useState<ProductVariant>(product.variants[0])
+  const [loading, setLoading] = useState(false)
 
   // @ts-ignore
   const { price, basePrice, discount } = usePrice({
@@ -37,8 +39,6 @@ const ProductView: FC<Props> = ({ product }) => {
   })
 
   const { openSidebar } = useUI()
-
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setVariant(getVariant(product, selectedOptions)!)
@@ -50,22 +50,24 @@ const ProductView: FC<Props> = ({ product }) => {
 
   const addToCart = async () => {
     setLoading(true)
-    try {
-      const selectedVariant = variant
-      await addItem({
-        productId: String(product.id),
-        variantId: String(selectedVariant.id),
-        pricing: {
-          amount: selectedVariant.price,
-          currencyCode: product.price.currencyCode ?? 'USD',
-        },
-      })
+
+    await addItem({
+      productConfiguration: {
+        productId: product.id,
+        productVariantId: variant.id as string,
+      },
+      quantity: 1,
+      price: {
+        amount: variant.price,
+        currencyCode: product.price.currencyCode ?? 'USD',
+      },
+      metafields: null,
+    }).then(() => {
       openSidebar()
       track('AddToCart')
-      setLoading(false)
-    } catch (err) {
-      setLoading(false)
-    }
+    })
+
+    setLoading(false)
   }
 
   return (

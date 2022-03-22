@@ -31,6 +31,7 @@ import { Product, ProductVariant } from '@framework/types/product'
 import { ProductOptionValues } from '@commerce/types/product'
 import { Category } from '@commerce/types/site'
 import { FeaturedProduct, Hero, Page } from '@framework/types/page'
+import { Discount } from '@commerce/types/common'
 
 const normalizeProductImages = (
   images: ImageInfo[],
@@ -247,9 +248,14 @@ export function normalizeCart(cart: ReactionCart): Cart | null {
         normalizeLineItem(<CartItemEdge>cartItem)
       ) ?? [],
     lineItemsSubtotalPrice: +(cart.checkout?.summary?.itemTotal?.amount ?? 0),
+    fulfillmentTotalPrice: +(
+      cart.checkout?.summary?.fulfillmentTotal?.amount ?? 0
+    ),
     subtotalPrice: +(cart.checkout?.summary?.itemTotal?.amount ?? 0),
     totalPrice: cart.checkout?.summary?.total?.amount ?? 0,
-    discounts: [],
+    discounts: cart.checkout?.summary?.discountTotal
+      ? [{ value: cart.checkout!.summary!.discountTotal!.amount }]
+      : [],
     shopId: cart.shop._id,
     fulfillmentGroups:
       cart.checkout?.fulfillmentGroups.map((fg) =>
@@ -314,6 +320,7 @@ function normalizeAddress(address: Address): ShippingAddress {
     phone: address.phone,
     postal: address.postal,
     region: address.region,
+    metafields: address.metafields,
   }
 }
 

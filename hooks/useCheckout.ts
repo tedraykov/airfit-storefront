@@ -1,135 +1,168 @@
-import { Cart, ShippingAddress } from '@framework/types/cart'
 import {
-  FulfillmentGroupOrderInput,
+  Address,
+  AddressInput,
+  CartItem,
+  MutationPlaceOrderArgs,
   Order,
+  OrderFulfillmentGroupInput,
+  OrderFulfillmentGroupItemInput,
   OrderInput,
-} from '@framework/types/order'
-import { PaymentInput } from '@framework/schema'
-import { useEffect, useState } from 'react'
-import { ShippingAddressFieldValues } from '@components/checkout/ShippingAddressFormClient/ShippingAddressFormClient'
+  PaymentInput,
+  PlaceOrderPayload,
+} from '@framework/schema'
+import { useCallback, useEffect, useState } from 'react'
 import paymentMethods from '@utils/paymentMethods'
+import useCart from '@hooks/cart/useCart'
+import useShop from '@hooks/useShop'
+import { useMutation } from '@apollo/client'
+import placeOrderMutation from '@graphql/mutations/place-order-mutation'
 
-interface CheckoutHookProps {
-  cart: Cart | null | undefined
-}
+export type SetShippingAddressProps = { email: string } & AddressInput
 
-export const useCheckout = ({ cart }: CheckoutHookProps) => {
-  const [availablePaymentMethods, setAvailablePaymentMethods] =
-    useState<string[] | undefined>(undefined)
-  const [paymentMethod, setPaymentMethod] =
-    useState<string | undefined>(undefined)
-  const [order, setOrder] = useState<Order | undefined>(undefined)
+export const useCheckout = () => {
+  const {
+    cart,
+    setEmailOnAnonymousCart,
+    setShippingAddress,
+    setFulfillmentMethod,
+  } = useCart()
+
+  const { getPaymentMethods } = useShop()
+
+  const [_placeOrder] = useMutation<
+    { placeOrder: PlaceOrderPayload },
+    MutationPlaceOrderArgs
+  >(placeOrderMutation)
+
+  const [availablePaymentMethods, setAvailablePaymentMethods] = useState<
+    string[] | undefined
+  >(undefined)
+  const [paymentMethod, setPaymentMethod] = useState<string | undefined>(
+    undefined
+  )
+  const [order, setOrder] = useState<Order | undefined>()
 
   useEffect(() => {
-    ;(async () => {
-      if (cart) {
-        const availablePayments =
-          (await cart?.mutationQueries?.getPaymentMethods()) ?? []
+    if (cart && !availablePaymentMethods) {
+      getPaymentMethods().then((availablePayments) => {
         setAvailablePaymentMethods(availablePayments)
-      }
-    })()
-  }, [cart])
-
-  const getShippingAddress = (): ShippingAddress | null => {
-    if (cart?.fulfillmentGroups.length === 0) return null
-    return cart?.fulfillmentGroups[0].data?.shippingAddress || null
-  }
-
-  const getEmail = (): string | null => {
-    return cart?.email ?? null
-  }
+      })
+    }
+  }, [cart, getPaymentMethods])
 
   const getPaymentsMethods = () => {
-    // return paymentMethods.filter(paymentMethod =>
-    //   availablePaymentMethods!.includes(paymentMethod.name)
-    // )
     return paymentMethods
   }
 
-  const handleSetShippingAddress = async ({
-    phone,
-    firstName,
-    sureName,
-    address,
-    city,
-    region,
-    postal,
+  const setShippingAddressOnCart = async ({
     email,
-  }: ShippingAddressFieldValues) => {
-    const { mutationQueries } = cart!
-    await mutationQueries!.setEmailOnAnonymousCart(email)
-    const updatedCart = await mutationQueries!.setShippingAddress({
-      phone,
-      firstName,
-      sureName,
-      fullName: `${firstName} ${sureName}`,
-      address,
-      city,
-      region,
-      country: 'BG',
-      postal,
-    })
+    ...address
+  }: SetShippingAddressProps) => {
+    await setEmailOnAnonymousCart(email)
+    const { data } = await setShippingAddress(address)
 
-    await mutationQueries!.setShipmentMethod(
-      updatedCart.fulfillmentGroups[0].id,
-      updatedCart.fulfillmentGroups[0].availableFulfillmentOptions[0]
-        .fulfillmentMethod.id
-    )
-  }
-
-  const handleSelectPaymentMethod = (paymentMethod: string) => {
-    setPaymentMethod(paymentMethod)
-  }
-
-  const buildOrder = (): OrderInput => {
-    const fulfillmentGroups = cart!.fulfillmentGroups!.map((group) => {
-      const { data, selectedFulfillmentOption } = group!
-
-      return {
-        data,
-        items: cart?.lineItems,
-        selectedFulfillmentMethodId:
-          selectedFulfillmentOption!.fulfillmentMethod.id,
-        shopId: group!.shopId,
-        totalPrice: cart?.totalPrice,
-        type: group!.type,
-      } as FulfillmentGroupOrderInput
-    })
-
-    return {
-      cartId: cart!.id,
-      currencyCode: cart!.currency.code,
-      email: cart!.email!,
-      fulfillmentGroups: fulfillmentGroups,
-      shopId: cart!.shopId,
+    if (data?.updateFulfillmentOptionsForGroup?.cart) {
+      const { cart } = data.updateFulfillmentOptionsForGroup
+      await setFulfillmentMethod(
+        cart?.checkout?.fulfillmentGroups[0]?._id || '',
+        cart?.checkout?.fulfillmentGroups[0]?.availableFulfillmentOptions[0]
+          ?.fulfillmentMethod?._id || ''
+      )
     }
   }
 
-  const handlePlaceOrder = async () => {
-    const orderInput = buildOrder()
-    const { mutationQueries } = cart!
+  const selectPaymentMethod = (paymentMethod: string) => {
+    setPaymentMethod(paymentMethod)
+  }
 
-    const order = await mutationQueries!.placeOrder({
-      order: orderInput,
-      payments: [
-        {
-          amount: cart?.totalPrice ?? 0,
-          method: paymentMethod!,
-        } as PaymentInput,
-      ],
+  const buildAddress = (address: Address) => {
+    const { __typename, ...addressInput } = address
+    const { metafields, ...addressInputAttributes } = addressInput
+    return {
+      metafields: metafields?.map((metafield) => {
+        const { __typename, ...metafieldInput } = metafield!
+        return metafieldInput
+      }),
+      ...addressInputAttributes,
+    } as unknown as AddressInput
+  }
+
+  const buildOrderItems = (items: CartItem[]) => {
+    return items.map((item) => {
+      return {
+        addedAt: item.addedAt,
+        price: item.price.amount,
+        productConfiguration: {
+          productId: item.productConfiguration.productId,
+          productVariantId: item.productConfiguration.productVariantId,
+        },
+        quantity: item.quantity,
+      } as OrderFulfillmentGroupItemInput
+    })
+  }
+  const buildOrder = (): OrderInput => {
+    const { summary } = cart!.checkout!
+    const fulfillmentGroups = cart!.checkout!.fulfillmentGroups!.map((fg) => {
+      const { data, selectedFulfillmentOption } = fg!
+      return {
+        data: {
+          shippingAddress: buildAddress(data!.shippingAddress!),
+        },
+        items: buildOrderItems(cart!.items!.nodes as CartItem[]),
+        selectedFulfillmentMethodId:
+          selectedFulfillmentOption!.fulfillmentMethod!._id,
+        shopId: fg!.shop._id,
+        totalPrice: summary!.total.amount + summary!.discountTotal.amount,
+        type: fg!.type,
+      } as OrderFulfillmentGroupInput
     })
 
-    setOrder(order)
+    return {
+      cartId: cart!._id,
+      currencyCode: cart!.checkout!.summary!.total!.currency!.code,
+      email: cart!.email!,
+      fulfillmentGroups: fulfillmentGroups,
+      shopId: cart!.shop!._id,
+    }
+  }
+
+  const buildPayments = useCallback((): PaymentInput[] => {
+    const { summary } = cart!.checkout!
+    return [
+      {
+        amount: summary?.total?.amount ?? 0,
+        method: paymentMethod!,
+        billingAddress: null,
+        data: null,
+      },
+    ]
+  }, [cart, paymentMethod])
+
+  const placeOrder = async () => {
+    const orderInput = buildOrder()
+    const paymentsInput = buildPayments()
+
+    const { data } = await _placeOrder({
+      variables: {
+        input: {
+          order: orderInput,
+          payments: paymentsInput,
+          clientMutationId: null,
+        },
+      },
+    })
+
+    if (data?.placeOrder?.orders) {
+      setOrder(data?.placeOrder?.orders[0]!)
+    }
   }
 
   return {
     availablePaymentMethods,
-    getShippingAddress,
-    getEmail,
     getPaymentsMethods,
-    handleSetShippingAddress,
-    handleSelectPaymentMethod,
-    handlePlaceOrder,
+    setShippingAddressOnCart,
+    selectPaymentMethod,
+    placeOrder,
     order,
     paymentMethod,
   }

@@ -1,11 +1,13 @@
 import * as Core from '@commerce/types/cart'
 import { Money } from '@framework/types/common'
 import { Order, PlaceOrderInput } from '@framework/types/order'
+import { CartSummary, MetafieldInput } from '@framework/schema'
 
 export type Cart = Core.Cart & {
   id: string
   lineItems: LineItem[]
   fulfillmentGroups: FulfillmentGroup[]
+  fulfillmentTotalPrice: number
   shopId: string
   mutationQueries?: {
     setShippingAddress: (address: ShippingAddress) => Promise<Cart>
@@ -16,6 +18,7 @@ export type Cart = Core.Cart & {
     ) => Promise<Cart>
     placeOrder: (input: PlaceOrderInput) => Promise<Order>
     getPaymentMethods: () => Promise<string[]>
+    applyDiscountCodeToCart: (discountCode: string) => Promise<Cart>
   }
 }
 
@@ -29,6 +32,7 @@ export type ShippingAddress = {
   phone: string
   postal: string
   region: string
+  metafields?: MetafieldInput[]
 }
 
 export type FulfillmentGroup = {

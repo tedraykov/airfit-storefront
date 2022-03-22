@@ -1,40 +1,23 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { Button, Text } from '@components/ui'
-import { Cart, LineItem } from '@framework/types/cart'
 import { CartItem } from '@components/cart'
-import usePrice from '@commerce/product/use-price'
 import Close from '@mui/icons-material/Close'
 import EmptyCart from '@components/cart/EmptyCart'
 import CartSummary from '@components/cart/CartSummary'
 import Fade from '@mui/material/Fade'
+import useCart from '@hooks/cart/useCart'
 
 interface CartViewProps {
-  isLoading: boolean
-  isEmpty: boolean
   checkoutButton?: boolean
-  data: Cart | null | undefined
   onClose?: () => void | undefined
 }
 
 export const CartView: FC<CartViewProps> = ({
-  isLoading,
-  isEmpty,
   checkoutButton = true,
-  data,
   onClose = undefined,
 }) => {
-  const { price: subTotal } = usePrice(
-    data && {
-      amount: Number(data.subtotalPrice),
-      currencyCode: data.currency.code,
-    }
-  )
-  const { price: total } = usePrice(
-    data && {
-      amount: Number(data.totalPrice),
-      currencyCode: data.currency.code,
-    }
-  )
+  const { cart, loading } = useCart()
+  const isEmpty = !loading && cart?.totalItemQuantity === 0
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto">
@@ -46,18 +29,14 @@ export const CartView: FC<CartViewProps> = ({
       </div>
       <div className="grid lg:grid-cols-12">
         <div className="lg:col-span-8">
-          {isEmpty && !isLoading ? (
+          {isEmpty ? (
             <EmptyCart />
           ) : (
             <div className="px-4 sm:px-6 flex-1">
-              <Fade in={!isLoading}>
+              <Fade in={!loading}>
                 <ul>
-                  {data?.lineItems.map((item: LineItem) => (
-                    <CartItem
-                      key={item.id}
-                      item={item}
-                      currencyCode={data?.currency.code!}
-                    />
+                  {cart?.items?.nodes?.map((item) => (
+                    <CartItem key={item!._id} item={item!} />
                   ))}
                 </ul>
               </Fade>
@@ -66,7 +45,7 @@ export const CartView: FC<CartViewProps> = ({
         </div>
         <div className="lg:col-span-4 lg:border-l border-accents-2">
           <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
-            <CartSummary cart={data} />
+            <CartSummary cart={cart} />
             {checkoutButton && (
               <div className="flex flex-row justify-end">
                 <div className="w-full md:w-md">

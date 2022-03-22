@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import s from './DropdownMenu.module.css'
 import { Avatar } from '@components/common'
 import { Moon, Sun } from '@components/icons'
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import ClickOutside from '@lib/click-outside'
 import useLogout from '@framework/auth/use-logout'
 

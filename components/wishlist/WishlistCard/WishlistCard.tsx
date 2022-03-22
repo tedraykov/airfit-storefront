@@ -6,7 +6,7 @@ import s from './WishlistCard.module.css'
 import { Trash } from '@components/icons'
 import { Button, Text } from '@components/ui'
 
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import usePrice from '@framework/product/use-price'
 import useAddItem from '@framework/cart/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'

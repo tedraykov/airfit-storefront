@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import { getRandomPairOfColors } from '@lib/colors'
 
 export const useUserAvatar = (name = 'userAvatar') => {

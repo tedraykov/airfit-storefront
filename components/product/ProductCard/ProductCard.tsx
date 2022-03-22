@@ -70,7 +70,6 @@ const SimpleProductCard: FC<{
             src={product.images[0]?.medium || placeholderImg}
             height={480}
             width={480}
-            unoptimized={true}
             layout="responsive"
             placeholder={'blur'}
             blurDataURL={placeholderImg}

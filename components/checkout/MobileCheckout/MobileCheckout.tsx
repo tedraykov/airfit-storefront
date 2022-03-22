@@ -8,9 +8,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { CartView } from '@components/cart/CartView/CartView'
 import { Button, Container } from '@components/ui'
 import CartSummary from '@components/cart/CartSummary'
-import { Cart } from '@framework/types/cart'
 import useStepper, { Step } from '@hooks/useStepper'
 import s from './MobileCheckout.module.scss'
+import DiscountCodeForm from '@components/checkout/DiscountCodeForm/DiscountCodeForm'
+import useCart from '@hooks/cart/useCart'
 
 const useCartDrawer = () => {
   const [cartDrawerOpened, setCartDrawerOpened] = useState(false)
@@ -31,18 +32,11 @@ const useCartDrawer = () => {
 }
 
 type MobileCheckoutProps = {
-  cart: Cart
-  isLoading: boolean
-  isEmpty: boolean
   steps: Step[]
 }
 
-const MobileCheckout: FC<MobileCheckoutProps> = ({
-  cart,
-  isLoading,
-  isEmpty,
-  steps,
-}) => {
+const MobileCheckout: FC<MobileCheckoutProps> = ({ steps }) => {
+  const { cart } = useCart()
   const {
     activeStep,
     handleBack,
@@ -73,6 +67,7 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
       </SwipeableViews>
       <section className="my-6">
         <CartSummary cart={cart} />
+        <DiscountCodeForm />
         <Button
           className="w-full justify-between mb-12"
           size="slim"
@@ -121,13 +116,7 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({
         }}
       >
         <div className={s.cartDrawerContent}>
-          <CartView
-            data={cart}
-            isEmpty={isEmpty}
-            isLoading={isLoading}
-            checkoutButton={false}
-            onClose={handleCloseCartDrawer}
-          />
+          <CartView checkoutButton={false} onClose={handleCloseCartDrawer} />
         </div>
       </Drawer>
     </Container>

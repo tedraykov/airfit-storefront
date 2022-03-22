@@ -48,6 +48,7 @@ export const setShippingAddress =
           postal: address.postal,
           region: address.region,
           isCommercial: false,
+          ...(address.metafields && { metafields: address.metafields }),
         },
       },
     })

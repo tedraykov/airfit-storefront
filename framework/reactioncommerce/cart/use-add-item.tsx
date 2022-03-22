@@ -13,8 +13,6 @@ export const handler: MutationHook<AddItemHook> = {
     method: 'POST',
   },
   async fetcher({ input: item, options, fetch }) {
-    console.log('add cart item', item)
-
     if (
       item.quantity &&
       (!Number.isInteger(item.quantity) || item.quantity! < 1)

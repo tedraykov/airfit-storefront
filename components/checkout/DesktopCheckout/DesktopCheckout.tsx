@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import useStepper, { Step as CheckoutStep } from '@hooks/useStepper'
-import { Cart, LineItem } from '@framework/types/cart'
 import Fade from '@mui/material/Fade'
 import CartItem from '@components/cart/CartItem'
 import CartSummary from '@components/cart/CartSummary/CartSummary'
@@ -12,18 +11,15 @@ import Stepper from '@mui/material/Stepper'
 import StepLabel from '@mui/material/StepLabel'
 import StepContent from '@mui/material/StepContent'
 import Step from '@mui/material/Step'
+import DiscountCodeForm from '@components/checkout/DiscountCodeForm/DiscountCodeForm'
+import useCart from '@hooks/cart/useCart'
 
 interface DesktopCheckoutProps {
-  cart: Cart
   steps: CheckoutStep[]
-  isLoading: boolean
 }
 
-const DesktopCheckout: FC<DesktopCheckoutProps> = ({
-  cart,
-  steps,
-  isLoading,
-}) => {
+const DesktopCheckout: FC<DesktopCheckoutProps> = ({ steps }) => {
+  const { cart, loading } = useCart()
   const {
     activeStep,
     isActiveStepLoading,
@@ -77,21 +73,17 @@ const DesktopCheckout: FC<DesktopCheckoutProps> = ({
         >
           <CardContent>
             <div className="flex flex-col">
-              <div className="px-4 sm:px-6 flex-1">
-                <Fade in={!isLoading}>
+              <div className="px-4 flex-1">
+                <Fade in={!loading}>
                   <ul>
-                    {cart?.lineItems.map((item: LineItem) => (
-                      <CartItem
-                        key={item.id}
-                        variant="slim"
-                        item={item}
-                        currencyCode={cart?.currency.code!}
-                      />
+                    {cart?.items?.nodes.map((item, key) => (
+                      <CartItem key={key} variant="slim" item={item!} />
                     ))}
                   </ul>
                 </Fade>
               </div>
-              <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
+              <div className="flex-shrink-0 px-4 pt-24 lg:pt-10">
+                <DiscountCodeForm />
                 <CartSummary cart={cart} />
               </div>
             </div>

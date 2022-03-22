@@ -31,6 +31,7 @@ export const placeOrder =
               postal: fg.data.shippingAddress.postal,
               region: fg.data.shippingAddress.region,
               isCommercial: false,
+              metafields: fg.data.shippingAddress.metafields,
             },
           },
           items: fg.items.map(

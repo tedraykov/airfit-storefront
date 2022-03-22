@@ -26,6 +26,11 @@
   height: 100%;
 }
 
+
+.slim.root {
+  @apply space-x-4
+}
+
 .slim {
   .title {
     @apply text-base;

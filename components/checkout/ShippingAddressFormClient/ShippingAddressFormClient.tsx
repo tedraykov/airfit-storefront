@@ -10,6 +10,8 @@ import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
 import { ShippingAddress } from '@framework/types/cart'
 import { Skeleton } from '@mui/material'
+import { SetShippingAddressProps } from '@hooks/useCheckout'
+import { AddressInput } from '@framework/schema'
 
 const mapCenter: google.maps.LatLngLiteral = {
   lat: 42.698334,
@@ -77,15 +79,15 @@ const getShippingAddress = (
   }
 }
 
-interface ShippingAddressFormClient {
+interface ShippingAddressFormClientProps {
   shippingAddress?: ShippingAddress
   email?: string
-  onSubmit: StepSubmitCallback<ShippingAddressFieldValues>
+  onSubmit: StepSubmitCallback<SetShippingAddressProps>
 }
 
 const ShippingAddressFormClient = forwardRef<
   Submittable,
-  ShippingAddressFormClient
+  ShippingAddressFormClientProps
 >(({ shippingAddress, email, onSubmit }, ref) => {
   const { control, setValue, trigger, handleSubmit } =
     useForm<ShippingAddressFieldValues>({
@@ -97,7 +99,24 @@ const ShippingAddressFormClient = forwardRef<
     submit() {
       handleSubmit(
         (values) => {
-          onSubmit({ data: values, error: null })
+          onSubmit({
+            data: {
+              ...({
+                phone: values.phone,
+                firstName: values.firstName,
+                lastName: values.sureName,
+                fullName: [values.firstName, values.sureName].join(' '),
+                address1: values.address,
+                city: values.city,
+                region: values.region,
+                postal: values.postal,
+                country: 'BG',
+                isCommercial: false,
+              } as AddressInput),
+              email: values.email,
+            },
+            error: null,
+          })
         },
         () => {
           onSubmit({ data: null, error: true })
@@ -135,7 +154,7 @@ const ShippingAddressFormClient = forwardRef<
     setValue('region', location.region)
     setValue('postal', location.postalCode)
     trigger(['address', 'postal', 'city', 'region'])
-  }, [location])
+  }, [location, setValue, trigger])
 
   return (
     <div className="flex flex-1 flex-col space-y-3">

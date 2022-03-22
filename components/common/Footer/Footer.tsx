@@ -7,6 +7,8 @@ import s from './Footer.module.scss'
 import { Page } from '@framework/types/page'
 import Instagram from '@mui/icons-material/Instagram'
 import Facebook from '@mui/icons-material/Facebook'
+import Phone from '@components/icons/Phone'
+import Mail from '@components/icons/Mail'
 
 interface Props {
   className?: string
@@ -31,7 +33,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
   return (
     <footer className={rootClassName}>
       <div className="mx-auto px-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accents-2 py-12 text-primary transition-colors duration-150">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-b border-accents-3 py-12 text-primary transition-colors duration-150">
           <div className="col-span-1 lg:col-span-2">
             <Link href="/">
               <a className={s.logo} aria-label="Logo">
@@ -40,16 +42,29 @@ const Footer: FC<Props> = ({ className, pages }) => {
             </Link>
           </div>
           <div className="col-span-1 lg:col-span-8">
-            <div className="grid md:grid-rows-4 md:grid-cols-3 md:grid-flow-col">
-              {[...links, ...sitePages].map((page) => (
-                <span key={page.url} className="py-3 md:py-0 md:pb-4">
-                  <Link href={page.url!}>
-                    <a className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150">
-                      {page.name}
-                    </a>
-                  </Link>
-                </span>
-              ))}
+            <div className="grid md:grid-cols-3 md:grid-flow-col">
+              <div className="flex flex-col gap-4">
+                {[...links, ...sitePages].map((page) => (
+                  <span key={page.url}>
+                    <Link href={page.url!}>
+                      <a className="text-accent-9 hover:text-accent-6 transition ease-in-out duration-150">
+                        {page.name}
+                      </a>
+                    </Link>
+                  </span>
+                ))}
+              </div>
+              <div className="h-[1px] w-full bg-accents-3 my-6 md:h-0" />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-3">
+                  <Phone />
+                  <span className="pt-0.5">089 053 1968</span>
+                </div>
+                <div className="flex gap-3">
+                  <Mail />
+                  <span className="pt-0.5">info@airfit.bg</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

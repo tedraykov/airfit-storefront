@@ -2,7 +2,6 @@ import React, { FC, useEffect, useMemo } from 'react'
 import { LoadingDots, Logo } from '@components/ui'
 import s from './CheckoutView.module.scss'
 import Link from '@components/ui/Link'
-import { Cart } from '@framework/types/cart'
 import MobileCheckout from '@components/checkout/MobileCheckout'
 import { Step } from '@hooks/useStepper'
 import ShippingAddressStep from '@components/checkout/ShippingAddressStep'
@@ -13,29 +12,21 @@ import { Media, MediaContextProvider } from '@components/common/MediaQueries'
 import FinalizeStep from '@components/checkout/FinalizeStep'
 import { track } from '@lib/facebookPixel'
 import { useRouter } from 'next/router'
+import useCart from '@hooks/cart/useCart'
 
-interface CheckoutViewProps {
-  cart: Cart | null | undefined
-  isLoading: boolean
-  isEmpty: boolean
-}
+export const CheckoutView: FC = () => {
+  const { cart, loading, getShippingAddress, getEmail } = useCart()
 
-export const CheckoutView: FC<CheckoutViewProps> = ({
-  cart,
-  isLoading,
-  isEmpty,
-}) => {
   const {
     availablePaymentMethods,
-    getShippingAddress,
-    getEmail,
     getPaymentsMethods,
-    handleSetShippingAddress,
-    handleSelectPaymentMethod,
-    handlePlaceOrder,
     order,
     paymentMethod,
-  } = useCheckout({ cart })
+    selectPaymentMethod,
+    setShippingAddressOnCart,
+    placeOrder,
+  } = useCheckout()
+
   const router = useRouter()
 
   useEffect(() => {
@@ -43,9 +34,10 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
   }, [])
 
   useEffect(() => {
-    if (!order) return
-    router.push(`/checkout/thank-you?order=${order.referenceId}`)
-  }, [order])
+    if (order) {
+      router.push(`/checkout/thank-you?order=${order.referenceId}`)
+    }
+  }, [order, router])
 
   const getCheckoutSteps = useMemo((): Step[] => {
     if (!cart || !availablePaymentMethods) return []
@@ -59,7 +51,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           shippingAddress: getShippingAddress(),
           email: getEmail(),
         },
-        onSubmit: handleSetShippingAddress,
+        onSubmit: setShippingAddressOnCart,
       },
       {
         label: 'Метод за плащане',
@@ -69,7 +61,7 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
         stepComponentProps: {
           paymentMethods: getPaymentsMethods(),
         },
-        onSubmit: handleSelectPaymentMethod,
+        onSubmit: selectPaymentMethod,
       },
       {
         label: 'Финализиране',
@@ -81,34 +73,35 @@ export const CheckoutView: FC<CheckoutViewProps> = ({
           shippingAddress: getShippingAddress(),
           email: getEmail(),
         },
-        onSubmit: handlePlaceOrder,
+        onSubmit: placeOrder,
       },
     ]
-  }, [cart, availablePaymentMethods, paymentMethod])
+  }, [
+    cart,
+    availablePaymentMethods,
+    getShippingAddress,
+    getEmail,
+    setShippingAddressOnCart,
+    getPaymentsMethods,
+    selectPaymentMethod,
+    paymentMethod,
+    placeOrder,
+  ])
 
   return (
     <div className={s.root}>
       <CheckoutHeader />
-      {isLoading || !availablePaymentMethods ? (
+      {loading || !availablePaymentMethods ? (
         <div className="flex flex-1 justify-center items-center">
           <LoadingDots />
         </div>
       ) : (
         <MediaContextProvider>
           <Media lessThan="lg" className={s.sliderContainer}>
-            <MobileCheckout
-              cart={cart!}
-              isLoading={isLoading}
-              isEmpty={isEmpty}
-              steps={getCheckoutSteps}
-            />
+            <MobileCheckout steps={getCheckoutSteps} />
           </Media>
           <Media greaterThanOrEqual="lg" className={s.galleryContainer}>
-            <DesktopCheckout
-              cart={cart!}
-              steps={getCheckoutSteps}
-              isLoading={isLoading}
-            />
+            <DesktopCheckout steps={getCheckoutSteps} />
           </Media>
         </MediaContextProvider>
       )}

@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import Script from 'next/script'
+import { isProd } from '@config/environment'
 
 export const FACEBOOK_PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
 
@@ -12,13 +13,17 @@ if (FACEBOOK_PIXEL_ID === undefined) {
 type StandardEvents = 'Lead' | 'InitiateCheckout' | 'AddToCart' | 'Purchase'
 
 export const pageView = () => {
-  // @ts-ignore
-  window.fbq('track', 'PageView')
+  if (isProd()) {
+    // @ts-ignore
+    window.fbq('track', 'PageView')
+  }
 }
 
 export const track = (name: StandardEvents, options = {}) => {
-  // @ts-ignore
-  window.fbq('track', name, options)
+  if (isProd()) {
+    // @ts-ignore
+    window.fbq('track', name, options)
+  }
 }
 
 export const FacebookPixel: FC = () => {

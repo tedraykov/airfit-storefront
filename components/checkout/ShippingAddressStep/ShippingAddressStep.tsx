@@ -12,10 +12,7 @@ import Radio from '@mui/material/Radio'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ShippingAddressFormClient from '@components/checkout/ShippingAddressFormClient'
 import { ShippingAddress } from '@framework/types/cart'
-// @ts-ignore
-import SwipeableViews, { SwipeableViewsContext } from 'react-swipeable-views'
-import cn from 'classnames'
-import s from './ShippingAddressStep.module.scss'
+import CourierOfficeForm from '../CourierOfficeForm'
 
 enum DeliveryType {
   COURIER_OFFICE,
@@ -36,7 +33,7 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
   ({ shippingAddress, email, onSubmit }, ref) => {
     const formRefs = useRef<{ [key: string]: Submittable }>({})
     const [deliveryType, setDeliveryType] = useState<DeliveryType>(
-      DeliveryType.CLIENT_ADDRESS
+      DeliveryType.COURIER_OFFICE
     )
 
     useImperativeHandle(ref, () => ({
@@ -55,6 +52,35 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
         <Accordion
           className="shadow-sm"
           elevation={0}
+          expanded={deliveryType === DeliveryType.COURIER_OFFICE}
+          onChange={handleChangeDeliveryType(DeliveryType.COURIER_OFFICE)}
+        >
+          <AccordionSummary>
+            <Radio
+              color={'primary'}
+              disabled
+              checked={deliveryType === DeliveryType.COURIER_OFFICE}
+            />
+            <span className="self-center">
+              {deliveryTypeTitles[DeliveryType.COURIER_OFFICE]}
+            </span>
+          </AccordionSummary>
+          <AccordionDetails>
+            <CourierOfficeForm
+              onSubmit={onSubmit}
+              shippingAddress={shippingAddress}
+              email={email}
+              ref={(el: Submittable) =>
+                (formRefs.current[DeliveryType.COURIER_OFFICE] = el)
+              }
+            />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion
+          className="shadow-sm"
+          elevation={0}
+          disabled
           expanded={deliveryType === DeliveryType.CLIENT_ADDRESS}
           onChange={handleChangeDeliveryType(DeliveryType.CLIENT_ADDRESS)}
         >
@@ -78,26 +104,6 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
               email={email}
             />
           </AccordionDetails>
-        </Accordion>
-
-        <Accordion
-          className="shadow-sm"
-          elevation={0}
-          disabled
-          expanded={deliveryType === DeliveryType.COURIER_OFFICE}
-          onChange={handleChangeDeliveryType(DeliveryType.COURIER_OFFICE)}
-        >
-          <AccordionSummary>
-            <Radio
-              color={'primary'}
-              disabled
-              checked={deliveryType === DeliveryType.COURIER_OFFICE}
-            />
-            <span className="self-center">
-              {deliveryTypeTitles[DeliveryType.COURIER_OFFICE]}
-            </span>
-          </AccordionSummary>
-          <AccordionDetails>test</AccordionDetails>
         </Accordion>
       </div>
     )

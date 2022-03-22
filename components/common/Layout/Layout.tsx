@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import s from './Layout.module.css'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-import { useUI } from '@components/ui/context'
+import useUI from '@hooks/useUI'
 import { Navbar, Footer } from '@components/common'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 import { Button, Modal, LoadingDots } from '@components/ui'
@@ -15,31 +15,35 @@ import { Category } from '@commerce/types/site'
 import { Page } from '@framework/types/page'
 import Drawer from '@mui/material/Drawer'
 
-const Loading = () => (
-  <div className="w-80 h-80 flex items-center text-center justify-center p-3">
-    <LoadingDots />
-  </div>
-)
-
-const dynamicProps = {
-  loading: () => <Loading />,
+const SignUpView = dynamic(() => import('@components/auth/SignUpView'), {
+  loading: () => (
+    <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+      <LoadingDots />
+    </div>
+  ),
   ssr: false,
-}
-
-const SignUpView = dynamic(
-  () => import('@components/auth/SignUpView'),
-  dynamicProps
-)
+})
 
 const ForgotPassword = dynamic(
   () => import('@components/auth/ForgotPassword'),
-  dynamicProps
+  {
+    loading: () => (
+      <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+        <LoadingDots />
+      </div>
+    ),
+    ssr: false,
+  }
 )
 
-const FeatureBar = dynamic(
-  () => import('@components/common/FeatureBar'),
-  dynamicProps
-)
+const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
+  loading: () => (
+    <div className="w-80 h-80 flex items-center text-center justify-center p-3">
+      <LoadingDots />
+    </div>
+  ),
+  ssr: false,
+})
 
 interface Props {
   pageProps: {

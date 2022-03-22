@@ -8,6 +8,7 @@ import { setShipmentMethod } from '@framework/cart/utils/setShipmentMethod'
 import { placeOrder } from '@framework/cart/utils/placeOrder'
 import { setEmailOnAnonymousCart } from '@framework/cart/utils/setEmailOnAnonymousCart'
 import { getPaymentMethods } from '@framework/cart/utils/getPaymentMethods'
+import { applyDiscountCodeToCart } from '@framework/cart/utils/applyDiscountCodeToCart'
 
 export default useCart as UseCart<typeof handler>
 
@@ -36,6 +37,7 @@ export const handler: SWRHook<GetCartHook> = {
           placeOrder: placeOrder(fetcher),
           setEmailOnAnonymousCart: setEmailOnAnonymousCart(fetcher, response),
           getPaymentMethods: getPaymentMethods(fetcher, response),
+          applyDiscountCodeToCart: applyDiscountCodeToCart(fetcher, response),
         }
       }
 
