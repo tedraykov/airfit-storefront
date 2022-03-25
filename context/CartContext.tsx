@@ -23,6 +23,7 @@ type State = {
   hasAnonymousCartCredentials: boolean
   hasAccountCart: boolean
   setAccountCartId: (id: string) => void
+  reset: () => void
 }
 
 export const CartContext = createContext<State>({} as State)
@@ -94,6 +95,11 @@ export const CartProvider: FC = ({ children }) => {
     setAnonymousCartCredentialsFromLocalStorage()
   }, [])
 
+  const reset = useCallback(() => {
+    setAnonymousCartCredentials(null, null)
+    setAccountCartId(null)
+  }, [])
+
   const value = useMemo(
     () => ({
       anonymousCartId,
@@ -104,6 +110,7 @@ export const CartProvider: FC = ({ children }) => {
       hasAnonymousCartCredentials,
       hasAccountCart,
       setAccountCartId,
+      reset,
     }),
     [
       accountCartId,
@@ -113,6 +120,7 @@ export const CartProvider: FC = ({ children }) => {
       hasAccountCart,
       hasAnonymousCartCredentials,
       setAnonymousCartCredentials,
+      reset,
     ]
   )
 

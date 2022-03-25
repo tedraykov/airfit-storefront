@@ -75,18 +75,18 @@ const CartItem: FC<CartItemProps> = ({ item, variant = 'normal', ...rest }) => {
     [s.slim]: variant === 'slim',
     ['opacity-75 pointer-events-none']: removing,
   })
+
   return (
     <li className={rootClassName} {...rest}>
       <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-md bg-violet relative overflow-hidden cursor-pointer">
         <Link href={`/product/${item.productSlug}`} passHref={true}>
-          <div>
+          <div className="h-full">
             <Image
               onClick={() => closeSidebarIfPresent()}
               className={s.productImage}
               layout="fill"
               src={item?.imageURLs?.thumbnail || '/product-img-placeholder.svg'}
               alt={'cart item'}
-              unoptimized
             />
           </div>
         </Link>

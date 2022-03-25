@@ -178,12 +178,18 @@ export default function useCart() {
     }
   }, [anonymousCartData, anonymousCartLoading, anonymousCartError])
 
+  useEffect(() => {
+    if (!anonymousCartId && !anonymousCartToken) {
+      setLoading(false)
+    }
+  }, [])
+
   // Get the cart when anonymousCartId is available
   useEffect(() => {
-    if (anonymousCartId) {
+    if (anonymousCartId && anonymousCartToken) {
       getAnonymousCart().then()
     }
-  }, [anonymousCartId])
+  }, [anonymousCartId, anonymousCartToken])
 
   const isEmpty = useMemo(() => !cart || cart.totalItemQuantity === 0, [cart])
 

@@ -7,23 +7,20 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material'
-import { Client as EcontClient, Office } from 'econt-js'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { Office } from 'econt-js'
+import { FC, useEffect, useState } from 'react'
 import { Controller, Control } from 'react-hook-form'
 import { CourierOfficeFieldValues } from '../CourierOfficeForm/CourierOfficeForm'
 import Error from '@mui/icons-material/Error'
+import { useLazyQuery } from '@apollo/client'
+import econtOfficesQuery from '@graphql/queries/econtOffices'
 
 type Props = {
   control: Control<CourierOfficeFieldValues>
 }
 
 const CourierOfficeSelect: FC<Props> = ({ control }) => {
-  const econtClient = useMemo(() => {
-    return new EcontClient({
-      testMode: true,
-    })
-  }, [])
-
+  const [getEcontOffices] = useLazyQuery(econtOfficesQuery)
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly Office[]>([])
   const loading = open && options.length === 0
@@ -36,19 +33,17 @@ const CourierOfficeSelect: FC<Props> = ({ control }) => {
     }
 
     ;(async () => {
-      const data = await econtClient.NomenclaturesService.getOffices({
-        countryCode: 'BGR',
-      })
+      const { data } = await getEcontOffices()
 
       if (active) {
-        setOptions(data.offices)
+        setOptions(data.econtOffices)
       }
     })()
 
     return () => {
       active = false
     }
-  }, [econtClient.NomenclaturesService, loading])
+  }, [getEcontOffices, loading])
 
   useEffect(() => {
     if (!open) {
@@ -69,6 +64,7 @@ const CourierOfficeSelect: FC<Props> = ({ control }) => {
           onClose={() => {
             setOpen(false)
           }}
+          noOptionsText={'Не са намерени офиси'}
           isOptionEqualToValue={(option, value) => option.code === value.code}
           getOptionLabel={(option) => option.name}
           options={options}

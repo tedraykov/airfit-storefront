@@ -13,10 +13,11 @@ import FinalizeStep from '@components/checkout/FinalizeStep'
 import { track } from '@lib/facebookPixel'
 import { useRouter } from 'next/router'
 import useCart from '@hooks/cart/useCart'
+import useCartStore from '@hooks/cart/useCartStore'
 
 export const CheckoutView: FC = () => {
   const { cart, loading, getShippingAddress, getEmail } = useCart()
-
+  const { reset } = useCartStore()
   const {
     availablePaymentMethods,
     getPaymentsMethods,
@@ -35,9 +36,10 @@ export const CheckoutView: FC = () => {
 
   useEffect(() => {
     if (order) {
+      reset()
       router.push(`/checkout/thank-you?order=${order.referenceId}`)
     }
-  }, [order, router])
+  }, [order, router, reset])
 
   const getCheckoutSteps = useMemo((): Step[] => {
     if (!cart || !availablePaymentMethods) return []

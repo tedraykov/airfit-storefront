@@ -7,10 +7,9 @@ import { useForm } from 'react-hook-form'
 import { ShippingAddress } from '@framework/types/cart'
 import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
-import { Office } from 'econt-js'
 import CourierOfficeSelect from '../CourierOfficeSelect'
 import { SetShippingAddressProps } from '@hooks/useCheckout'
-import { AddressInput, MetafieldInput } from '@framework/schema'
+import { AddressInput } from '@framework/schema'
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('Задължително поле'),
@@ -31,13 +30,27 @@ export interface CourierOfficeFieldValues {
   sureName: string
   phone: string
   email: string
-  courierOffice: Office
+  courierOffice: any
 }
 
 type CourierOfficeFormProps = {
   shippingAddress?: ShippingAddress
   email?: string
   onSubmit: StepSubmitCallback<SetShippingAddressProps>
+}
+
+function buildAddressFromEcontAddress(
+  courierOffice: any
+): Omit<AddressInput, 'phone' | 'firstName' | 'lastName' | 'fullName'> {
+  const { __typename, metafields, ...addressData } = courierOffice.address
+
+  return {
+    metafields: courierOffice.address.metafields.map((metafield: any) => ({
+      key: metafield.key,
+      value: metafield.value,
+    })),
+    ...addressData,
+  }
 }
 
 const CourierOfficeForm = forwardRef<Submittable, CourierOfficeFormProps>(
@@ -58,31 +71,7 @@ const CourierOfficeForm = forwardRef<Submittable, CourierOfficeFormProps>(
                   firstName: values.firstName,
                   lastName: values.sureName,
                   fullName: [values.firstName, values.sureName].join(' '),
-                  address1:
-                    values.courierOffice.address.street ||
-                    values.courierOffice.address.other ||
-                    'No street',
-                  city: values.courierOffice.address.city.name || 'Econt City',
-                  region:
-                    values.courierOffice.address.city.regionName ||
-                    values.courierOffice.address.city.name ||
-                    'Econt region',
-                  postal:
-                    values.courierOffice.address.city.postCode ||
-                    'Econt postal',
-                  country:
-                    values.courierOffice.address.city.country.code2 || 'BG',
-                  metafields: [
-                    {
-                      key: 'courier',
-                      value: 'econt',
-                    } as MetafieldInput,
-                    {
-                      key: 'courierOfficeCode',
-                      value: values.courierOffice.code,
-                    } as MetafieldInput,
-                  ],
-                  isCommercial: false,
+                  ...buildAddressFromEcontAddress(values.courierOffice),
                 } as AddressInput),
                 email: values.email,
               },
