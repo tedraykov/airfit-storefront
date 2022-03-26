@@ -4,12 +4,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 
-import { ShippingAddress } from '@framework/types/cart'
 import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
 import CourierOfficeSelect from '../CourierOfficeSelect'
 import { SetShippingAddressProps } from '@hooks/useCheckout'
-import { AddressInput } from '@framework/schema'
+import { Address, AddressInput } from '@framework/schema'
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('Задължително поле'),
@@ -34,7 +33,7 @@ export interface CourierOfficeFieldValues {
 }
 
 type CourierOfficeFormProps = {
-  shippingAddress?: ShippingAddress
+  shippingAddress?: Address
   email?: string
   onSubmit: StepSubmitCallback<SetShippingAddressProps>
 }
@@ -98,7 +97,7 @@ const CourierOfficeForm = forwardRef<Submittable, CourierOfficeFormProps>(
         <ControlledTextField
           name="sureName"
           control={control}
-          defaultValue={shippingAddress?.sureName ?? ''}
+          defaultValue={shippingAddress?.lastName ?? ''}
           label="Фамилия"
         />
         <ControlledTextField

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { Button, Text } from '@components/ui'
 import { CartItem } from '@components/cart'
 import Close from '@mui/icons-material/Close'
@@ -36,7 +36,11 @@ export const CartView: FC<CartViewProps> = ({
               <Fade in={!loading}>
                 <ul>
                   {cart?.items?.nodes?.map((item) => (
-                    <CartItem key={item!._id} item={item!} />
+                    <CartItem
+                      canEdit={checkoutButton}
+                      key={item!._id}
+                      item={item!}
+                    />
                   ))}
                 </ul>
               </Fade>

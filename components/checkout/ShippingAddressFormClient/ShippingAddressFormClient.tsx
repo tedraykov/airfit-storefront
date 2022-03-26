@@ -8,10 +8,9 @@ import { useGoogleMaps, Location } from '@hooks/useGoogleMaps'
 import { yupResolver } from '@hookform/resolvers/yup'
 import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
-import { ShippingAddress } from '@framework/types/cart'
 import { Skeleton } from '@mui/material'
 import { SetShippingAddressProps } from '@hooks/useCheckout'
-import { AddressInput } from '@framework/schema'
+import { Address, AddressInput } from '@framework/schema'
 
 const mapCenter: google.maps.LatLngLiteral = {
   lat: 42.698334,
@@ -80,7 +79,7 @@ const getShippingAddress = (
 }
 
 interface ShippingAddressFormClientProps {
-  shippingAddress?: ShippingAddress
+  shippingAddress?: Address
   email?: string
   onSubmit: StepSubmitCallback<SetShippingAddressProps>
 }
@@ -171,7 +170,7 @@ const ShippingAddressFormClient = forwardRef<
           <ControlledTextField
             name="sureName"
             control={control}
-            defaultValue={shippingAddress?.sureName ?? ''}
+            defaultValue={shippingAddress?.lastName ?? ''}
             label="Фамилия"
           />
         </div>
@@ -192,7 +191,7 @@ const ShippingAddressFormClient = forwardRef<
         <ControlledTextField
           name="address"
           control={control}
-          defaultValue={shippingAddress?.address ?? ''}
+          defaultValue={shippingAddress?.address1 ?? ''}
           label="Адрес"
           fullWidth
         />

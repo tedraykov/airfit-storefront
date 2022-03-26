@@ -47,7 +47,7 @@ export const CheckoutView: FC = () => {
       {
         label: 'Адрес за доставка',
         icon: '📦',
-        isComplete: getShippingAddress() !== null && getEmail() !== null,
+        isComplete: false,
         StepComponent: ShippingAddressStep,
         stepComponentProps: {
           shippingAddress: getShippingAddress(),

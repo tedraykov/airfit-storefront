@@ -76,8 +76,13 @@ const DesktopCheckout: FC<DesktopCheckoutProps> = ({ steps }) => {
               <div className="px-4 flex-1">
                 <Fade in={!loading}>
                   <ul>
-                    {cart?.items?.nodes.map((item, key) => (
-                      <CartItem key={key} variant="slim" item={item!} />
+                    {cart?.items?.nodes?.map((item, key) => (
+                      <CartItem
+                        canEdit={false}
+                        key={key}
+                        variant="slim"
+                        item={item!}
+                      />
                     ))}
                   </ul>
                 </Fade>

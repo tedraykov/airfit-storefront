@@ -8,19 +8,18 @@ import useUI from '@hooks/useUI'
 import { CartItem as MOCCartItem } from '@framework/schema'
 import useCart from '@hooks/cart/useCart'
 
-type ItemOption = {
-  name: string
-  nameId: number
-  value: string
-  valueId: number
-}
-
 interface CartItemProps {
   item: MOCCartItem
   variant?: 'normal' | 'slim'
+  canEdit?: boolean
 }
 
-const CartItem: FC<CartItemProps> = ({ item, variant = 'normal', ...rest }) => {
+const CartItem: FC<CartItemProps> = ({
+  item,
+  variant = 'normal',
+  canEdit = 'true',
+  ...rest
+}) => {
   const { closeSidebarIfPresent } = useUI()
   const [quantity, setQuantity] = useState(item.quantity)
   const { updateItem, removeItem } = useCart()
@@ -61,20 +60,22 @@ const CartItem: FC<CartItemProps> = ({ item, variant = 'normal', ...rest }) => {
     setRemoving(true)
     await removeItem(item?._id).catch(() => setRemoving(false))
   }
-  // TODO: Add a type for this
-  const options = (item as any).options
+
+  const options = item?.attributes
 
   useEffect(() => {
     // Reset the quantity state if the item quantity changes
     if (item.quantity !== Number(quantity)) {
       setQuantity(item.quantity)
     }
-  }, [item.quantity])
+  }, [item.quantity, quantity])
 
   const rootClassName = cn(s.root, {
     [s.slim]: variant === 'slim',
     ['opacity-75 pointer-events-none']: removing,
   })
+
+  console.log(item)
 
   return (
     <li className={rootClassName} {...rest}>
@@ -92,43 +93,42 @@ const CartItem: FC<CartItemProps> = ({ item, variant = 'normal', ...rest }) => {
         </Link>
       </div>
       <div className="flex-1 flex flex-col text-base">
-        <Link href={`/product/${item.productSlug}`}>
+        <Link href={`/product/${item.productSlug}`} passHref>
           <span className={s.title} onClick={() => closeSidebarIfPresent()}>
             {item.title}
           </span>
         </Link>
         {options && options.length > 0 ? (
           <div className="">
-            {options.map((option: ItemOption, i: number) => (
-              <span
-                key={`${item._id}-${option.name}`}
-                className="text-sm font-semibold text-accents-7"
-              >
-                {option.value}
+            {options.map((option, i: number) => (
+              <span key={i} className="text-sm font-semibold text-accents-7">
+                {option?.value}
                 {i === options.length - 1 ? '' : ', '}
               </span>
             ))}
           </div>
         ) : null}
-        <div className="flex items-center mt-3">
-          <button type="button" onClick={() => increaseQuantity(-1)}>
-            <Minus width={18} height={18} />
-          </button>
-          <label>
-            <input
-              type="number"
-              max={99}
-              min={0}
-              className={s.quantity}
-              value={quantity}
-              onChange={handleQuantity}
-              onBlur={handleBlur}
-            />
-          </label>
-          <button type="button" onClick={() => increaseQuantity(1)}>
-            <Plus width={18} height={18} />
-          </button>
-        </div>
+        {canEdit && (
+          <div className="flex items-center mt-3">
+            <button type="button" onClick={() => increaseQuantity(-1)}>
+              <Minus width={18} height={18} />
+            </button>
+            <label>
+              <input
+                type="number"
+                max={99}
+                min={0}
+                className={s.quantity}
+                value={quantity}
+                onChange={handleQuantity}
+                onBlur={handleBlur}
+              />
+            </label>
+            <button type="button" onClick={() => increaseQuantity(1)}>
+              <Plus width={18} height={18} />
+            </button>
+          </div>
+        )}
       </div>
       <div className={s.price}>
         <span className="flex flex-col">
@@ -137,14 +137,19 @@ const CartItem: FC<CartItemProps> = ({ item, variant = 'normal', ...rest }) => {
               {item?.compareAtPrice.displayAmount}
             </span>
           )}
-          <span>{item?.price.displayAmount}</span>
+          <span className="leading-6">
+            <span>{item?.price.displayAmount}</span>
+            {item?.quantity > 1 && !canEdit && ` x ${item?.quantity}`}
+          </span>
         </span>
-        <button
-          className="flex justify-end outline-none"
-          onClick={handleRemove}
-        >
-          <Trash />
-        </button>
+        {canEdit && (
+          <button
+            className="flex justify-end outline-none"
+            onClick={handleRemove}
+          >
+            <Trash />
+          </button>
+        )}
       </div>
     </li>
   )
