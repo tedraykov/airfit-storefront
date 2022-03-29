@@ -1,6 +1,3 @@
 export function isProd() {
-  return (
-    process.env.NODE_ENV === 'production' &&
-    process.env.SERVER_ENV === 'production'
-  )
+  return process.env.NEXT_PUBLIC_ENV === 'production'
 }

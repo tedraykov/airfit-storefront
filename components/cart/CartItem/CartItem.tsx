@@ -75,8 +75,6 @@ const CartItem: FC<CartItemProps> = ({
     ['opacity-75 pointer-events-none']: removing,
   })
 
-  console.log(item)
-
   return (
     <li className={rootClassName} {...rest}>
       <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-md bg-violet relative overflow-hidden cursor-pointer">
