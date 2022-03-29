@@ -1,3 +1,5 @@
 export function isProd() {
-  return process.env.NEXT_PUBLIC_ENV === 'production'
+  const env = process.env.NEXT_PUBLIC_ENV
+  console.log(`isProd: ${env}`)
+  return env === 'production'
 }
