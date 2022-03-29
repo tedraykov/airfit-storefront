@@ -55,6 +55,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <>
       {isProd() && (
         <>
+          {() => console.log('running in production')}
           <GoogleAnalytics />
           <FacebookPixel />
         </>
