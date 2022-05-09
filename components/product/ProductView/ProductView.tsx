@@ -81,7 +81,7 @@ const ProductView: FC<Props> = ({ product }) => {
           description: product.description,
           images: [
             {
-              url: product.images[0]?.url!,
+              url: product.images[0]?.small!,
               width: 800,
               height: 600,
               alt: product.name,
@@ -129,7 +129,7 @@ const ProductView: FC<Props> = ({ product }) => {
           </section>
           <div>
             <Button
-              aria-label="Add to Cart"
+              aria-label="Добави в количката"
               type="button"
               className={s.button}
               onClick={addToCart}

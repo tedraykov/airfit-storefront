@@ -16,6 +16,12 @@ import { GRAPHQL_URL } from '@config/index'
 import { CartProvider } from '@context/CartContext'
 import { isProd } from '@config/environment'
 import GoogleAnalytics from '@lib/googleAnalytics/GoogleAnalytics'
+import { CacheProvider, EmotionCache } from '@emotion/react'
+import createEmotionCache from '@lib/emotion/createEmotionCache'
+
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache
+}
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -24,14 +30,18 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+const clientSideEmotionCache = createEmotionCache()
+
+export default function MyApp({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache,
+}: MyAppProps) {
   const Layout = (Component as any).Layout || Noop
   const router = useRouter()
 
   useEffect(() => {
-    if (isProd()) {
-      pageView()
-    }
+    pageView()
 
     const handleRouteChange = (url: string) => {
       if (isProd()) {
@@ -53,24 +63,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      {isProd() && (
-        <>
-          {() => console.log('running in production')}
-          <GoogleAnalytics />
-          <FacebookPixel />
-        </>
-      )}
+      <GoogleAnalytics />
+      <FacebookPixel />
       <Head>
         <title>Airfit | Спортно оборудване за дома</title>
       </Head>
       <UIProvider>
         <ApolloProvider client={client}>
           <CartProvider>
-            <ThemeProvider theme={theme}>
-              <Layout pageProps={pageProps}>
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
+            <CacheProvider value={emotionCache}>
+              <ThemeProvider theme={theme}>
+                <Layout pageProps={pageProps}>
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </CacheProvider>
           </CartProvider>
         </ApolloProvider>
       </UIProvider>

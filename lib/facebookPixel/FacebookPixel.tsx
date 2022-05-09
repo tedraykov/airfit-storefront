@@ -27,6 +27,8 @@ export const track = (name: StandardEvents, options = {}) => {
 }
 
 export const FacebookPixel: FC = () => {
+  if (!isProd()) return null
+
   return (
     <Script
       id="fb-pixel"

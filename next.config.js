@@ -1,14 +1,5 @@
 const commerce = require('./commerce.config.json')
-const {
-  withCommerceConfig,
-  getProviderName,
-} = require('./framework/commerce/config')
-
-const provider = commerce.provider || getProviderName()
-const isBC = provider === 'bigcommerce'
-const isShopify = provider === 'shopify'
-const isSwell = provider === 'swell'
-const isVendure = provider === 'vendure'
+const { withCommerceConfig } = require('./framework/commerce/config')
 
 module.exports = withCommerceConfig({
   env: {
@@ -26,42 +17,12 @@ module.exports = withCommerceConfig({
     locales: ['bg-BG'],
     defaultLocale: 'bg-BG',
   },
-  rewrites() {
-    return [
-      (isBC || isShopify || isSwell || isVendure) && {
-        source: '/checkout',
-        destination: '/api/bigcommerce/checkout',
+  experimental: {
+    emotion: true,
+    modularizeImports: {
+      '@mui': {
+        transform: '@mui/material/{{Member}}',
       },
-      // The logout is also an action so this route is not required, but it's also another way
-      // you can allow a logout!
-      isBC && {
-        source: '/logout',
-        destination: '/api/bigcommerce/customers/logout?redirect_to=/',
-      },
-      // For Vendure, rewrite the local api url to the remote (external) api url. This is required
-      // to make the session cookies work.
-      isVendure &&
-        process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL && {
-          source: `${process.env.NEXT_PUBLIC_VENDURE_LOCAL_URL}/:path*`,
-          destination: `${process.env.NEXT_PUBLIC_VENDURE_SHOP_API_URL}/:path*`,
-        },
-      // Rewrites for /search
-      {
-        source: '/search/designers/:name',
-        destination: '/search',
-      },
-      {
-        source: '/search/designers/:name/:category',
-        destination: '/search',
-      },
-      {
-        // This rewrite will also handle `/search/designers`
-        source: '/search/:category',
-        destination: '/search',
-      },
-    ].filter((x) => x)
+    },
   },
 })
-
-// Don't delete this console log, useful to see the commerce config in Vercel deployments
-console.log('next.config.js', JSON.stringify(module.exports, null, 2))

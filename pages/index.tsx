@@ -1,4 +1,3 @@
-import Script from 'next/script'
 import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
@@ -6,6 +5,7 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
 import { ProductsList, Slideshow } from '@components/landingPage'
+import { KlaviyoSignup } from '@lib/klaviyo'
 
 export async function getStaticProps({
   preview,
@@ -17,7 +17,6 @@ export async function getStaticProps({
     variables: { first: 25 },
     config,
     preview,
-    // Saleor provider only
     ...({ featured: true } as any),
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
@@ -53,12 +52,7 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Script
-        id="klaviyo-signup"
-        async
-        type="text/javascript"
-        src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=ReJ3p8"
-      />
+      <KlaviyoSignup />
       <Banner />
       <ProductsList products={products} />
       <Slideshow products={featuredProducts} />

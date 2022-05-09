@@ -1,9 +1,4 @@
-import type {
-  GetStaticPathsContext,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-} from 'next'
-import { useRouter } from 'next/router'
+import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
@@ -39,22 +34,15 @@ export async function getStaticProps({
       product,
       categories,
     },
-    revalidate: 60,
+    revalidate: 60 * 30,
   }
 }
 
-export async function getStaticPaths({ locales }: GetStaticPathsContext) {
+export async function getStaticPaths() {
   const { products } = await getAllProductPaths()
 
   return {
-    paths: locales
-      ? locales.reduce<string[]>((arr, locale) => {
-          products.forEach((product) => {
-            arr.push(`/${locale}/product${product.node.path}`)
-          })
-          return arr
-        }, [])
-      : products.map((product) => `/product${product.node.path}`),
+    paths: products.map((product) => `/product${product.node.path}`),
     fallback: 'blocking',
   }
 }
@@ -62,13 +50,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 export default function Slug({
   product,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter()
-
-  return router.isFallback ? (
-    <h1>Loading...</h1>
-  ) : (
-    <ProductView product={product} />
-  )
+  return <ProductView product={product} />
 }
 
 Slug.Layout = Layout

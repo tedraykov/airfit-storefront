@@ -1,7 +1,10 @@
 import React, { FC } from 'react'
 import Script from 'next/script'
+import { isProd } from '@config/environment'
 
 const GoogleAnalytics: FC = () => {
+  if (!isProd()) return null
+
   return (
     <>
       <Script
