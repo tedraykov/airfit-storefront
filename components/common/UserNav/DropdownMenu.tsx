@@ -8,7 +8,6 @@ import { Avatar } from '@components/common'
 import { Moon, Sun } from '@components/icons'
 import useUI from '@hooks/useUI'
 import ClickOutside from '@lib/click-outside'
-import useLogout from '@framework/auth/use-logout'
 
 import {
   disableBodyScroll,
@@ -36,7 +35,7 @@ const LINKS = [
 ]
 
 const DropdownMenu: FC<DropdownMenuProps> = ({ open = false }) => {
-  const logout = useLogout()
+  const logout = () => {}
   const { pathname } = useRouter()
   const { theme, setTheme } = useTheme()
   const [display, setDisplay] = useState(false)

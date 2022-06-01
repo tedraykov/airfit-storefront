@@ -2,7 +2,7 @@ import { SHOP_ID } from '@config/index'
 import { useCallback, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import availablePaymentMethodsQuery from '@graphql/queries/availablePaymentMethods'
-import { PaymentMethod } from '@framework/schema'
+import { PaymentMethod } from '@graphql/schema'
 
 export default function useShop() {
   const [shopId] = useState(SHOP_ID)

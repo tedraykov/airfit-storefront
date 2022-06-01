@@ -8,7 +8,7 @@ import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
 import CourierOfficeSelect from '../CourierOfficeSelect'
 import { SetShippingAddressProps } from '@hooks/useCheckout'
-import { Address, AddressInput } from '@framework/schema'
+import { Address, AddressInput } from '@graphql/schema'
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('Задължително поле'),

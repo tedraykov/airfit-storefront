@@ -9,7 +9,7 @@ import {
   OrderInput,
   PaymentInput,
   PlaceOrderPayload,
-} from '@framework/schema'
+} from '@graphql/schema'
 import { useCallback, useEffect, useState } from 'react'
 import paymentMethods from '@utils/paymentMethods'
 import useCart from '@hooks/cart/useCart'

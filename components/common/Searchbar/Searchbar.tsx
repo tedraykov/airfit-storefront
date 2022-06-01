@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import s from './Searchbar.module.scss'
 import { useRouter } from 'next/router'
-import Search from '@components/icons/Search'
+import SearchIcon from '@components/icons/Search'
 
 interface Props {
   className?: string
@@ -14,7 +14,7 @@ const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
 
   useEffect(() => {
     router.prefetch('/search')
-  }, [])
+  }, [router])
 
   return useMemo(
     () => (
@@ -50,11 +50,11 @@ const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
           }}
         />
         <div className={s.iconContainer}>
-          <Search className={s.icon} />
+          <SearchIcon className={s.icon} />
         </div>
       </div>
     ),
-    []
+    [className, id, router]
   )
 }
 

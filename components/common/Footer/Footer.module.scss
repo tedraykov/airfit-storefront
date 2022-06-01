@@ -3,7 +3,7 @@
 }
 
 .root {
-  @apply relative bg-accents-1;
+  @apply relative bg-accents-1 mb-[70px] md:mb-0;
 }
 
 .root::before {

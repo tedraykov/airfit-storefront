@@ -2,7 +2,6 @@ import { forwardRef, useImperativeHandle } from 'react'
 import * as yup from 'yup'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
 import { PaymentMethod } from '@utils/paymentMethods'
-import { ShippingAddress } from '@framework/types/cart'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
@@ -10,6 +9,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
+import { Address } from '@graphql/schema'
 
 const inputSchema = yup.object().shape({
   agreeWithTerms: yup
@@ -19,7 +19,7 @@ const inputSchema = yup.object().shape({
 })
 
 interface CheckoutFinalizeProps {
-  shippingAddress: ShippingAddress
+  shippingAddress: Address
   email: string
   paymentMethod: PaymentMethod
   onSubmit: StepSubmitCallback

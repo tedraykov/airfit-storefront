@@ -3,12 +3,14 @@ import { ApolloCache, useLazyQuery, useMutation } from '@apollo/client'
 
 import anonymousCartQuery from '@graphql/queries/get-anonymous-cart'
 import {
+  AddCartItemsInput,
   AddCartItemsPayload,
   Address,
   AddressInput,
   ApplyDiscountCodeToCartPayload,
   Cart,
   CartItemInput,
+  CreateCartInput,
   CreateCartPayload,
   MutationAddCartItemsArgs,
   MutationApplyDiscountCodeToCartArgs,
@@ -19,14 +21,20 @@ import {
   MutationSetShippingAddressOnCartArgs,
   MutationUpdateCartItemsQuantityArgs,
   MutationUpdateFulfillmentOptionsForGroupArgs,
+  RemoveCartItemsInput,
   RemoveCartItemsPayload,
+  SelectFulfillmentOptionForGroupInput,
   SelectFulfillmentOptionForGroupPayload,
+  SetEmailOnAnonymousCartInput,
   SetEmailOnAnonymousCartPayload,
+  SetShippingAddressOnCartInput,
   SetShippingAddressOnCartPayload,
   UpdateCartItemInput,
+  UpdateCartItemsQuantityInput,
   UpdateCartItemsQuantityPayload,
+  UpdateFulfillmentOptionsForGroupInput,
   UpdateFulfillmentOptionsForGroupPayload,
-} from '@framework/schema'
+} from '@graphql/schema'
 import useCartStore from '@hooks/cart/useCartStore'
 import {
   addCartItemsMutation,
@@ -182,16 +190,16 @@ export default function useCart() {
     if (!anonymousCartId && !anonymousCartToken) {
       setLoading(false)
     }
-  }, [])
+  }, [anonymousCartId, anonymousCartToken])
 
   // Get the cart when anonymousCartId is available
   useEffect(() => {
     if (anonymousCartId && anonymousCartToken) {
       getAnonymousCart().then()
     }
-  }, [anonymousCartId, anonymousCartToken])
+  }, [anonymousCartId, anonymousCartToken, getAnonymousCart])
 
-  const isEmpty = useMemo(() => !cart || cart.totalItemQuantity === 0, [cart])
+  const isEmpty = useMemo(() => cart && cart.totalItemQuantity === 0, [cart])
 
   const addItem = useCallback(
     async (item: CartItemInput) => {
@@ -200,10 +208,9 @@ export default function useCart() {
           variables: {
             input: {
               cartId: anonymousCartId || '',
-              cartToken: anonymousCartToken,
+              cartToken: anonymousCartToken || '',
               items: [item],
-              clientMutationId: null,
-            },
+            } as AddCartItemsInput,
           },
         })
       }
@@ -212,8 +219,7 @@ export default function useCart() {
           input: {
             items: [item],
             shopId: shopId!,
-            clientMutationId: null,
-          },
+          } as CreateCartInput,
         },
       })
     },
@@ -226,10 +232,9 @@ export default function useCart() {
         variables: {
           input: {
             cartId: anonymousCartId || '',
-            cartToken: anonymousCartToken,
+            cartToken: anonymousCartToken || '',
             cartItemIds: [itemId],
-            clientMutationId: null,
-          },
+          } as RemoveCartItemsInput,
         },
       })
     },
@@ -246,10 +251,9 @@ export default function useCart() {
         variables: {
           input: {
             cartId: anonymousCartId || '',
-            cartToken: anonymousCartToken,
+            cartToken: anonymousCartToken || '',
             items: [item],
-            clientMutationId: null,
-          },
+          } as UpdateCartItemsQuantityInput,
         },
       })
     },
@@ -272,8 +276,7 @@ export default function useCart() {
             cartId: anonymousCartId || '',
             cartToken: anonymousCartToken || '',
             email,
-            clientMutationId: null,
-          },
+          } as SetEmailOnAnonymousCartInput,
         },
       })
     },
@@ -288,9 +291,7 @@ export default function useCart() {
             cartId: anonymousCartId || '',
             cartToken: anonymousCartToken || '',
             address,
-            addressId: null,
-            clientMutationId: null,
-          },
+          } as SetShippingAddressOnCartInput,
         },
       })
 
@@ -305,8 +306,7 @@ export default function useCart() {
               fulfillmentGroupId: fg?._id || '',
               cartId: anonymousCartId || '',
               cartToken: anonymousCartToken || '',
-              clientMutationId: null,
-            },
+            } as UpdateFulfillmentOptionsForGroupInput,
           },
         })
       )
@@ -329,10 +329,9 @@ export default function useCart() {
           input: {
             cartId: anonymousCartId || '',
             cartToken: anonymousCartToken || '',
-            clientMutationId: null,
             fulfillmentGroupId,
             fulfillmentMethodId,
-          },
+          } as SelectFulfillmentOptionForGroupInput,
         },
       })
     },

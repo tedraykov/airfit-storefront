@@ -2,13 +2,5 @@
 @import './components.css';
 
 @tailwind base;
-
-@layer base {
-  body {
-    font-family: 'Ubuntu', sans-serif;
-  }
-}
-
 @tailwind components;
-
 @tailwind utilities;

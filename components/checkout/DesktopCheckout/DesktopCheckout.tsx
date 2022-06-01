@@ -37,9 +37,7 @@ const DesktopCheckout: FC<DesktopCheckoutProps> = ({ steps }) => {
           {steps.map((step, index) => (
             <Step key={index}>
               <StepLabel StepIconComponent={() => <div>{step.icon}</div>}>
-                <Typography variant="h5" className="font-bold">
-                  {step.label}
-                </Typography>
+                <h3 className="font-bold text-2xl ml-2">{step.label}</h3>
               </StepLabel>
               <StepContent>
                 {renderStepComponent(index)}

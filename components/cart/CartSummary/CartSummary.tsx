@@ -1,7 +1,7 @@
 import { FC, memo, useMemo } from 'react'
 import HelpIcon from '@mui/icons-material/Help'
 import { Tooltip } from '@mui/material'
-import { Cart } from '@framework/schema'
+import { Cart } from '@graphql/schema'
 
 interface CartSummaryProps {
   cart: Cart | undefined

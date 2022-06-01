@@ -27,6 +27,9 @@ export interface IFeaturedProductFields {
 
   /** useReversedText */
   useReversedText?: boolean | undefined
+
+  /** slug */
+  slug?: string | undefined
 }
 
 export interface IFeaturedProduct extends Entry<IFeaturedProductFields> {
@@ -151,30 +154,8 @@ export interface ISeo extends Entry<ISeoFields> {
   }
 }
 
-export interface ITextFields {
-  /** Общи условия */
-  text?: Document | undefined
-}
+export type CONTENT_TYPE = 'featuredProduct' | 'hero' | 'page' | 'seo'
 
-export interface IText extends Entry<ITextFields> {
-  sys: {
-    id: string
-    type: string
-    createdAt: string
-    updatedAt: string
-    locale: string
-    contentType: {
-      sys: {
-        id: 'text'
-        linkType: 'ContentType'
-        type: 'Link'
-      }
-    }
-  }
-}
-
-export type CONTENT_TYPE = 'featuredProduct' | 'hero' | 'page' | 'seo' | 'text'
-
-export type LOCALE_CODE = 'bg' | 'en-US'
+export type LOCALE_CODE = 'bg-BG' | 'en-US'
 
 export type CONTENTFUL_DEFAULT_LOCALE_CODE = 'en-US'

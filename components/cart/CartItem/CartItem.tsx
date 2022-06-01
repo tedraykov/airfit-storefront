@@ -5,7 +5,7 @@ import Link from 'next/link'
 import s from './CartItem.module.scss'
 import { Trash, Plus, Minus } from '@components/icons'
 import useUI from '@hooks/useUI'
-import { CartItem as MOCCartItem } from '@framework/schema'
+import { CartItem as MOCCartItem } from '@graphql/schema'
 import useCart from '@hooks/cart/useCart'
 
 interface CartItemProps {

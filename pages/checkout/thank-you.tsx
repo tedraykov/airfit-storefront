@@ -1,16 +1,10 @@
-import React, { useEffect } from 'react'
 import { CheckoutHeader } from '@components/checkout/CheckoutView/CheckoutView'
 import { StrippedLayout } from '@components/common/Layout/Layout'
 import { SuccessCheck } from '@components/ui/SuccessCheck/SuccessCheck'
 import { Button, Text } from '@components/ui'
 import Link from '@components/ui/Link'
-import { track } from '@lib/facebookPixel'
 
 export default function ThankYou() {
-  useEffect(() => {
-    track('Lead')
-  }, [])
-
   return (
     <>
       <CheckoutHeader />

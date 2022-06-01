@@ -1,18 +1,12 @@
-import React, {
-  forwardRef,
-  useContext,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { CheckoutStepComponentProps, Submittable } from '@hooks/useStepper'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import Radio from '@mui/material/Radio'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ShippingAddressFormClient from '@components/checkout/ShippingAddressFormClient'
-import { ShippingAddress } from '@framework/types/cart'
 import CourierOfficeForm from '../CourierOfficeForm'
+import { Address } from '@graphql/schema'
 
 enum DeliveryType {
   COURIER_OFFICE,
@@ -25,7 +19,7 @@ const deliveryTypeTitles = {
 }
 
 interface ShippingAddressStepProps extends CheckoutStepComponentProps {
-  shippingAddress?: ShippingAddress
+  shippingAddress?: Address
   email?: string
 }
 
@@ -51,7 +45,6 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
       <div>
         <Accordion
           className="shadow-sm"
-          elevation={0}
           expanded={deliveryType === DeliveryType.COURIER_OFFICE}
           onChange={handleChangeDeliveryType(DeliveryType.COURIER_OFFICE)}
         >
@@ -79,7 +72,6 @@ const ShippingAddressStep = forwardRef<Submittable, ShippingAddressStepProps>(
 
         <Accordion
           className="shadow-sm"
-          elevation={0}
           disabled
           expanded={deliveryType === DeliveryType.CLIENT_ADDRESS}
           onChange={handleChangeDeliveryType(DeliveryType.CLIENT_ADDRESS)}

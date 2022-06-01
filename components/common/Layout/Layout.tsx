@@ -1,19 +1,18 @@
 import cn from 'classnames'
 import dynamic from 'next/dynamic'
 import s from './Layout.module.css'
-import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 import useUI from '@hooks/useUI'
-import { Navbar, Footer } from '@components/common'
+import { Footer, Navbar } from '@components/common'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
-import { Button, Modal, LoadingDots } from '@components/ui'
+import { Button, LoadingDots, Modal } from '@components/ui'
 import CartSidebarView from '@components/cart/CartSidebarView'
 
 import LoginView from '@components/auth/LoginView'
-import { CommerceProvider } from '@framework'
-import { Category } from '@commerce/types/site'
-import { Page } from '@framework/types/page'
 import Drawer from '@mui/material/Drawer'
+import { NavigationTree } from '@graphql/schema'
+import { Entry } from 'contentful'
+import { IPageFields } from '@lib/contentful/schema'
 
 const SignUpView = dynamic(() => import('@components/auth/SignUpView'), {
   loading: () => (
@@ -47,8 +46,8 @@ const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
 
 interface Props {
   pageProps: {
-    pages?: Page[]
-    categories: Category[]
+    pages?: Entry<IPageFields>[]
+    categories: NavigationTree
   }
 }
 
@@ -88,47 +87,38 @@ const SidebarUI: FC = () => {
 
 const Layout: FC<Props> = ({
   children,
-  pageProps: { categories = [], ...pageProps },
+  pageProps: { categories, ...pageProps },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
-  const { locale = 'en-US' } = useRouter()
-  const navBarLinks = categories
-    .filter((c) => c.slug !== undefined)
-    .map((c) => ({
-      label: c.name,
-      href: `/search/${c.slug}`,
-    }))
+
+  const navBarLinks =
+    (categories as NavigationTree)?.items.map((c) => ({
+      label: c.navigationItem.data.contentForLanguage,
+      href: `/search${c.navigationItem.data.url}`,
+    })) || []
 
   return (
-    <CommerceProvider locale={locale}>
-      <div className={cn(s.root)}>
-        <Navbar links={navBarLinks} />
-        <main className={cn(s.main, 'fit')}>{children}</main>
-        <Footer pages={pageProps.pages} />
-        <ModalUI />
-        <SidebarUI />
-        <FeatureBar
-          title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
-          hide={acceptedCookies}
-          action={
-            <Button className="mx-5" onClick={onAcceptCookies}>
-              Accept cookies
-            </Button>
-          }
-        />
-      </div>
-    </CommerceProvider>
+    <div className={cn(s.root)}>
+      <Navbar links={navBarLinks} />
+      <main className="flex-1 md:pt-[70px]">{children}</main>
+      <Footer pages={pageProps.pages} />
+      <ModalUI />
+      <SidebarUI />
+      <FeatureBar
+        title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
+        hide={acceptedCookies}
+        action={
+          <Button className="mx-5" onClick={onAcceptCookies}>
+            Приеми бисквитки
+          </Button>
+        }
+      />
+    </div>
   )
 }
 
 export const StrippedLayout: FC<Props> = ({ children, pageProps: {} }) => {
-  const { locale = 'en-US' } = useRouter()
-
-  return (
-    <CommerceProvider locale={locale}>
-      <div className={cn(s.root)}>{children}</div>
-    </CommerceProvider>
-  )
+  return <div className={cn(s.root)}>{children}</div>
 }
 
 export default Layout

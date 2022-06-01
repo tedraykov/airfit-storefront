@@ -9,10 +9,10 @@ export default function Checkout() {
   const router = useRouter()
 
   useEffect(() => {
-    if ((!cart && !loading) || (isEmpty && !loading)) {
+    if (cart && isEmpty) {
       router.push('/').then()
     }
-  }, [cart, loading, router])
+  }, [cart, isEmpty, loading, router])
 
   return <CheckoutView />
 }

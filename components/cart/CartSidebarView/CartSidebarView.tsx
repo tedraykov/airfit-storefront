@@ -38,11 +38,11 @@ const CartSidebarView: FC = () => {
                 </ul>
               </Fade>
             </div>
-            <div className="flex-shrink-0 px-4 pt-24 lg:pt-10 sm:px-6">
+            <div className="flex-shrink-0 px-4 pb-4 pt-24 lg:pt-10 sm:px-6">
               <CartSummary cart={cart} />
               <div className="flex flex-row justify-end">
                 <Link href="/checkout" passHref>
-                  <Button width="100%" onClick={handleClose}>
+                  <Button className="w-full" onClick={handleClose}>
                     Завършви поръчката
                   </Button>
                 </Link>

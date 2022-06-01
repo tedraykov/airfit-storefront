@@ -9,6 +9,7 @@ import cn from 'classnames'
 import Collapse from '@mui/material/Collapse'
 import DrawerIcon from '@components/icons/Drawer'
 import MobileDrawer from '@components/common/NavDrawer'
+import useUI from '@hooks/useUI'
 
 export interface Link {
   href: string
@@ -20,16 +21,30 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ links }) => {
+  const { isTablet } = useUI()
   const [showMobileSearch, setShowMobileSearch] = useState(false)
+  const [showTabletSearch, setShowTabletSearch] = useState(false)
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
 
   const toggleDrawer = () => {
     setMobileDrawerOpen((prev) => !prev)
   }
 
+  const toggleSearch = () => {
+    if (isTablet) {
+      return setShowTabletSearch(!showTabletSearch)
+    }
+    setShowMobileSearch(!showMobileSearch)
+  }
+
   return (
     <NavbarRoot>
       <Container>
+        <Collapse in={showMobileSearch}>
+          <div className={cn(s.mobileSearch)}>
+            <Searchbar id="mobile-search" className="mt-4 overflow-hidden" />
+          </div>
+        </Collapse>
         <div className={s.nav}>
           <div className="flex items-center flex-1">
             <Link href="/">
@@ -48,17 +63,13 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
               ))}
             </nav>
           </div>
-          <div className="justify-center flex-1 hidden xl:flex">
+          <div className="justify-center flex-1 hidden lg:flex">
             <Searchbar />
           </div>
 
           <div className="flex items-center justify-end flex-1">
-            <div className="mr-3 xl:hidden">
-              <Button
-                variant="transparent"
-                size="icon"
-                onClick={() => setShowMobileSearch(!showMobileSearch)}
-              >
+            <div className="mr-3 lg:hidden">
+              <Button variant="transparent" size="icon" onClick={toggleSearch}>
                 <Search className="h-5 w-5" />
               </Button>
             </div>
@@ -70,9 +81,9 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
             </div>
           </div>
         </div>
-        <Collapse in={showMobileSearch}>
+        <Collapse in={showTabletSearch}>
           <div className={cn(s.mobileSearch)}>
-            <Searchbar id="mobile-search" className="mb-4 overflow-hidden" />
+            <Searchbar id="tablet-search" className="mb-4 overflow-hidden" />
           </div>
         </Collapse>
       </Container>

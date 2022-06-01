@@ -35,8 +35,6 @@
   --accents-7: #495057;
   --accents-8: #343a40;
   --accents-9: #212529;
-  --font-sans: 'Ubuntu', -apple-system, system-ui, BlinkMacSystemFont,
-    'Helvetica Neue', 'Helvetica', sans-serif;
 }
 
 [data-theme='dark'] {
@@ -65,6 +63,14 @@
   --accents-9: #f8f9fa;
 }
 
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url("/fonts/Inter.woff2") format("woff2");
+}
+
 *,
 *:before,
 *:after {
@@ -84,7 +90,6 @@ html {
 
 html,
 body {
-  font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -112,15 +117,6 @@ a {
 .fadeIn {
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
-}
-
-.pswp img {
-  max-width: none;
-  object-fit: contain;
-}
-
-.pswp__img--placeholder--blank{
-  display: none !important;
 }
 
 @-webkit-keyframes fadeIn {

@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import Drawer from '@mui/material/Drawer'
 import MobileStepper from '@mui/material/MobileStepper'
-import Typography from '@mui/material/Typography'
 
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { CartView } from '@components/cart/CartView/CartView'
@@ -50,7 +49,7 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({ steps }) => {
     useCartDrawer()
 
   return (
-    <Container className="animated fadeIn">
+    <Container className="animated fadeIn w-full">
       <SwipeableViews
         index={activeStep}
         disabled={true}
@@ -58,9 +57,9 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({ steps }) => {
       >
         {steps.map((step, index) => (
           <div key={index} className="h-auto">
-            <Typography variant="h5" className="font-bold mb-4">
+            <h5 className="font-bold text-2xl mb-4">
               {step.icon} {step.label}
-            </Typography>
+            </h5>
             {renderStepComponent(index)}
           </div>
         ))}
@@ -71,10 +70,9 @@ const MobileCheckout: FC<MobileCheckoutProps> = ({ steps }) => {
         <Button
           className="w-full justify-between mb-12"
           size="slim"
-          color="secondary"
           onClick={handleOpenCartDrawer}
         >
-          <span className="flex-1 font-light">🛒 Преглед на количката</span>
+          <span className="flex-1">🛒 Преглед на количката</span>
           <ExpandLessIcon />
         </Button>
       </section>

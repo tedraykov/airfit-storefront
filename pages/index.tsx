@@ -2,44 +2,38 @@ import { Layout } from '@components/common'
 import { Hero } from '@components/ui'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
-import commerce from '@lib/api/commerce'
 import Banner from '@components/ui/Banner/Banner'
 import { ProductsList, Slideshow } from '@components/landingPage'
 import { KlaviyoSignup } from '@lib/klaviyo'
+import getCatalogProducts from '@server/operations/getCatalogProducts'
+import { SHOP_ID } from '@config/index'
+import { QueryCatalogItemsArgs } from '@graphql/schema'
+import commonStaticProps from '@utils/static/commonStaticProps'
+import getHero from '@utils/static/getHero'
+import getFeaturedProducts from '@utils/static/getFeaturedProducts'
 
 export async function getStaticProps({
   preview,
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const config = { locale, locales }
-  const productsPromise = commerce.getAllProducts({
-    variables: { first: 25 },
-    config,
-    preview,
-    ...({ featured: true } as any),
-  })
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const commonProps = await commonStaticProps({ preview, locale, locales })
+
+  const products = await getCatalogProducts({
+    shopIds: [SHOP_ID],
+  } as QueryCatalogItemsArgs)
 
   const landingPageHeroId = '5zUKnt2GRtt2NvpOgnNuO0'
-  const heroPromise = commerce.getHero({ variables: { id: landingPageHeroId } })
-  const featuredProductsPromise = commerce.getFeaturedProducts()
+  const hero = await getHero(landingPageHeroId)
 
-  const { products } = await productsPromise
-  const { featuredProducts } = await featuredProductsPromise
-  const { pages } = await pagesPromise
-  const { categories, brands } = await siteInfoPromise
-  const { hero } = await heroPromise
+  const featuredProducts = await getFeaturedProducts()
 
   return {
     props: {
       products,
       featuredProducts: featuredProducts || [],
-      categories,
-      brands,
-      pages,
       hero,
+      ...commonProps,
     },
     revalidate: 144,
   }
@@ -57,8 +51,8 @@ export default function Home({
       <ProductsList products={products} />
       <Slideshow products={featuredProducts} />
       <Hero
-        headline={hero?.headline ?? ''}
-        description={hero?.description ?? ''}
+        headline={hero?.fields.headline ?? ''}
+        description={hero?.fields.description ?? ''}
       />
     </>
   )

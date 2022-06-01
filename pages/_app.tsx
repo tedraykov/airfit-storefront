@@ -39,7 +39,6 @@ export default function MyApp({
 }: MyAppProps) {
   const Layout = (Component as any).Layout || Noop
   const router = useRouter()
-
   useEffect(() => {
     pageView()
 
@@ -68,19 +67,19 @@ export default function MyApp({
       <Head>
         <title>Airfit | Спортно оборудване за дома</title>
       </Head>
-      <UIProvider>
-        <ApolloProvider client={client}>
-          <CartProvider>
-            <CacheProvider value={emotionCache}>
-              <ThemeProvider theme={theme}>
+      <ApolloProvider client={client}>
+        <CartProvider>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <UIProvider>
                 <Layout pageProps={pageProps}>
                   <Component {...pageProps} />
                 </Layout>
-              </ThemeProvider>
-            </CacheProvider>
-          </CartProvider>
-        </ApolloProvider>
-      </UIProvider>
+              </UIProvider>
+            </ThemeProvider>
+          </CacheProvider>
+        </CartProvider>
+      </ApolloProvider>
     </>
   )
 }

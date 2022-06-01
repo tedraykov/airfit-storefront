@@ -1,17 +1,18 @@
 import React, { FC } from 'react'
-import TextField from '@mui/material/TextField'
 import { Control, Controller } from 'react-hook-form'
-import { TextFieldProps } from '@mui/material/TextField/TextField'
-import { InputAdornment } from '@mui/material'
-import Error from '@mui/icons-material/Error'
-import Tooltip from '@mui/material/Tooltip'
+import FormHelperText from '@mui/material/FormHelperText'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
+import FilledInput from '@mui/material/FilledInput'
+import { InputProps } from '@mui/material/Input'
 
-type ControlledTextFieldProps = TextFieldProps & {
+type ControlledTextFieldProps = InputProps & {
   name: string
   defaultValue: string
   label: string
   control: Control<any>
   rules?: Object
+  helperText?: string
 }
 
 const ControlledTextField: FC<ControlledTextFieldProps> = ({
@@ -19,6 +20,7 @@ const ControlledTextField: FC<ControlledTextFieldProps> = ({
   defaultValue,
   label,
   control,
+  helperText,
   rules,
   ...rest
 }) => {
@@ -30,27 +32,22 @@ const ControlledTextField: FC<ControlledTextFieldProps> = ({
       rules={rules}
       render={({ field, fieldState: { error, invalid } }) => {
         return (
-          <TextField
-            label={label}
-            size="small"
-            error={invalid}
-            fullWidth
-            InputProps={{
-              endAdornment: invalid && (
-                <InputAdornment position="end">
-                  <Tooltip
-                    title={error?.message ?? 'Грешка'}
-                    arrow
-                    placement="bottom-end"
-                  >
-                    <Error color="error" />
-                  </Tooltip>
-                </InputAdornment>
-              ),
-            }}
-            {...field}
-            {...rest}
-          />
+          <FormControl fullWidth>
+            <FormLabel error={invalid} htmlFor={name}>
+              {label}
+            </FormLabel>
+            <FilledInput id={name} error={invalid} {...field} {...rest} />
+            {invalid && (
+              <FormHelperText sx={{ color: 'error.main' }}>
+                {error?.message || 'Грешка'}
+              </FormHelperText>
+            )}
+            {!invalid && helperText && (
+              <FormHelperText sx={{ color: 'error.main' }}>
+                {helperText}
+              </FormHelperText>
+            )}
+          </FormControl>
         )
       }}
     />

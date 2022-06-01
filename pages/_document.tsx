@@ -1,6 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 import React from 'react'
-import { mediaStyles } from '@components/common/MediaQueries'
 import { isProd } from '@config/environment'
 import createEmotionCache from '@lib/emotion/createEmotionCache'
 import createEmotionServer from '@emotion/server/create-instance'
@@ -11,21 +10,18 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <meta name="theme-color" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
           {isProd() && (
             <meta
               name="verify-paysera"
               content="b2b92766c5fcbbbe8438e8ce92d9375b"
             />
           )}
-          <style
-            type="text/css"
-            dangerouslySetInnerHTML={{ __html: mediaStyles }}
-          />
           <link
-            href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600;700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/Inter.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
           />
         </Head>
         <body className="loading">

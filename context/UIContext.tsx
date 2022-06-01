@@ -1,4 +1,6 @@
 import { createContext, FC, useCallback, useMemo, useReducer } from 'react'
+import { useMediaQuery } from '@mui/material'
+import { useTheme } from '@mui/system'
 
 export interface State {
   displaySidebar: boolean
@@ -7,6 +9,10 @@ export interface State {
   sidebarView: string
   modalView: string
   userAvatar: string
+  isMobile: boolean
+  isLaptop: boolean
+  isTablet: boolean
+  isAtLeastTablet: boolean
 }
 
 const initialState = {
@@ -16,6 +22,10 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   sidebarView: 'CART_VIEW',
   userAvatar: '',
+  isMobile: false,
+  isLaptop: false,
+  isTablet: false,
+  isAtLeastTablet: false,
 }
 
 type Action =
@@ -125,7 +135,11 @@ function uiReducer(state: State, action: Action) {
 
 export const UIProvider: FC = (props) => {
   const [state, dispatch] = useReducer(uiReducer, initialState)
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isTablet = useMediaQuery(theme.breakpoints.between('md', 'lg'))
+  const isLaptop = useMediaQuery(theme.breakpoints.between('lg', 'xl'))
+  const isAtLeastTablet = useMediaQuery(theme.breakpoints.up('md'))
   const openSidebar = useCallback(
     () => dispatch({ type: 'OPEN_SIDEBAR' }),
     [dispatch]
@@ -193,6 +207,10 @@ export const UIProvider: FC = (props) => {
       setModalView,
       setSidebarView,
       setUserAvatar,
+      isMobile,
+      isLaptop,
+      isTablet,
+      isAtLeastTablet,
     }),
     [
       closeDropdown,
@@ -207,6 +225,10 @@ export const UIProvider: FC = (props) => {
       setUserAvatar,
       state,
       toggleSidebar,
+      isMobile,
+      isLaptop,
+      isTablet,
+      isAtLeastTablet,
     ]
   )
 

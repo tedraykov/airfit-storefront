@@ -1,14 +1,3 @@
-.root {
-  @apply relative grid items-start grid-cols-1 overflow-x-hidden pb-6;
-
-  @screen md {
-    @apply overflow-visible;
-  }
-
-  @screen lg {
-    @apply grid-cols-12 gap-8;
-  }
-}
 
 .productDisplay {
   @apply flex flex-col px-0 pb-0 box-border;
@@ -28,19 +17,6 @@
 
 .galleryContainer {
   @apply cursor-pointer;
-}
-
-.sidebar {
-  @apply flex flex-col col-span-1 mx-auto max-w-2xl xl:max-w-8xl px-6 w-full z-20;
-
-  @screen md {
-    @apply sticky;
-    top: 78px;
-  }
-
-  @screen lg {
-    @apply col-span-6 justify-between;
-  }
 }
 
 .productTitle {
