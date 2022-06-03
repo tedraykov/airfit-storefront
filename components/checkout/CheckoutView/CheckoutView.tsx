@@ -44,7 +44,7 @@ export const CheckoutView: FC = () => {
           id: item?.productSlug,
           quantity: item?.quantity,
         })),
-        value: cart?.checkout.summary.itemTotal,
+        value: cart?.checkout.summary.itemTotal.amount,
         content_type: 'product',
         currency: cart?.shop?.currency?.code,
       })
@@ -64,7 +64,7 @@ export const CheckoutView: FC = () => {
               quantity: item?.quantity,
             })),
             content_type: 'product',
-            value: cart?.checkout.summary.total,
+            value: cart?.checkout.summary.total.amount,
             currency: cart?.shop?.currency?.code,
           })
         })
