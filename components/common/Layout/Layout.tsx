@@ -91,11 +91,19 @@ const Layout: FC<Props> = ({
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
 
-  const navBarLinks =
-    (categories as NavigationTree)?.items.map((c) => ({
+  const navBarLinks = [
+    {
+      href: '/',
+      label: 'ВСИЧКИ',
+    },
+  ]
+
+  ;(categories as NavigationTree)?.items.forEach((c) => {
+    navBarLinks.push({
       label: c.navigationItem.data.contentForLanguage,
       href: `/search${c.navigationItem.data.url}`,
-    })) || []
+    })
+  })
 
   return (
     <div className={cn(s.root)}>
@@ -105,7 +113,7 @@ const Layout: FC<Props> = ({
       <ModalUI />
       <SidebarUI />
       <FeatureBar
-        title="This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy."
+        title="Този сайт използва бисквитки за да подобри използването на сайта. Приемайки, се съгласявате с нашите общи условия."
         hide={acceptedCookies}
         action={
           <Button className="mx-5" onClick={onAcceptCookies}>

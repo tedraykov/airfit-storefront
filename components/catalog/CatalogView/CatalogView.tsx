@@ -20,7 +20,7 @@ const CatalogView: FC<CatalogViewProps> = ({ categories, tag }) => {
   return (
     <div
       className={`
-      grid px-6 pt-6 max-w-8xl mx-auto
+      grid p-6 max-w-8xl mx-auto
       lg:grid-cols-[3fr_10fr]
       2xl:grid-cols-[2fr_10fr]
     `}

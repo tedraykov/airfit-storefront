@@ -31,6 +31,7 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
   }
 
   const toggleSearch = () => {
+    console.log(`Toggling search`)
     if (isTablet) {
       return setShowTabletSearch(!showTabletSearch)
     }
@@ -53,9 +54,6 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
               </a>
             </Link>
             <nav className={s.navMenu}>
-              <Link href="/search">
-                <a className={s.link}>ВСИЧКИ</a>
-              </Link>
               {links?.map((l) => (
                 <Link href={l.href} key={l.href}>
                   <a className={s.link}>{l.label}</a>
