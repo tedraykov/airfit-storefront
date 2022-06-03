@@ -68,7 +68,15 @@ const ProductView: FC<Props> = ({ product }) => {
       metafields: [],
     }).then(() => {
       openSidebar()
-      track('AddToCart')
+      track('AddToCart', {
+        contents: [
+          {
+            id: option ? option.pricing[0].price : variant.pricing[0].price,
+            quantity: 1,
+          },
+        ],
+        currency: product?.pricing[0].currency.code,
+      })
     })
 
     setLoading(false)
