@@ -44,6 +44,8 @@ export const CheckoutView: FC = () => {
           id: item?.productSlug,
           quantity: item?.quantity,
         })),
+        value: cart?.checkout.summary.itemTotal,
+        content_type: 'product',
         currency: cart?.shop?.currency?.code,
       })
       checkoutInitialized.current = true
@@ -61,6 +63,8 @@ export const CheckoutView: FC = () => {
               id: item?.productSlug,
               quantity: item?.quantity,
             })),
+            content_type: 'product',
+            value: cart?.checkout.summary.total,
             currency: cart?.shop?.currency?.code,
           })
         })

@@ -44,11 +44,11 @@ export default function Slug({
   useEffect(() => {
     track('ViewContent', {
       content_type: 'product',
-      content_ids: [product?._id],
+      content_ids: [product?.slug],
       value: product?.pricing[0].minPrice,
       currency: product?.pricing[0].currency.code,
     })
-  }, [product?._id, product.pricing])
+  }, [product?.slug, product.pricing])
 
   return <ProductView product={product} />
 }
