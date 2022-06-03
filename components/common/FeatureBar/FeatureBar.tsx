@@ -26,6 +26,9 @@ const FeatureBar: FC<FeatureBarProps> = ({
     },
     className
   )
+
+  if (hide) return null
+
   return (
     <div className={rootClassName}>
       <span className="block md:inline">{title}</span>

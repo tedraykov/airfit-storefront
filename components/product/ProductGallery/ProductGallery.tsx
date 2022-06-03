@@ -72,7 +72,6 @@ const ProductGallery: FC<ProductGalleryProps> = ({ product }) => {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
     {
       initial: 0,
-      loop: true,
     },
     [LazyLoadPlugin(setLoaded)]
   )
