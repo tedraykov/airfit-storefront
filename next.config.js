@@ -20,6 +20,7 @@ module.exports = withBundleAnalyzer({
   images: {
     domains: [
       'api.treble.bg',
+      'api-dev.treble.bg',
       'images.ctfassets.net',
       'localhost',
       'undefined',
