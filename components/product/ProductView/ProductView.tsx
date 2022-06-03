@@ -71,10 +71,11 @@ const ProductView: FC<Props> = ({ product }) => {
       track('AddToCart', {
         contents: [
           {
-            id: option ? option.pricing[0].price : variant.pricing[0].price,
+            id: product.slug,
             quantity: 1,
           },
         ],
+        value: option ? option.pricing[0].price : variant.pricing[0].price,
         currency: product?.pricing[0].currency.code,
       })
     })
