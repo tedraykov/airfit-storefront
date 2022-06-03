@@ -1,10 +1,9 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   future: {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
-  },
-  corePlugins: {
-    fontFamily: false,
   },
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -15,6 +14,9 @@ module.exports = {
   },
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+      },
       maxWidth: {
         '8xl': '1920px',
       },

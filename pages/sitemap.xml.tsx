@@ -1,20 +1,20 @@
-import commerce from '@lib/api/commerce'
 import { GetServerSidePropsContext } from 'next'
 import { IncomingMessage } from 'http'
-import getAllProductPaths, {
-  ProductPathNode,
-} from '@framework/product/get-all-product-paths'
-import { Page } from '@commerce/types/page'
+import getPages from '@utils/static/getPages'
+import getCatalogProducts from '@server/operations/getCatalogProducts'
+import getCatalogProductPaths from '@server/operations/getCatalogProductPaths'
+import { SHOP_ID } from '@config/index'
+import { CatalogProduct, QueryCatalogItemsArgs } from '@graphql/schema'
 
 function productsSitemapFragment(
   req: IncomingMessage,
-  products: ProductPathNode[]
+  products: CatalogProduct[]
 ) {
   return products
-    .map(({ node }) => {
+    .map(({ slug }) => {
       return `
        <url>
-           <loc>https://${req.headers.host}/product${node.path}</loc>
+           <loc>https://${req.headers.host}/product/${slug}</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
        </url>
      `
@@ -22,7 +22,7 @@ function productsSitemapFragment(
     .join('')
 }
 
-function pagesSitemapFragment(req: IncomingMessage, pages: Page[]) {
+function pagesSitemapFragment(req: IncomingMessage, pages: any[]) {
   return pages
     .map((page) => {
       return `
@@ -56,16 +56,15 @@ function SiteMap() {
 }
 
 export async function getServerSideProps({
-  preview,
-  locale,
-  locales,
   res,
   req,
 }: GetServerSidePropsContext) {
-  const config = { locale, locales }
+  const products = await getCatalogProductPaths({
+    shopIds: [SHOP_ID],
+    first: 200,
+  } as QueryCatalogItemsArgs)
 
-  const { products } = await getAllProductPaths()
-  const { pages } = await commerce.getAllPages({ config, preview })
+  const pages = await getPages()
 
   const productsSitemap = productsSitemapFragment(req, products)
   const pagesSitemap = pagesSitemapFragment(req, pages)

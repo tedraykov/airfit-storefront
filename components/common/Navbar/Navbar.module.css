@@ -1,5 +1,5 @@
 .root {
-  @apply fixed w-full top-0 z-40 bg-primary-transparent transition-all duration-150;
+  @apply fixed w-full bottom-0 md:top-0 md:bottom-auto z-40 bg-primary-transparent transition-all duration-150;
   backdrop-filter: saturate(200%) blur(20px);
 }
 

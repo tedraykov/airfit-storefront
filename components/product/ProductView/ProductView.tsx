@@ -1,130 +1,145 @@
-import cn from 'classnames'
-import { NextSeo } from 'next-seo'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, memo, useState } from 'react'
 import s from './ProductView.module.scss'
-import { Swatch, ProductSlider } from '@components/product'
-import { Button, Container, Text } from '@components/ui'
-import type { Product, ProductOption } from '@framework/types/product'
-import usePrice from '@framework/product/use-price'
-import {
-  getVariant,
-  selectDefaultOptionFromProduct,
-  SelectedOptions,
-} from '../helpers'
-import DesktopGallery from '@components/product/DesktopGallery'
-import { ProductVariant } from '@framework/types/product'
-import { Media, MediaContextProvider } from '@components/common/MediaQueries'
+import { Swatch } from '@components/product'
+import { Button, Text } from '@components/ui'
 import { track } from '@lib/facebookPixel'
 import useUI from '@hooks/useUI'
 import useCart from '@hooks/cart/useCart'
+import { CatalogProduct, CatalogProductVariant } from '@graphql/schema'
+import usePrice from '@hooks/usePrice'
+import ProductGallery from '@components/product/ProductGallery'
+import ProductSeo from '@components/product/ProductSeo'
 
 interface Props {
   children?: any
-  product: Product
+  product: CatalogProduct
   className?: string
 }
 
-const ProductView: FC<Props> = ({ product }) => {
-  const { addItem } = useCart()
+function getInitialProductVariant(product: CatalogProduct) {
+  return product!.variants[0]
+}
 
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
-  const [variant, setVariant] = useState<ProductVariant>(product.variants[0])
+function getInitialProductVariantOption(variant: CatalogProductVariant | null) {
+  return (variant?.options && variant?.options[0]) || null
+}
+
+const ProductView: FC<Props> = ({ product }) => {
+  const { openSidebar } = useUI()
+  const { addItem } = useCart()
+  const [variant, setVariant] = useState<CatalogProductVariant>(
+    getInitialProductVariant(product)
+  )
+  const [option, setOption] = useState<CatalogProductVariant | null>(
+    getInitialProductVariantOption(variant)
+  )
   const [loading, setLoading] = useState(false)
 
-  // @ts-ignore
-  const { price, basePrice, discount } = usePrice({
-    amount: variant.price,
-    baseAmount: variant.listPrice,
-    currencyCode: product.price.currencyCode!,
+  const { price, compareAtPrice, discount } = usePrice({
+    product: option ? option : variant,
   })
 
-  const { openSidebar } = useUI()
+  const handleChangeVariant = (newVariant: CatalogProductVariant) => {
+    if (newVariant._id !== variant._id) {
+      setVariant(newVariant)
+      setOption(getInitialProductVariantOption(newVariant))
+    }
+  }
 
-  useEffect(() => {
-    setVariant(getVariant(product, selectedOptions)!)
-  }, [selectedOptions])
-
-  useEffect(() => {
-    selectDefaultOptionFromProduct(product, setSelectedOptions)
-  }, [])
+  const handleChangeOption = (newOption: CatalogProductVariant) => {
+    if (newOption._id !== option?._id) {
+      setOption(newOption)
+    }
+  }
 
   const addToCart = async () => {
     setLoading(true)
 
     await addItem({
       productConfiguration: {
-        productId: product.id,
-        productVariantId: variant.id as string,
+        productId: product.productId,
+        productVariantId: option ? option.variantId : variant.variantId,
       },
       quantity: 1,
       price: {
-        amount: variant.price,
-        currencyCode: product.price.currencyCode ?? 'USD',
+        amount: option ? option.pricing[0].price : variant.pricing[0].price,
+        currencyCode: product.pricing[0].currency.code ?? 'BGN',
       },
-      metafields: null,
+      metafields: [],
     }).then(() => {
       openSidebar()
-      track('AddToCart')
+      track('AddToCart', {
+        contents: [
+          {
+            id: option ? option.pricing[0].price : variant.pricing[0].price,
+            quantity: 1,
+          },
+        ],
+        currency: product?.pricing[0].currency.code,
+      })
     })
 
     setLoading(false)
   }
 
   return (
-    <Container className="max-w-none w-full" clean>
-      <NextSeo
-        title={product.name}
-        description={product.description}
-        openGraph={{
-          type: 'website',
-          title: product.name,
-          description: product.description,
-          images: [
-            {
-              url: product.images[0]?.small!,
-              width: 800,
-              height: 600,
-              alt: product.name,
-            },
-          ],
-        }}
-      />
-      <div className={cn(s.root, 'fit')}>
-        <div className={cn(s.productDisplay, 'fit')}>
-          <MediaContextProvider>
-            <Media lessThan="lg" className={s.sliderContainer}>
-              <ProductSlider key={product.id} images={product.images} />
-            </Media>
-            <Media greaterThanOrEqual="lg" className={s.galleryContainer}>
-              <DesktopGallery images={product.images} />
-            </Media>
-          </MediaContextProvider>
+    <>
+      <ProductSeo product={product} />
+      <div
+        className={`
+          relative grid items-start grid-cols-1 overflow-x-hidden
+          lg:grid-cols-12 lg:gap-8 lg:p-4
+        `}
+      >
+        <div
+          className={`w-full md:px-4 lg:col-span-6 lg:max-w-[640px] lg:justify-self-end`}
+        >
+          <ProductGallery product={product} />
         </div>
-        <div className={s.sidebar}>
-          <h1 className={s.productTitle}>
-            <span>{product.name}</span>
+        <div
+          className={`
+            flex flex-col col-span-1
+            mx-auto max-w-2xl w-full
+            p-6
+            lg:col-span-6 lg:justify-between
+            xl:max-w-8xl
+          `}
+        >
+          <h1>
+            <span
+              className={`
+              font-bold
+              tracking-wide text-2xl box-decoration-clone`}
+            >
+              {product.title}
+            </span>
           </h1>
           <div className="flex pt-6">
-            {basePrice && (
+            {compareAtPrice && (
               <span className="text-xl line-through text-accents-8 pr-2">
-                {basePrice}
+                {compareAtPrice}
               </span>
             )}
             <div className="font-bold inline-block tracking-wide text-xl">
               {price}
             </div>
           </div>
-          {discount && (
-            <span className="text-red text-lg py-3">{discount} намаление</span>
-          )}
+          {discount.discount ? (
+            <span className="text-red text-lg pb-2">
+              {discount.displayDiscount} намаление
+            </span>
+          ) : null}
           <section>
             <ProductOptions
-              options={product.options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
+              variants={product.variants}
+              options={variant.options}
+              selectedVariant={variant}
+              selectedOption={option}
+              onChangeVariant={handleChangeVariant}
+              onChangeOption={handleChangeOption}
             />
             <div className="pb-14 break-words w-full max-w-2xl text-left">
-              <Text html={product.descriptionHtml || product.description} />
+              <Text html={product.description} />
             </div>
           </section>
           <div>
@@ -140,51 +155,62 @@ const ProductView: FC<Props> = ({ product }) => {
           </div>
         </div>
       </div>
-    </Container>
+    </>
   )
 }
 
 interface ProductOptionsProps {
-  options: ProductOption[]
-  selectedOptions: SelectedOptions
-  setSelectedOptions: React.Dispatch<React.SetStateAction<SelectedOptions>>
+  variants: CatalogProductVariant[]
+  options: CatalogProductVariant[]
+  selectedVariant: CatalogProductVariant
+  selectedOption: CatalogProductVariant | null
+  onChangeVariant: (variant: CatalogProductVariant) => void
+  onChangeOption: (option: CatalogProductVariant) => void
 }
 
-const ProductOptions: React.FC<ProductOptionsProps> = React.memo(
-  ({ options, selectedOptions, setSelectedOptions }) => {
+const ProductOptions: FC<ProductOptionsProps> = memo(
+  ({
+    variants,
+    options,
+    selectedVariant,
+    selectedOption,
+    onChangeVariant,
+    onChangeOption,
+  }) => {
     return (
       <div>
-        {options.map((opt) => (
-          <div key={opt.displayName}>
+        <h2 className="uppercase font-medium text-sm tracking-wide leading-loose">
+          {selectedVariant.attributeLabel}
+        </h2>
+        <div className="flex flex-row flex-wrap sm:flex-nowrap">
+          {variants.map((variant) => (
+            <Swatch
+              key={variant._id}
+              className="mb-4"
+              active={variant._id === selectedVariant._id}
+              label={variant.optionTitle}
+              onClick={() => onChangeVariant(variant)}
+            />
+          ))}
+        </div>
+        {selectedOption && (
+          <>
             <h2 className="uppercase font-medium text-sm tracking-wide leading-loose">
-              {opt.displayName}
+              {selectedOption.attributeLabel}
             </h2>
             <div className="flex flex-row flex-wrap sm:flex-nowrap">
-              {opt.values.map((v, i: number) => {
-                const active = selectedOptions[opt.displayName.toLowerCase()]
-                return (
-                  <Swatch
-                    key={`${opt.id}-${i}`}
-                    className="mb-4"
-                    active={v.label.toLowerCase() === active}
-                    variant={opt.displayName}
-                    color={v.hexColors ? v.hexColors[0] : ''}
-                    label={v.label}
-                    onClick={() => {
-                      setSelectedOptions((selectedOptions) => {
-                        return {
-                          ...selectedOptions,
-                          [opt.displayName.toLowerCase()]:
-                            v.label.toLowerCase(),
-                        }
-                      })
-                    }}
-                  />
-                )
-              })}
+              {options.map((option) => (
+                <Swatch
+                  key={option._id}
+                  className="mb-4"
+                  active={option._id === selectedOption._id}
+                  label={option.optionTitle}
+                  onClick={() => onChangeOption(option)}
+                />
+              ))}
             </div>
-          </div>
-        ))}
+          </>
+        )}
       </div>
     )
   }

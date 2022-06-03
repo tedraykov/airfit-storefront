@@ -54,11 +54,11 @@ export const CartView: FC<CartViewProps> = ({
               <div className="flex flex-row justify-end">
                 <div className="w-full md:w-md">
                   {isEmpty ? (
-                    <Button href="/" Component="a" width="100%">
+                    <Button href="/" Component="a" className="w-full">
                       Продължи с пазаруването
                     </Button>
                   ) : (
-                    <Button href="/checkout" Component="a" width="100%">
+                    <Button href="/checkout" Component="a" className="w-full">
                       Завършване на поръчката
                     </Button>
                   )}

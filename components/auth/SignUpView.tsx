@@ -1,9 +1,7 @@
 import { FC, useEffect, useState, useCallback } from 'react'
-import { validate } from 'email-validator'
 import { Info } from '@components/icons'
 import useUI from '@hooks/useUI'
 import { Logo, Button, Input } from '@components/ui'
-import useSignup from '@framework/auth/use-signup'
 
 interface Props {}
 
@@ -18,7 +16,8 @@ const SignUpView: FC<Props> = () => {
   const [dirty, setDirty] = useState(false)
   const [disabled, setDisabled] = useState(false)
 
-  const signup = useSignup()
+  // const signup = useSignup()
+  const signup = (args: any) => {}
   const { setModalView, closeModal } = useUI()
 
   const handleSignup = async (e: React.SyntheticEvent<EventTarget>) => {
@@ -53,7 +52,7 @@ const SignUpView: FC<Props> = () => {
 
     // Unable to send form unless fields are valid.
     if (dirty) {
-      setDisabled(!validate(email) || password.length < 7 || !validPassword)
+      setDisabled(!Boolean(email) || password.length < 7 || !validPassword)
     }
   }, [email, password, dirty])
 

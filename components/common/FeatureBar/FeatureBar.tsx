@@ -1,15 +1,16 @@
 import cn from 'classnames'
+import { FC, ReactNode } from 'react'
 import s from './FeatureBar.module.css'
 
 interface FeatureBarProps {
   className?: string
-  title: string
-  description?: string
+  title: string | ReactNode
+  description?: string | ReactNode
   hide?: boolean
-  action?: React.ReactNode
+  action?: ReactNode
 }
 
-const FeatureBar: React.FC<FeatureBarProps> = ({
+const FeatureBar: FC<FeatureBarProps> = ({
   title,
   description,
   className,
@@ -25,6 +26,9 @@ const FeatureBar: React.FC<FeatureBarProps> = ({
     },
     className
   )
+
+  if (hide) return null
+
   return (
     <div className={rootClassName}>
       <span className="block md:inline">{title}</span>

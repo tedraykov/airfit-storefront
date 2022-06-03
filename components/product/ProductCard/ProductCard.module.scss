@@ -48,6 +48,17 @@
       @apply bg-cyan text-white;
     }
   }
+  & .squareBg {
+    @apply bg-accents-0;
+  }
+
+  & .productTitle {
+    font-size: 1rem;
+  }
+
+  & .productPrice {
+    @apply text-sm;
+  }
 }
 
 .squareBg,
@@ -67,23 +78,6 @@
   @apply transition ease-in-out duration-500 bg-repeat-space w-full h-full block;
   background-image: url('/bg-products.svg');
   content: '';
-}
-
-.simple {
-  & .squareBg {
-    @apply bg-accents-0;
-  }
-
-  & .productTitle {
-    font-size: 1rem;
-
-    & span {
-    }
-  }
-
-  & .productPrice {
-    @apply text-sm;
-  }
 }
 
 .productTitle {

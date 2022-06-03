@@ -1,121 +1,79 @@
-import Econt from '@components/icons/Econt'
-import {
-  Autocomplete,
-  Box,
-  CircularProgress,
-  InputAdornment,
-  TextField,
-  Tooltip,
-} from '@mui/material'
-import { Office } from 'econt-js'
-import { FC, useEffect, useState } from 'react'
-import { Controller, Control } from 'react-hook-form'
+import { FC, useCallback, useEffect, useState } from 'react'
+import { Control } from 'react-hook-form'
 import { CourierOfficeFieldValues } from '../CourierOfficeForm/CourierOfficeForm'
-import Error from '@mui/icons-material/Error'
 import { useLazyQuery } from '@apollo/client'
 import econtOfficesQuery from '@graphql/queries/econtOffices'
+import ControlledAutocomplete from '@components/ui/ControlledAutocomplete'
+import { AutocompleteFetchDataHandler } from '@components/ui/Autocomplete/Autocomplete'
+import {
+  EcontOffice,
+  EcontOfficeConnection,
+  QueryEcontOfficesArgs,
+} from '@graphql/schema'
+import Econt from '@components/icons/Econt'
+import Box from '@mui/material/Box'
 
 type Props = {
   control: Control<CourierOfficeFieldValues>
 }
 
 const CourierOfficeSelect: FC<Props> = ({ control }) => {
-  const [getEcontOffices] = useLazyQuery(econtOfficesQuery)
-  const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<readonly Office[]>([])
-  const loading = open && options.length === 0
+  const [getEcontOffices] = useLazyQuery<
+    { econtOffices: EcontOfficeConnection },
+    Partial<QueryEcontOfficesArgs>
+  >(econtOfficesQuery)
+  const [offices, setOffices] = useState<EcontOffice[]>([])
+  const [hasMoreOffices, setHasMoreOffices] = useState(false)
+  const [loadingOffices, setLoadingOffices] = useState(true)
+  const [selectedOffice, setSelectedOffice] = useState<
+    EcontOffice | undefined
+  >()
 
-  useEffect(() => {
-    let active = true
+  const handleFetchData = useCallback<AutocompleteFetchDataHandler>(
+    async ({ inputValue, first, offset, mode }) => {
+      setLoadingOffices(true)
+      const { data } = await getEcontOffices({
+        variables: {
+          first: first || 20,
+          offset: offset || 0,
+          searchQuery: inputValue,
+        },
+      })
 
-    if (!loading) {
-      return undefined
-    }
-
-    ;(async () => {
-      const { data } = await getEcontOffices()
-
-      if (active) {
-        setOptions(data.econtOffices)
+      if (mode === 'set') {
+        setOffices(data?.econtOffices?.nodes || [])
       }
-    })()
 
-    return () => {
-      active = false
-    }
-  }, [getEcontOffices, loading])
+      if (mode === 'append') {
+        setOffices((offices) => [
+          ...offices,
+          ...(data?.econtOffices?.nodes || []),
+        ])
+      }
 
-  useEffect(() => {
-    if (!open) {
-      setOptions([])
-    }
-  }, [open])
+      setHasMoreOffices(data?.econtOffices?.pageInfo?.hasNextPage || false)
+      setLoadingOffices(false)
+    },
+    [getEcontOffices]
+  )
 
   return (
-    <Controller
+    <ControlledAutocomplete
       control={control}
       name="courierOffice"
-      render={({ field, fieldState: { invalid, error } }) => (
-        <Autocomplete
-          open={open}
-          onOpen={() => {
-            setOpen(true)
-          }}
-          onClose={() => {
-            setOpen(false)
-          }}
-          noOptionsText={'Не са намерени офиси'}
-          isOptionEqualToValue={(option, value) => option.code === value.code}
-          getOptionLabel={(option) => option.name}
-          options={options}
-          loading={loading}
-          renderOption={(params, option) => (
-            <Box
-              component="li"
-              display="flex"
-              alignItems="center"
-              gap={0.5}
-              {...params}
-            >
-              <Econt />
-              <span>({option.code})</span>
-              <span>{option.name}</span>
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              size="small"
-              label="Офис на куриер"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {loading && (
-                      <InputAdornment position="end">
-                        <CircularProgress color="inherit" size={20} />
-                      </InputAdornment>
-                    )}
-                    {invalid && (
-                      <InputAdornment position="end">
-                        <Tooltip
-                          title={error?.message ?? 'Грешка'}
-                          arrow
-                          placement="bottom-end"
-                        >
-                          <Error color="error" />
-                        </Tooltip>
-                      </InputAdornment>
-                    )}
-                  </>
-                ),
-              }}
-            />
-          )}
-          //@ts-ignore
-          onChange={(_, data) => field.onChange(data)}
-        />
-      )}
+      label="Офис на куриер"
+      noOptionsLabel={'Не са намерени офиси'}
+      getOptionLabel={(office: EcontOffice) => office.name}
+      inputPlaceholder="Търси офис на куриер"
+      isOptionEqualToValue={(option: EcontOffice, value: EcontOffice) =>
+        option.code === value.code
+      }
+      loading={loadingOffices}
+      onFetchData={handleFetchData}
+      options={offices}
+      value={selectedOffice}
+      multiple={false}
+      hasMore={hasMoreOffices}
     />
   )
 }

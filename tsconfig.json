@@ -24,11 +24,8 @@
       "@context/*": ["context/*"],
       "@lib/*": ["lib/*"],
       "@utils/*": ["utils/*"],
+      "@server/*": ["server/*"],
       "@components/*": ["components/*"],
-      "@commerce": ["framework/commerce"],
-      "@commerce/*": ["framework/commerce/*"],
-      "@framework": ["framework/reactioncommerce"],
-      "@framework/*": ["framework/reactioncommerce/*"],
       "@theme/*": ["theme/*"],
       "@graphql/*": ["graphql/*"]
     }

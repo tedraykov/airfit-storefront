@@ -1,6 +1,5 @@
 .swatch {
   box-sizing: border-box;
-  composes: root from '../Button/Button.module.css';
   @apply mr-3 inline-flex items-center justify-center cursor-pointer
   p-0 shadow-none border-accents-3 border box-border select-none;
   margin-right: calc(0.75rem - 1px);

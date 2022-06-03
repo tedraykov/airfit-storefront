@@ -1,21 +1,13 @@
 import type { GetStaticPropsContext } from 'next'
-import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { Text } from '@components/ui'
+import commonStaticProps from '@utils/static/commonStaticProps'
 
-export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
-  const config = { locale, locales }
-  const { pages } = await commerce.getAllPages({ config, preview })
-  const { categories, brands } = await commerce.getSiteInfo({ config, preview })
+export async function getStaticProps(ctx: GetStaticPropsContext) {
+  const commonProps = commonStaticProps(ctx)
   return {
     props: {
-      pages,
-      categories,
-      brands,
+      ...commonProps,
     },
     revalidate: 200,
   }

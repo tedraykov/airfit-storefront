@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react'
+import React, { FC, useEffect, useMemo, useRef } from 'react'
 import { LoadingDots, Logo } from '@components/ui'
 import s from './CheckoutView.module.scss'
 import Link from '@components/ui/Link'
@@ -8,15 +8,17 @@ import ShippingAddressStep from '@components/checkout/ShippingAddressStep'
 import DesktopCheckout from '@components/checkout/DesktopCheckout'
 import PaymentStep from '@components/checkout/PaymentStep/PaymentStep'
 import { useCheckout } from '@hooks/useCheckout'
-import { Media, MediaContextProvider } from '@components/common/MediaQueries'
 import FinalizeStep from '@components/checkout/FinalizeStep'
 import { track } from '@lib/facebookPixel'
 import { useRouter } from 'next/router'
 import useCart from '@hooks/cart/useCart'
 import useCartStore from '@hooks/cart/useCartStore'
+import useUI from '@hooks/useUI'
 
 export const CheckoutView: FC = () => {
+  const { isAtLeastTablet } = useUI()
   const { cart, loading, getShippingAddress, getEmail } = useCart()
+  const checkoutInitialized = useRef(false)
   const { reset } = useCartStore()
   const {
     availablePaymentMethods,
@@ -30,16 +32,41 @@ export const CheckoutView: FC = () => {
 
   const router = useRouter()
 
+  /*
+   * Track Facebook Pixel Initiate Checkout Event
+   */
   useEffect(() => {
-    track('InitiateCheckout')
-  }, [])
+    if (checkoutInitialized.current) return
+
+    if (!loading && cart) {
+      track('InitiateCheckout', {
+        contents: cart?.items?.nodes?.map((item) => ({
+          id: item?.productSlug,
+          quantity: item?.quantity,
+        })),
+        currency: cart?.shop?.currency?.code,
+      })
+      checkoutInitialized.current = true
+    }
+  }, [cart, loading])
 
   useEffect(() => {
     if (order) {
-      reset()
-      router.push(`/checkout/thank-you?order=${order.referenceId}`)
+      router
+        .push(`/checkout/thank-you?order=${order.referenceId}`)
+        .then(() => {
+          track('Purchase', {
+            content_ids: cart?.items?.nodes?.map((item) => item?.productSlug),
+            contents: cart?.items?.nodes?.map((item) => ({
+              id: item?.productSlug,
+              quantity: item?.quantity,
+            })),
+            currency: cart?.shop?.currency?.code,
+          })
+        })
+        .then(reset)
     }
-  }, [order, router, reset])
+  }, [order, router, reset, cart?.items?.nodes, cart?.shop?.currency?.code])
 
   const getCheckoutSteps = useMemo((): Step[] => {
     if (!cart || !availablePaymentMethods) return []
@@ -90,23 +117,22 @@ export const CheckoutView: FC = () => {
     placeOrder,
   ])
 
-  return (
-    <div className={s.root}>
-      <CheckoutHeader />
-      {loading || !availablePaymentMethods ? (
+  if (loading || !availablePaymentMethods) {
+    return (
+      <div className={s.root}>
+        <CheckoutHeader />
         <div className="flex flex-1 justify-center items-center">
           <LoadingDots />
         </div>
-      ) : (
-        <MediaContextProvider>
-          <Media lessThan="lg" className={s.sliderContainer}>
-            <MobileCheckout steps={getCheckoutSteps} />
-          </Media>
-          <Media greaterThanOrEqual="lg" className={s.galleryContainer}>
-            <DesktopCheckout steps={getCheckoutSteps} />
-          </Media>
-        </MediaContextProvider>
-      )}
+      </div>
+    )
+  }
+
+  return (
+    <div className={s.root}>
+      <CheckoutHeader />
+      {!isAtLeastTablet && <MobileCheckout steps={getCheckoutSteps} />}
+      {isAtLeastTablet && <DesktopCheckout steps={getCheckoutSteps} />}
     </div>
   )
 }

@@ -1,11 +1,8 @@
 import { FC } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
-import useCustomer from '@framework/customer/use-customer'
-import { Avatar } from '@components/common'
 import { Heart, Bag } from '@components/icons'
 import useUI from '@hooks/useUI'
-import DropdownMenu from './DropdownMenu'
 import s from './UserNav.module.scss'
 import { Button } from '@components/ui'
 import useCart from '@hooks/cart/useCart'
@@ -17,9 +14,7 @@ interface Props {
 
 const UserNav: FC<Props> = ({ className }) => {
   const { cart, loading } = useCart()
-  const { data: customer } = useCustomer()
-  const { toggleSidebar, closeSidebarIfPresent, openModal, setSidebarView } =
-    useUI()
+  const { toggleSidebar, closeSidebarIfPresent, setSidebarView } = useUI()
   const itemsCount = cart?.totalItemQuantity ?? 0
 
   const toggleCart = () => {
@@ -61,19 +56,19 @@ const UserNav: FC<Props> = ({ className }) => {
               </Link>
             </li>
           )}
-          <li className={cn(s.item, s.avatar)}>
-            {customer ? (
-              <DropdownMenu />
-            ) : (
-              <button
-                className={s.avatarButton}
-                aria-label="Menu"
-                onClick={() => openModal()}
-              >
-                <Avatar />
-              </button>
-            )}
-          </li>
+          {/*<li className={cn(s.item, s.avatar)}>*/}
+          {/*  {customer ? (*/}
+          {/*    <DropdownMenu />*/}
+          {/*  ) : (*/}
+          {/*    <button*/}
+          {/*      className={s.avatarButton}*/}
+          {/*      aria-label="Menu"*/}
+          {/*      onClick={() => openModal()}*/}
+          {/*    >*/}
+          {/*      <Avatar />*/}
+          {/*    </button>*/}
+          {/*  )}*/}
+          {/*</li>*/}
         </ul>
       </div>
     </nav>

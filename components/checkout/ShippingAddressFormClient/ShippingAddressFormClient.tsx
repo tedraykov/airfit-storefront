@@ -10,7 +10,7 @@ import ControlledTextField from '@components/ui/ControlledTextField'
 import { StepSubmitCallback, Submittable } from '@hooks/useStepper'
 import { Skeleton } from '@mui/material'
 import { SetShippingAddressProps } from '@hooks/useCheckout'
-import { Address, AddressInput } from '@framework/schema'
+import { Address, AddressInput } from '@graphql/schema'
 
 const mapCenter: google.maps.LatLngLiteral = {
   lat: 42.698334,

@@ -1,7 +1,8 @@
-const commerce = require('./commerce.config.json')
-const { withCommerceConfig } = require('./framework/commerce/config')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
-module.exports = withCommerceConfig({
+module.exports = withBundleAnalyzer({
   env: {
     REACTION_API_DOMAIN: process.env.REACTION_API_DOMAIN,
   },
@@ -12,10 +13,18 @@ module.exports = withCommerceConfig({
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  commerce,
   i18n: {
     locales: ['bg-BG'],
     defaultLocale: 'bg-BG',
+  },
+  images: {
+    domains: [
+      'api.treble.bg',
+      'api-dev.treble.bg',
+      'images.ctfassets.net',
+      'localhost',
+      'undefined',
+    ],
   },
   experimental: {
     emotion: true,

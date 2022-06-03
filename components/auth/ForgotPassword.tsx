@@ -1,5 +1,4 @@
 import { FC, useEffect, useState, useCallback } from 'react'
-import { validate } from 'email-validator'
 import useUI from '@hooks/useUI'
 import { Logo, Button, Input } from '@components/ui'
 
@@ -27,7 +26,7 @@ const ForgotPassword: FC<Props> = () => {
   const handleValidation = useCallback(() => {
     // Unable to send form unless fields are valid.
     if (dirty) {
-      setDisabled(!validate(email))
+      setDisabled(!Boolean(email))
     }
   }, [email, dirty])
 

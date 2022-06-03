@@ -1,6 +1,15 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles'
 
 let theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1440,
+    },
+  },
   shape: {
     borderRadius: 12,
   },
@@ -57,13 +66,20 @@ theme = createTheme(theme, {
       },
     },
     MuiAccordion: {
+      defaultProps: {
+        elevation: 0,
+      },
       styleOverrides: {
         root: {
           border: '1px solid',
           // @ts-ignore
           borderColor: theme.palette.accent4.main,
           '&:not(:last-child)': {
-            marginBottom: '1rem',
+            marginBottom: '0rem',
+            borderBottom: 'none',
+          },
+          '&.Mui-expanded': {
+            margin: 0,
           },
         },
       },
@@ -74,6 +90,27 @@ theme = createTheme(theme, {
           '&.Mui-expanded': {
             margin: '12px 0',
           },
+        },
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          overflow: 'hidden',
+          borderRadius: '0.25rem',
+          '&:before, &:hover:not(.Mui-disabled):before': {
+            borderBottom: 'none',
+          },
+        },
+        input: {
+          padding: `${theme.spacing(1.5)} ${theme.spacing(1.5)}`,
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          marginLeft: theme.spacing(0.5),
         },
       },
     },

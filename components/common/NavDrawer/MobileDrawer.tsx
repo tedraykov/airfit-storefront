@@ -24,7 +24,13 @@ const MobileDrawer: FC<NavDrawerProps> = ({ links, open, onClose }) => {
         <List>
           {links?.map((l) => (
             <Link href={l.href} key={l.href}>
-              <ListItemButton className={s.categoryItem} onClick={onClose}>
+              <ListItemButton
+                sx={{
+                  justifyContent: 'center',
+                }}
+                className="text-lg"
+                onClick={onClose}
+              >
                 {l.label}
               </ListItemButton>
             </Link>

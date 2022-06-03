@@ -10,7 +10,12 @@ if (FACEBOOK_PIXEL_ID === undefined) {
   )
 }
 
-type StandardEvents = 'Lead' | 'InitiateCheckout' | 'AddToCart' | 'Purchase'
+type StandardEvents =
+  | 'Lead'
+  | 'InitiateCheckout'
+  | 'AddToCart'
+  | 'Purchase'
+  | 'ViewContent'
 
 export const pageView = () => {
   if (isProd()) {

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { cartQueryFragment } from '@framework/utils/queries/get-cart-query'
+import cartQueryFragment from '@graphql/fragments/cartQuery'
 
 export default gql`
   query accountCartByAccountIdQuery($accountId: ID!, $shopId: ID!, $itemsAfterCursor: ConnectionCursor) {

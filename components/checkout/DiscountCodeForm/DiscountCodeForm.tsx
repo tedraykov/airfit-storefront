@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
-import { Cart } from '@framework/types/cart'
 import ControlledTextField from '@components/ui/ControlledTextField'
 import { Button } from '@components/ui'
 import useCart from '@hooks/cart/useCart'
@@ -37,10 +36,12 @@ const DiscountCodeForm: FC = () => {
   }
 
   return (
-    <div className="flex space-x-3 mb-5">
+    <div className="flex space-x-3 mb-5 items-start">
       <ControlledTextField
         className="flex-1"
         name="discountCode"
+        rules={{ required: true }}
+        helperText=" "
         control={control}
         defaultValue={''}
         label="Промо код"
@@ -49,6 +50,7 @@ const DiscountCodeForm: FC = () => {
         disabled={!isDirty}
         type="submit"
         size="slim"
+        className="h-fit mt-6"
         onClick={handleSubmit(onSubmit)}
       >
         Приложи

@@ -1,0 +1,11 @@
+# Generate code from your GraphQL schema and operations with a simple CLI
+# Read the docs: https://www.graphql-code-generator.com
+overwrite: true
+schema: "http://localhost:3000/graphql"
+generates:
+  graphql/schema/index.d.ts:
+    plugins:
+      - "typescript"
+    config:
+      avoidOptionals: true
+      maybeValue: T

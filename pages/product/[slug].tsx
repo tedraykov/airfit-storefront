@@ -2,47 +2,38 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
-import getAllProductPaths from '@framework/product/get-all-product-paths'
-import commerce from '@lib/api/commerce'
+import { track } from '@lib/facebookPixel'
+import getCatalogProduct from '@server/operations/getCatalogProduct'
+import commonStaticProps from '@utils/static/commonStaticProps'
+import { useEffect } from 'react'
+import getCatalogProductPaths from '@server/operations/getCatalogProductPaths'
 
 export async function getStaticProps({
   params,
-  locale,
-  locales,
-  preview,
+  ...ctx
 }: GetStaticPropsContext<{ slug: string }>) {
-  const config = { locale, locales }
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const productPromise = commerce.getProduct({
-    variables: { slug: params!.slug },
-    config,
-    preview,
-  })
-
-  const { pages } = await pagesPromise
-  const { categories } = await siteInfoPromise
-  const { product } = await productPromise
-
+  const commonProps = await commonStaticProps(ctx)
+  const product = await getCatalogProduct(params!.slug)
   if (!product) {
-    throw new Error(`Product with slug '${params!.slug}' not found`)
+    return {
+      notFound: true,
+    }
   }
 
   return {
     props: {
-      pages,
+      ...commonProps,
       product,
-      categories,
     },
     revalidate: 60 * 30,
   }
 }
 
 export async function getStaticPaths() {
-  const { products } = await getAllProductPaths()
+  const products = await getCatalogProductPaths()
 
   return {
-    paths: products.map((product) => `/product${product.node.path}`),
+    paths: products.map((product) => `/product/${product.slug}`),
     fallback: 'blocking',
   }
 }
@@ -50,6 +41,15 @@ export async function getStaticPaths() {
 export default function Slug({
   product,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  useEffect(() => {
+    track('ViewContent', {
+      content_type: 'product',
+      content_ids: [product?._id],
+      value: product?.pricing[0].minPrice,
+      currency: product?.pricing[0].currency.code,
+    })
+  }, [product?._id, product.pricing])
+
   return <ProductView product={product} />
 }
 

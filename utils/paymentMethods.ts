@@ -1,7 +1,7 @@
 import {
   PaymentMethod as OpenCommercePaymentMethod,
   PaymentMethodData,
-} from '@framework/schema'
+} from '@graphql/schema'
 import { ForwardRefExoticComponent } from 'react'
 import { Submittable } from '@hooks/useStepper'
 

@@ -2,16 +2,15 @@ import type { GetStaticPropsContext } from 'next'
 import { Bag } from '@components/icons'
 import { Layout } from '@components/common'
 import { Container, Text } from '@components/ui'
-import commerce from '@lib/api/commerce'
+import commonStaticProps from '@utils/static/commonStaticProps'
 
 export async function getStaticProps({
   preview,
   locale,
 }: GetStaticPropsContext) {
-  const config = commerce.getConfig({ locale })
-  const { pages } = await commerce.getAllPages({ config, preview })
+  const commonProps = commonStaticProps({ preview, locale })
   return {
-    props: { pages },
+    props: { ...commonProps },
   }
 }
 

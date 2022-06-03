@@ -3,18 +3,18 @@ import s from './Slideshow.module.scss'
 import { Button } from '@components/ui'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { FeaturedProduct } from '@framework/types/page'
 import Typography from '@mui/material/Typography'
 import { Box, Fade } from '@mui/material'
 import cn from 'classnames'
 import { useSwipeable } from 'react-swipeable'
+import { IFeaturedProduct } from '@lib/contentful/schema'
 
 interface SlideshowProps {
-  products: FeaturedProduct[]
+  products: IFeaturedProduct[]
 }
 
 const Slideshow: FC<SlideshowProps> = ({ products }) => {
-  const [activeProduct, setActiveProduct] = useState<FeaturedProduct>({
+  const [activeProduct, setActiveProduct] = useState<IFeaturedProduct>({
     ...products[0],
   })
   const [activeProductIndex, setActiveProductIndex] = useState(
@@ -52,9 +52,9 @@ const Slideshow: FC<SlideshowProps> = ({ products }) => {
   return (
     <Box
       className={cn(s.section, {
-        [s.reversedText]: activeProduct.useReversedText,
+        [s.reversedText]: activeProduct.fields.useReversedText,
       })}
-      style={{ background: activeProduct.backgroundColor }}
+      style={{ background: activeProduct.fields.backgroundColor }}
       {...handlers}
     >
       <div className="flex justify-between w-full px-4 pb-6 max-w-6xl">
@@ -88,43 +88,44 @@ const Slideshow: FC<SlideshowProps> = ({ products }) => {
   )
 }
 
-const Slide = ({ product }: { product: FeaturedProduct }) => {
-  const router = useRouter()
-
+const Slide = ({ product }: { product: IFeaturedProduct }) => {
   return (
-    <div key={product.productUrl} className={cn(s.content)}>
+    <div key={product.fields.productUrl} className={cn(s.content)}>
       <Fade in timeout={{ enter: 500 }}>
         <div className={s.productImage}>
           <Image
             layout="responsive"
             width={500}
             height={500}
-            src={`https:${product.productImage}`}
-            alt={product.title}
+            src={`https:${product.fields.productImage.fields.file.url}`}
+            alt={product.fields.title}
             placeholder={'blur'}
-            blurDataURL={`https:${product.productImage}?h=10`}
+            blurDataURL={`https:${product.fields.productImage}?h=10`}
           />
         </div>
       </Fade>
       <div className={s.textContent}>
         <Fade in timeout={{ enter: 500 }}>
           <Typography variant="h5" fontWeight="bold" mb={2}>
-            {product.title}
+            {product.fields.title}
           </Typography>
         </Fade>
         <Fade in timeout={{ enter: 500 }} style={{ transitionDelay: '100ms' }}>
-          <Typography className="xl:text-lg">{product.description}</Typography>
+          <Typography className="xl:text-lg">
+            {product.fields.shortDecription}
+          </Typography>
         </Fade>
         <Fade in timeout={{ enter: 500 }} style={{ transitionDelay: '200ms' }}>
           <Button
-            onClick={() => router.push(product.productUrl)}
+            component="a"
+            href={`/product/${product.fields.slug}`}
             variant="outlined"
             size="slim"
             color="secondary"
             round
-            className={s.button}
+            className="mt-4"
           >
-            {product.buttonText}
+            {product.fields.buttonText}
           </Button>
         </Fade>
       </div>
